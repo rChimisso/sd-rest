@@ -1,75 +1,105 @@
 package ZorChi.REST;
 
 
+
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-public class Controller {
+public class Controller  {
 	
 	
-	//---------------------------//
+	
+	//-----------HTML------------//
+	
+	@RequestMapping("/")
+	public String homeHTML() {
+		
+		return "homePage";
+		
+	}
+	
+	@RequestMapping("/transfer")
+	public String trensferHTML() {
+		
+		return "transferPage";
+		
+	}
+	
+	
+	//------------API------------//
 	
 	@GetMapping("/api/account")
-	public String getAccount() {
+	public ResponseEntity<String> getAccount() {
 		
-		return "getAccount called";
+		return StatusCodes.OK();
 	}
 	
-	@PostMapping("/api/account")
-	public String postAccount() {
+	//Sto lavorando a questo
+	@PostMapping( value = "/api/account" , consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> postAccount(@RequestBody Account account) {
 		
-		return "postAccount called";
-	}
+		//System.out.println(account.getName() + " " + account.getSurname());
+		
+		//System.out.println("Account generato con id: "+ account.getId() );   
+		
+		return new ResponseEntity<Object>(account.getId(), HttpStatus.CREATED);
+		    
+		}
 	
 	@DeleteMapping("/api/account")
-	public String deleteAccount() {
+	public ResponseEntity<String> deleteAccount() {
 		
-		return "deleteAccount called";
+		return StatusCodes.OK();
 	}
 	
 	//---------------------------//
 	
 	@GetMapping("/api/account/{accountId}")
-	public String getAccountId(@PathVariable String accountId) {
+	public ResponseEntity<String> getAccountId(@PathVariable String accountId) {
 		
-		return "getAccountId called with parameter " + accountId;
+		return StatusCodes.OK();
 		
 	}
 	
 	@PostMapping("/api/account/{accountId}")
-	public String postAccountId(@PathVariable String accountId) {
+	public ResponseEntity<String> postAccountId(@PathVariable String accountId, @RequestBody String body) {
 		
-		return "postAccountId called with parameter " + accountId;
+		return StatusCodes.OK();
 		
 	}
 	
 	@PutMapping("/api/account/{accountId}")
-	public String putAccountId(@PathVariable String accountId) {
+	public ResponseEntity<String> putAccountId(@PathVariable String accountId) {
 		
-		return "putAccountId called with parameter " + accountId;
+		return StatusCodes.OK();
 		
 	}
 	
 	@PatchMapping("/api/account/{accountId}")
-	public String patchAccountId(@PathVariable String accountId) {
+	public ResponseEntity<String> patchAccountId(@PathVariable String accountId) {
 		
-		return "patchAccountId called with parameter " + accountId;
+		return StatusCodes.OK();
 		
 	}
 	
 	
 	@RequestMapping(value =  "/api/account/{accountId}", method = RequestMethod.HEAD)
-	public String headAccountId(@PathVariable String accountId) {
+	public ResponseEntity<String> headAccountId(@PathVariable String accountId) {
 		
-		return "headAccountId called with parameter " + accountId;
+		return StatusCodes.OK();
 		
 	}
 	
@@ -77,9 +107,9 @@ public class Controller {
 	
 	
 	@PostMapping("/api/transfer")
-	public String postTransfer() {
+	public ResponseEntity<String> postTransfer(@RequestBody String body) {
 		
-		return "postTransfer called" ;
+		return StatusCodes.OK();
 		
 	}
 	
@@ -87,9 +117,9 @@ public class Controller {
 	
 	
 	@PostMapping("/api/divert")
-	public String postDiver() {
+	public ResponseEntity<String> postDivert(@RequestBody String body) {
 		
-		return "postDivert called" ;
+		return StatusCodes.OK();
 		
 	}			
 	
