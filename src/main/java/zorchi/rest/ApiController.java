@@ -122,4 +122,14 @@ public class ApiController {
     }
     return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 	}
+
+  @PostMapping("/transfer")
+	public ResponseEntity<String> postTransfer(@RequestBody String body) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	}
+
+	@PostMapping("/divert")
+	public ResponseEntity<String> postDivert(@RequestBody String body) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	}		
 }
