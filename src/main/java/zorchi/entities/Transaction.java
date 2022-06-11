@@ -25,7 +25,7 @@ public class Transaction {
   private final Date DATE;
 
   public Transaction() {
-    this.ACCOUNT = null;
+    this.ACCOUNT = new Account();
     this.UUID = StandardUUID.INVALID_UUID;
     this.AMOUNT = 0;
     this.DATE = new Date();
