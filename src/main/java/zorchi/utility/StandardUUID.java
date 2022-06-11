@@ -14,6 +14,16 @@ public class StandardUUID {
   public static final String INVALID_UUID = "-1";
 
   /**
+   * Controlla se l'UUID passato è {@link #INVALID_UUID}.
+   * 
+   * @param uuid - UUID da controllare.
+   * @return risultato del controllo.
+   */
+  public static final boolean isInvalid(String uuid) {
+    return uuid.equals(INVALID_UUID);
+  }
+
+  /**
    * Restituisce una stringa rappresentante un {@link UUID}, assicurandosi che non sia duplicato in base al {@link Predicate predicato} passato.
    * 
    * @param duplicated - {@link Predicate} per il controllo della duplicazione.

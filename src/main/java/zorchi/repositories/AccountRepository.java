@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import zorchi.entities.Account;
 
 /**
- * JPA {@link Account} Repository.
+ * JPA {@link Account} {@link CrudRepository}.
  */
 public interface AccountRepository extends CrudRepository<Account, String> {}

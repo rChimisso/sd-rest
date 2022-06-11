@@ -1,13 +1,9 @@
 package zorchi.rest;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import zorchi.entities.Account;
 import zorchi.entities.Account.AccountData;
+import zorchi.entities.Transaction;
+import zorchi.entities.Transaction.TransactionData;
 import zorchi.repositories.AccountRepository;
+import zorchi.repositories.TransactionRepository;
+import zorchi.responses.bodies.TransactionResponseBody;
+import zorchi.responses.headers.CustomHeaders;
+import zorchi.utility.StandardUUID;
 import zorchi.utility.StandardUUID.ShortUUID;
 
 /**
@@ -34,13 +36,20 @@ public class ApiController {
   /**
    * JPA {@link AccountRepository}.
    */
-  public final AccountRepository accountRepository;
+  private final AccountRepository accountRepository;
+
+  /**
+   * JPA {@link TransactionRepository}.
+   */
+  private final TransactionRepository transactionRepository;
 
   /**
    * @param accountRepository - JPA {@link AccountRepository} iniettata da Spring.
+   * @param transactionRepository - JPA {@link TransactionRepository} iniettata da Spring.
    */
-  ApiController(AccountRepository accountRepository) {
+  ApiController(AccountRepository accountRepository, TransactionRepository transactionRepository) {
     this.accountRepository = accountRepository;
+    this.transactionRepository = transactionRepository;
   }
 
   /**
@@ -50,7 +59,7 @@ public class ApiController {
    */
   @GetMapping("/account")
   public ResponseEntity<Iterable<Account>> getAccount() {
-    return new ResponseEntity<Iterable<Account>>(accountRepository.findAll(), HttpStatus.OK);
+    return new ResponseEntity<>(accountRepository.findAll(), HttpStatus.OK);
   }
 
   /**
@@ -66,9 +75,9 @@ public class ApiController {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
     if (account.isValid()) {
       accountRepository.save(account);
-      return new ResponseEntity<String>(account.getID(), HttpStatus.OK);
+      return new ResponseEntity<>(account.getID(), HttpStatus.OK);
     }
-    return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
@@ -83,51 +92,122 @@ public class ApiController {
   public ResponseEntity<String> deleteAccount(@Valid @RequestParam String id) {
     if (accountRepository.existsById(id)) {
       accountRepository.deleteById(id);
-      return new ResponseEntity<String>(HttpStatus.OK);
+      return new ResponseEntity<>(HttpStatus.OK);
     }
-    return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
+  /**
+   * TODO
+   * 
+   * @param id
+   * @return
+   */
   @GetMapping("/account/{id}")
 	public ResponseEntity<String> getAccountId(@PathVariable String id) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
+  /**
+   * Gestisce le richieste di tipo {@link RequestMethod#POST POST} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
+   * 
+   * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
+   * @param transactionData - Dati nel corpo della richiesta della {@link Transaction}.
+   * @return {@link TransactionResponseBody}.
+   */
   @PostMapping("/account/{id}")
-	public ResponseEntity<String> postAccountId(@PathVariable String id, @RequestBody String body) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);		
+	public ResponseEntity<TransactionResponseBody> postAccountId(@PathVariable String id, @Valid @RequestBody TransactionData transactionData) {
+    Account account = accountRepository.findById(id).orElseGet(Account::new);
+    if (account.isValid()) {
+      long newBalance = account.getBalance() + transactionData.getAmount();
+      if (newBalance >= 0) {
+        account.setBalance(newBalance);
+        Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
+        accountRepository.save(account);
+        transactionRepository.save(transaction);
+        return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.OK);
+      }
+      return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.OK);
+    }
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+  /**
+   * Gestisce le richieste di tipo {@link RequestMethod#PUT PUT} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
+   * 
+   * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
+   * @return {@link HttpStatus}.
+   */
 	@PutMapping("/account/{id}")
-	public ResponseEntity<String> putAccountId(@PathVariable String id) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);		
+	public ResponseEntity<String> putAccountId(@PathVariable String id, @Valid @RequestBody AccountData accountData) {
+    Account account = accountRepository.findById(id).orElseGet(Account::new);
+    if (account.isValid()) {
+      account.setName(accountData.getName());
+      account.setSurname(accountData.getSurname());
+      accountRepository.save(account);
+      return new ResponseEntity<>(HttpStatus.OK);
+    }
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+  /**
+   * Gestisce le richieste di tipo {@link RequestMethod#PATCH HEAD} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
+   * 
+   * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
+   * @return {@link HttpStatus}.
+   */
 	@PatchMapping("/account/{id}")
-	public ResponseEntity<String> patchAccountId(@PathVariable String id) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);		
+	public ResponseEntity<String> patchAccountId(@PathVariable String id, @RequestBody AccountData accountData) {
+    Account account = accountRepository.findById(id).orElseGet(Account::new);
+    if (account.isValid()) {
+      String name = accountData.getName(), surname = accountData.getSurname();
+      if (name != null || surname != null) {
+        if (name != null) {
+          account.setName(name);
+        }
+        if (surname != null) {
+          account.setSurname(surname);
+        }
+        accountRepository.save(account);
+        return new ResponseEntity<>(HttpStatus.OK);
+      }
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
   /**
    * Gestisce le richieste di tipo {@link RequestMethod#HEAD HEAD} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
    * 
    * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
-   * @return {@link Account#name nome} e {@link Account#surname cognome} dell'{@link Account} in un header di chiave {@code "X-Sistema-Bancario"} e valore nel formato {@code "nome;cognome"}. 
+   * @return L'header {@link CustomHeaders#getXSistemaBancarioHeader XSistemaBancario} con {@link Account#name nome} e {@link Account#surname cognome} dell'{@link Account}. 
    */
 	@RequestMapping(value = "/account/{id}", method = RequestMethod.HEAD)
 	public ResponseEntity<String> headAccountId(@PathVariable String id) {
     Account account = accountRepository.findById(id).orElseGet(Account::new);
     if (account.isValid()) {
-      return new ResponseEntity<String>(new LinkedMultiValueMap<String, String>(Map.of("X-Sistema-Bancario", List.of(account.getName() + ";" + account.getSurname()))), HttpStatus.OK);
+      return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK);
     }
     return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 	}
 
+  /**
+   * TODO
+   * 
+   * @param body
+   * @return
+   */
   @PostMapping("/transfer")
 	public ResponseEntity<String> postTransfer(@RequestBody String body) {
 		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
+  /**
+   * TODO
+   * 
+   * @param body
+   * @return
+   */
 	@PostMapping("/divert")
 	public ResponseEntity<String> postDivert(@RequestBody String body) {
 		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
