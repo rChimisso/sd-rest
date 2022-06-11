@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,6 +16,7 @@ import zorchi.utility.StandardUUID;
 public class Transaction {
   @ManyToOne
   @JoinColumn(name = "SHORT_ID")
+  
   private final Account ACCOUNT;
 
   @Id
