@@ -3,7 +3,7 @@
     "angular.ng-template",
     "crystal-spider.jsdoc-generator",
     "dbaeumer.vscode-eslint",
-    "mhutchie.git-graph",
-    "vscjava.vscode-java-pack"
+    "esbenp.prettier-vscode",
+    "mhutchie.git-graph"
   ]
 }

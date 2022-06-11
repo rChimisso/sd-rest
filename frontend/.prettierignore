@@ -1,0 +1,10 @@
+# Ignore artifacts:
+coverage
+dist
+
+# Ignore dependencies:
+node_modules
+
+# Ignore TS and JS files (ESLint will manage of them):
+*.ts
+*.js

@@ -7,38 +7,42 @@ module.exports = function (config) {
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
+      require('karma-chrome-launcher'),
+      require('karma-sabarivka-reporter'),
+      require('karma-jasmine-html-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
-      jasmine: {
-        // you can add configuration options for Jasmine here
-        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
-        // for example, you can disable the random execution with `random: false`
-        // or set a specific seed with `seed: 4321`
-      },
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false
     },
     jasmineHtmlReporter: {
-      suppressAll: true // removes the duplicated traces
+      suppressAll: true,
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/frontend'),
+      dir: require("path").join(__dirname, "jenkins/coverage"),
       subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
+      reporters: [{type: 'html'}, {type: 'lcovonly'}, {type: 'text-summary'}],
+      include: [
+        "src/app/**/*.(js|ts)",
+        '!src/environments/*.ts',
+        '!src/test/**/*.ts',
+        '!src/main.ts',
+        '!src/polyfills.ts',
+        '!src/settings.ts',
+        '!src/test.ts',
+        "!src/app/**/*enum.ts",
+        "!src/app/**/*interface.ts",
+        "!src/app/**/*spec.ts",
       ]
     },
-    reporters: ['progress', 'kjhtml'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
-    restartOnFileChange: true
+    browsers: ['ChromeHeadless'],
+    captureTimeout: 300000,
+    browserNoActivityTimeout: 300000,
+    browserDisconnectTimeout: 60000,
+    browserDisconnectTolerance: 2,
+    failOnEmptyTestSuite: false,
+    restartOnFileChange: true,
+    retryLimit: 12
   });
 };
