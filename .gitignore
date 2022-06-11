@@ -1,11 +1,10 @@
-HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!**/src/main/**/build
+!**/src/test/**/build
 
-### STS ###
+# STS
 .apt_generated
 .classpath
 .factorypath
@@ -14,24 +13,61 @@ build/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+!**/src/main/**/bin
+!**/src/test/**/bin
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+!**/src/main/**/out
+!**/src/test/**/out
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# NetBeans
+nbproject/private
+nbbuild
+nbdist
+.nb-gradle
 
-### VS Code ###
-.vscode/
+# Eclipse
+.metadata
+
+# Visual Studio Code
+.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+# Other IDEs and editors
+.c9
+*.launch
+*.sublime-workspace
+
+# Frontend compiled output
+dist
+tmp
+out-tsc
+bazel-out
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Miscellaneous
+.angular
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
+testem.log
+typings
+
+# System files
+.DS_Store
+Thumbs.db
+
