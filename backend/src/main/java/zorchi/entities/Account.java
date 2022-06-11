@@ -98,7 +98,7 @@ public class Account {
   public long getBalance() {
     return balance;
   }
-
+  
   /**
    * Imposta il nuovo valore del {@link #balance saldo} dell'account.
    * 

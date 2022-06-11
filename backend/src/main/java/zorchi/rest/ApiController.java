@@ -20,9 +20,13 @@ import zorchi.entities.Account;
 import zorchi.entities.Account.AccountData;
 import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
+import zorchi.entities.Transfer;
+import zorchi.entities.Transfer.TransferData;
 import zorchi.repositories.AccountRepository;
 import zorchi.repositories.TransactionRepository;
+import zorchi.repositories.TransferRepository;
 import zorchi.responses.bodies.TransactionResponseBody;
+import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
 import zorchi.utility.StandardUUID;
 import zorchi.utility.StandardUUID.ShortUUID;
@@ -42,14 +46,20 @@ public class ApiController {
    * JPA {@link TransactionRepository}.
    */
   private final TransactionRepository transactionRepository;
+  
+  /**
+   * JPA {@link TransferRepository}.
+   */
+  private final TransferRepository transferRepository;
 
   /**
    * @param accountRepository - JPA {@link AccountRepository} iniettata da Spring.
    * @param transactionRepository - JPA {@link TransactionRepository} iniettata da Spring.
    */
-  ApiController(AccountRepository accountRepository, TransactionRepository transactionRepository) {
+  ApiController(AccountRepository accountRepository, TransactionRepository transactionRepository, TransferRepository transferRepository) {
     this.accountRepository = accountRepository;
     this.transactionRepository = transactionRepository;
+    this.transferRepository = transferRepository;
   }
 
   /**
@@ -100,7 +110,7 @@ public class ApiController {
   /**
    * TODO
    * 
-   * @param id
+   * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
    * @return
    */
   @GetMapping("/account/{id}")
@@ -193,14 +203,39 @@ public class ApiController {
 
   /**
    * TODO
-   * 
-   * @param body
+   *  Da sistemare ,è quella da modificare inserendo i controlli nel costruttore
+   * @param transferData
    * @return
    */
   @PostMapping("/transfer")
-	public ResponseEntity<String> postTransfer(@RequestBody String body) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-	}
+	public ResponseEntity<TransferResponseBody> postTransfer(@RequestBody TransferData transferData) {
+	  
+	  Account accountTo = accountRepository.findById(transferData.getTo()).orElseGet(Account::new);
+	  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
+	  String uuid = "";
+	    if (accountTo.isValid() && accountFrom.isValid()) {
+	      long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
+	      long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
+	      if (newFromBalance >= 0) {
+	        accountFrom.setBalance(newFromBalance);
+	        accountTo.setBalance(newToBalance);
+	        Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById,StandardUUID.randomUUID(transferRepository::existsById));
+	        uuid = transfer.getUUID();
+	        
+	        accountRepository.save(accountFrom);
+	        accountRepository.save(accountTo);
+	        transactionRepository.save(transfer.getFrom());
+	        transactionRepository.save(transfer.getTo());
+	        transferRepository.save(transfer);
+	        return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(newFromBalance, newToBalance,  accountFrom.getID(),accountTo.getID(),transfer.getUUID()), HttpStatus.OK);
+	      }
+	      return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(-1, -1,  accountFrom.getID(),accountTo.getID(),uuid), HttpStatus.OK);
+	    }
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	  
+		
+	
 
   /**
    * TODO

@@ -37,6 +37,8 @@ public class Transaction {
     this.ACCOUNT = account;
     this.UUID = UUID;
     this.DATE = new Date();
+    
+   
   }
 
   public Account getACCOUNT() {
