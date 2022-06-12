@@ -1,11 +1,13 @@
 package zorchi.entities;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,6 +17,15 @@ import zorchi.utility.StandardUUID;
 public class Transaction {
   @ManyToOne
   @JoinColumn(name = "SHORT_ID")
+  
+  
+  @OneToMany(mappedBy = "from")
+  Set<Transfer> form;
+  
+  @OneToMany(mappedBy = "to")
+  Set<Transfer> to;
+  
+  
   
   private final Account ACCOUNT;
 

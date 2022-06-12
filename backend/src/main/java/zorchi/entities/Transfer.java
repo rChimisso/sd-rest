@@ -1,39 +1,53 @@
 package zorchi.entities;
 
+
 import java.util.Date;
 import java.util.function.Predicate;
 
-import javax.persistence.EmbeddedId;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import zorchi.entities.Transaction.TransactionData;
+
 import zorchi.utility.StandardUUID;
 
 @Entity
-public class Transfer {
+public class Transfer{
 	
-	@EmbeddedId
-	private final String UUID;
+
+	
+	
+	/**
+	 * 
+	 */
+	//@EmbeddedId
+	//TransferKey id;
+	
+	@Id
+	final String UUID;
+	
+	/*
+	 * Tassa per il trasferimento / bonifico, per ora è 0
+	 */
+	private static int tassa = 0;
 	
 	/**
 	 * Transazione del ricevente
 	 */
 	@ManyToOne
-    @MapsId("toId")
     @JoinColumn(name = "to_id")
 	private Transaction to; 
 	
 	/**
 	 * Tranzazione del destinatario
 	 */
-	@ManyToOne /// vedere come funzionano , sono sbagliate
-    @MapsId("fromId")
+	@ManyToOne
     @JoinColumn(name = "from_id")
 	private Transaction from;
 
@@ -42,32 +56,43 @@ public class Transfer {
 	 */
 	private final Date DATE;
 	
+	private final int amount;
+	
 	 
 	public Transfer( Account to,  Account from,  int amount, Predicate<String> duplicated, String UUID) {
 		
 		this.DATE = new Date();
 		this.UUID = UUID;
+		this.amount = amount;
 		int absAmount = Math.abs(amount);
 		
 		// Orribile da cambiare
-		if(from.getBalance() - absAmount >= 0)
+		if(from.getBalance() - (absAmount+tassa) >= 0)
 		{
 		
-			TransactionData f = new TransactionData(absAmount);
+			TransactionData f = new TransactionData(absAmount+tassa);
 			TransactionData t = new TransactionData(-absAmount);
 			
+
+		
 			this.to = new Transaction(t ,to ,StandardUUID.randomUUID(duplicated));
 			this.from = new Transaction(f ,from ,StandardUUID.randomUUID(duplicated));
 			
 			
 		}else{
 			
-			TransactionData f = new TransactionData(absAmount);
-			TransactionData t = new TransactionData(-absAmount);
+			TransactionData f = new TransactionData(0);
+			TransactionData t = new TransactionData(0);
 			
+			
+
 			this.to = new Transaction(t ,to ,StandardUUID.randomUUID(duplicated));
 			this.from = new Transaction(f ,from ,StandardUUID.randomUUID(duplicated));
+
 		}
+		
+		
+		
 		
 		
 		
@@ -106,6 +131,9 @@ public class Transfer {
 	public Transaction getFrom() {
 		return from;
 	}
+	
+	
+	
 
 	 public static class TransferData {
 		    private final int amount;
