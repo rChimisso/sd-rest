@@ -22,6 +22,7 @@ import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
 import zorchi.entities.Transfer;
 import zorchi.entities.Transfer.TransferData;
+import zorchi.entities.Transfer.TransferId;
 import zorchi.repositories.AccountRepository;
 import zorchi.repositories.TransactionRepository;
 import zorchi.repositories.TransferRepository;
@@ -244,7 +245,35 @@ public class ApiController {
    * @return
    */
 	@PostMapping("/divert")
-	public ResponseEntity<String> postDivert(@RequestBody String body) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-	}		
-}
+	public ResponseEntity<String> postDivert(@RequestBody TransferId transferId) {
+		//RICORDARSI DI INSERIRE CONTROLLO SU ID PER LANCIARE BAD REQUEST
+		
+		
+		Transfer transfer = transferRepository.findById(transferId.getId()).orElseGet(Transfer::new);
+		if (transfer.isValid()) {
+		   
+				Account to = transfer.getTo().getACCOUNT();
+				Account from = transfer.getFrom().getACCOUNT();
+				
+				if(from.canTransfer(transfer.getAmount()))
+					{
+				
+						Transfer newTransfer = new Transfer(from, to, Math.abs(transfer.getAmount()), transactionRepository::existsById,StandardUUID.randomUUID(transferRepository::existsById));
+						transactionRepository.save(newTransfer.getFrom());
+						transactionRepository.save(newTransfer.getTo());
+						transferRepository.save(newTransfer);
+						return new ResponseEntity<>(HttpStatus.OK);
+					}
+				else
+					{
+					return new ResponseEntity<>("Saldo del destinatari non sufficente, operazione annulata ",HttpStatus.OK);
+					}
+		        
+		      }
+		
+		
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		
+	}		 
+

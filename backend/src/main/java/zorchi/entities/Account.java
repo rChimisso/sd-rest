@@ -116,6 +116,13 @@ public class Account {
   public String getID() {
     return SHORT_UUID;
   }
+  
+  
+  public boolean canTransfer(int amount)
+  {
+	  return this.balance >= amount;
+		  
+  }
 
   /**
    * Controlla se questo account è valido.

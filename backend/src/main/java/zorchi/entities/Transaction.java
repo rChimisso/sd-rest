@@ -17,16 +17,7 @@ import zorchi.utility.StandardUUID;
 public class Transaction {
   @ManyToOne
   @JoinColumn(name = "SHORT_ID")
-  
-  
-  @OneToMany(mappedBy = "from")
-  Set<Transfer> form;
-  
-  @OneToMany(mappedBy = "to")
-  Set<Transfer> to;
-  
-  
-  
+
   private final Account ACCOUNT;
 
   @Id
