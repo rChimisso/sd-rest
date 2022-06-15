@@ -93,6 +93,7 @@
         "array-element-newline": [
           "warn",
           {
+            "multiline": true,
             "minItems": 3
           }
         ],
@@ -101,12 +102,14 @@
           "warn",
           {
             "ObjectExpression": {
-              "consistent": false,
-              "minProperties": 2
-            },
-            "ObjectPattern": {
+              "multiline": true,
               "consistent": false,
               "minProperties": 3
+            },
+            "ObjectPattern": {
+              "multiline": true,
+              "consistent": false,
+              "minProperties": 5
             },
             "ImportDeclaration": {
               "consistent": false,
@@ -294,7 +297,7 @@
         "@typescript-eslint/brace-style": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/no-shadow": "warn",
-        "@typescript-eslint/explicit-member-accessibility": "error",
+        "@typescript-eslint/explicit-member-accessibility": "warn",
         "@typescript-eslint/consistent-type-definitions": [
           "warn",
           "interface"
@@ -448,7 +451,6 @@
         "import/no-useless-path-segments": "warn",
         "import/newline-after-import": "warn",
         "import/no-deprecated": "warn",
-        "import/group-exports": "warn",
         "import/exports-last": "warn",
         "import/first": "warn",
         "import/order": [
