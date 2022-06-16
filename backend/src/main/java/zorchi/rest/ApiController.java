@@ -1,5 +1,7 @@
 package zorchi.rest;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import zorchi.entities.Account;
 import zorchi.entities.Account.AccountData;
+import zorchi.entities.Account.AccountFullData;
 import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
 import zorchi.entities.Transfer;
@@ -115,8 +118,19 @@ public class ApiController {
    * @return
    */
   @GetMapping("/account/{id}")
-	public ResponseEntity<String> getAccountId(@PathVariable String id) {
-    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	public ResponseEntity<AccountFullData> getAccountId(@PathVariable String id) {
+	  Account account = accountRepository.findById(id).orElseGet(Account::new);
+	    if (account.isValid()) {
+	    	
+	    	// Manca l'heder
+	    	
+	      //return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK); account.getID()
+	    	
+	    	return new ResponseEntity<>(new AccountFullData(account.getName(), account.getSurname(), transferRepository.findTransferFormAccountId(account.getID())), HttpStatus.OK);
+	    
+	    }
+	   // return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		return null;
 	}
 
   /**
@@ -240,8 +254,8 @@ public class ApiController {
 
   /**
    * TODO
-   * 
-   * @param body
+   * Da sistemare
+   * @param transferId
    * @return
    */
 	@PostMapping("/divert")

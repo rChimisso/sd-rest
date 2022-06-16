@@ -1,14 +1,19 @@
 package zorchi.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import zorchi.utility.StandardUUID;
+import zorchi.entities.Transfer.TransferId;
 
 /**
  * Account bancario.
@@ -195,5 +200,64 @@ public class Account {
     public String getSurname() {
       return surname;
     }
+    
+
   }
+  
+  public static class AccountFullData {
+	    /**
+	     * Nome del proprietario dell'account.
+	     */
+	    @NonNull
+	    private final String name;
+	    /**
+	     * Cognome del proprietario dell'account.
+	     */
+	    @NonNull
+	    private final String surname;
+	    
+	   // Vedere se si riesce ad averla final
+	    private  List<TransferId> transfers = new ArrayList<TransferId>();
+
+	    /**
+	     * @param name - {@link #name nome}, passabile come proprietà {@code "name"} di un JSON.
+	     * @param surname - {@link #surname cognome}, passabile come proprietà {@code "surname"} di un JSON.
+	     */
+	    public AccountFullData(@JsonProperty("name") String name, @JsonProperty("surname") String surname, @JsonProperty("id") List<String> id) {
+	      this.name = name;
+	      this.surname = surname;
+	      
+	     
+	      for (String string : id) {
+	    	  
+	    	System.out.print(string);  
+			this.transfers.add(new TransferId(string));
+		}
+	    }
+
+	    /**
+	     * Restituisce il {@link #name nome}.
+	     * 
+	     * @return {@link #name}.
+	     */
+	    public String getName() {
+	      return name;
+	    }
+
+	    /**
+	     * Restituisce il {@link #surname cognome}.
+	     * 
+	     * @return {@link #surname}.
+	     */
+	    public String getSurname() {
+	      return surname;
+	    }
+	    
+	    public List<TransferId> getTransfers()
+	    {
+	    	return transfers;
+	    }
+	    
+
+	  }
 }
