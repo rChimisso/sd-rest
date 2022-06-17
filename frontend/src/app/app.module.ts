@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
@@ -11,6 +12,7 @@ import {RootModule} from './root/root.module';
   declarations: [AppComponent],
   imports: [
     RootModule,
+    BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([])

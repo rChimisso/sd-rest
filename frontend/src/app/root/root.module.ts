@@ -6,7 +6,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatTableModule} from '@angular/material/table';
-import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
@@ -17,7 +16,6 @@ import {RootEffects} from './redux/root.effects';
 
 @NgModule({
   imports: [
-    BrowserModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
