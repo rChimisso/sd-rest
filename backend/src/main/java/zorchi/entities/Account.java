@@ -13,6 +13,8 @@ import org.springframework.lang.NonNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import zorchi.utility.StandardUUID;
+import zorchi.entities.Transaction.TransactionFullData;
+import zorchi.entities.Transaction.TransactionFullDataInterface;
 import zorchi.entities.Transfer.TransferId;
 
 /**
@@ -217,22 +219,17 @@ public class Account {
 	    private final String surname;
 	    
 	   // Vedere se si riesce ad averla final
-	    private  List<TransferId> transfers = new ArrayList<TransferId>();
+	    private  final List<TransactionFullDataInterface> transfers;
 
 	    /**
 	     * @param name - {@link #name nome}, passabile come proprietà {@code "name"} di un JSON.
 	     * @param surname - {@link #surname cognome}, passabile come proprietà {@code "surname"} di un JSON.
 	     */
-	    public AccountFullData(@JsonProperty("name") String name, @JsonProperty("surname") String surname, @JsonProperty("id") List<String> id) {
+	    public AccountFullData(@JsonProperty("name") String name, @JsonProperty("surname") String surname, @JsonProperty("id") List<TransactionFullDataInterface> transfers) {
 	      this.name = name;
 	      this.surname = surname;
+	      this.transfers = transfers;
 	      
-	     
-	      for (String string : id) {
-	    	  
-	    	System.out.print(string);  
-			this.transfers.add(new TransferId(string));
-		}
 	    }
 
 	    /**
@@ -252,11 +249,12 @@ public class Account {
 	    public String getSurname() {
 	      return surname;
 	    }
+
+		public List<TransactionFullDataInterface> getTransfers() {
+			return transfers;
+		}
 	    
-	    public List<TransferId> getTransfers()
-	    {
-	    	return transfers;
-	    }
+	   
 	    
 
 	  }

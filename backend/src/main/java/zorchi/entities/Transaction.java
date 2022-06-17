@@ -1,15 +1,20 @@
 package zorchi.entities;
 
+
 import java.util.Date;
-import java.util.Set;
+
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 
 import zorchi.utility.StandardUUID;
 
@@ -69,5 +74,78 @@ public class Transaction {
     public int getAmount() {
       return amount;
     }
+    
   }
+  public static class TransactionFullData implements TransactionFullDataInterface {
+	    
+	    @NonNull
+	    private final String UUID;
+	    
+	    @NonNull
+	    private final int amount;
+	    
+	    @NonNull
+	    private final Date DATE;
+	    
+	    
+	    private final String idFrom;
+	    
+	    private final String idTo;
+	    
+	    
+	    
+	   
+
+		
+	    public TransactionFullData(@JsonProperty("UUID") String UUID, 
+	    		@JsonProperty("amount") int amount, 
+	    			@JsonProperty("DATE") Date date, 
+	    				@JsonProperty("idFrom")String idFrom,  
+	    					@JsonProperty("idTo")String idTo) 
+	    {
+	      this.UUID = UUID;
+	      this.amount = amount;
+	      this.DATE = date;
+	      this.idFrom = idFrom;
+	      this.idTo = idTo;
+	    }
+
+	
+
+		public String getUUID() {
+			return UUID;
+		}
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public Date getDATE() {
+			return DATE;
+		}
+
+		public String getIdFrom() {
+			return idFrom;
+		}
+
+		public String getIdTo() {
+			return idTo;
+		}
+
+	    
+
+	  }
+  public interface TransactionFullDataInterface {
+
+	   String getUUID();
+	    
+	   int getAmount();
+	    
+	   Date getDATE();
+	    
+	    
+	  String getIdFrom();
+	    
+	  String getIdTo();
+	}
 }

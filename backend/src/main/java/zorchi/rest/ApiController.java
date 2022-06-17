@@ -23,6 +23,7 @@ import zorchi.entities.Account.AccountData;
 import zorchi.entities.Account.AccountFullData;
 import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
+import zorchi.entities.Transaction.TransactionFullData;
 import zorchi.entities.Transfer;
 import zorchi.entities.Transfer.TransferData;
 import zorchi.entities.Transfer.TransferId;
@@ -113,7 +114,7 @@ public class ApiController {
 
   /**
    * TODO
-   * 
+   *  // Ricordarsi di scrivere sulla documentazione che cambiamo la risposta aggiungendo data amount e destinatario
    * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
    * @return
    */
@@ -126,7 +127,7 @@ public class ApiController {
 	    	
 	      //return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK); account.getID()
 	    	
-	    	return new ResponseEntity<>(new AccountFullData(account.getName(), account.getSurname(), transferRepository.findTransferFormAccountId(account.getID())), HttpStatus.OK);
+	    	return new ResponseEntity<AccountFullData>(new AccountFullData(account.getName(), account.getSurname(), transactionRepository.findTransactionFormAccountId(account.getID())), HttpStatus.OK);
 	    
 	    }
 	   // return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
