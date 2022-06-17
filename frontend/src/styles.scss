@@ -1,3 +1,31 @@
 @use "@angular/material" as material;
 
+@import "./styles/variables";
+@import "@material/layout-grid/mdc-layout-grid";
+
 @include material.core();
+
+.xsb-grid {
+  @include mdc-layout-grid-inner(desktop, 0, $grid-col-gap);
+  align-items: center;
+
+  .xsb-grid-cell-span {
+    @for $i from 1 to 13 {
+      &-#{$i} {
+        @include mdc-layout-grid-cell(desktop, $i, $grid-col-gap);
+
+        .mat-form-field {
+          display: block;
+        }
+
+        &.xsb-submit {
+          margin-bottom: 1.34375em;
+        }
+      }
+    }
+  }
+}
+
+.xsb-submit {
+  height: 65%;
+}

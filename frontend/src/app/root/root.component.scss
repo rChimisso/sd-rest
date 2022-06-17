@@ -1,7 +1,10 @@
 :host {
-  .account-form-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  table {
+    width: 100%;
+
+    td.mat-cell,
+    th.mat-header-cell {
+      padding-left: 24px;
+    }
   }
 }

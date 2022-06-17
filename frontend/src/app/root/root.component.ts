@@ -1,7 +1,11 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {SHORT_UUID_LENGTH, UUID_REGEX} from '../constants/constants';
+import {SHORT_UUID_LENGTH, UUID_REGEX} from '../core/constants/constants';
+import {Account} from '../core/types/Account.interface';
+import {Nullable} from '../core/types/Nullable.type';
+import {Transaction} from '../core/types/Transaction.interface';
+import {Transfer} from '../core/types/Transfer.interface';
 
 @Component({
   selector: 'root',
@@ -10,6 +14,17 @@ import {SHORT_UUID_LENGTH, UUID_REGEX} from '../constants/constants';
 })
 export class RootComponent {
   public ids = ['12345678901234567890', 'adf345678abc345de54f'];
+
+  public account: Nullable<Account> = null;
+
+  public history: Nullable<(Transaction | Transfer)[]> = null;
+
+  public columns = [
+    'id',
+    'amount',
+    'date',
+    'otherAccount'
+  ];
 
   public readonly accountForm: FormGroup<{
     accountId: FormControl<string>;
@@ -52,5 +67,45 @@ export class RootComponent {
         }
       )
     });
+  }
+
+  public research() {
+    // TODO: Dispatch action
+    this.account = {
+      id: this.accountForm.controls.accountId.value,
+      balance: 10,
+      name: 'Test',
+      surname: 'Von Tester'
+    };
+    this.history = [
+      {
+        accountId: this.accountForm.controls.accountId.value,
+        amount: 20,
+        date: new Date('2022/06/17'),
+        id: '123456789012345678901234567890ab'
+      },
+      {
+        accountId: this.accountForm.controls.accountId.value,
+        amount: -10,
+        date: new Date('2022/06/15'),
+        id: '123456789012345678901234567890cd'
+      },
+      {
+        accountId: this.accountForm.controls.accountId.value,
+        amount: 0,
+        date: new Date('2022/06/15'),
+        id: '123456789012345678901234567890ef'
+      }
+    ];
+  }
+
+  public getOtherAccount(element: Transaction | Transfer) {
+    if ('to' in element && element.to !== this.account?.id) {
+      return element.to;
+    }
+    if ('from' in element && element.from !== this.account?.id) {
+      return element.from;
+    }
+    return '-';
   }
 }

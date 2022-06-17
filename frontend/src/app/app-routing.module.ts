@@ -5,7 +5,7 @@ import {RootComponent} from './root/root.component';
 
 const routes: Routes = [
   {
-    path: 'root',
+    path: '',
     component: RootComponent
   }
 ];

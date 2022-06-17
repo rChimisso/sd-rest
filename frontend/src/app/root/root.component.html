@@ -1,5 +1,5 @@
-<div class="account-form-container">
-  <form [formGroup]="accountForm" class="account-form">
+<div class="xsb-grid">
+  <form [formGroup]="accountForm" class="xsb-grid-cell-span-8">
     <mat-form-field appearance="outline">
       <mat-label>Account ID</mat-label>
       <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" />
@@ -11,6 +11,37 @@
       <mat-error *ngIf="accountIdInvalid">{{ errorMessage }}</mat-error>
     </mat-form-field>
   </form>
-
-  <button mat-button [disabled]="accountIdInvalid">Ricerca</button>
+  <button mat-button [disabled]="accountIdInvalid" (click)="research()" class="xsb-grid-cell-span-4 xsb-submit">Ricerca</button>
 </div>
+<ng-container *ngIf="account && history">
+  <div>
+    Proprietario: {{ account.name }} {{ account.surname }}
+    <br />
+    Saldo: {{ account.balance }}
+  </div>
+  <table mat-table [dataSource]="history">
+    <!-- Colonna ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+    <!-- Colonna Ammontare -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Ammontare</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+    </ng-container>
+    <!-- Colonna Data -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Data</th>
+      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    </ng-container>
+    <!-- Colonna Altro Conto Coinvolto -->
+    <ng-container matColumnDef="otherAccount">
+      <th mat-header-cell *matHeaderCellDef>Altro Conto Coinvolto</th>
+      <td mat-cell *matCellDef="let element">{{ getOtherAccount(element) }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+</ng-container>
