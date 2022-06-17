@@ -1,31 +1,21 @@
 import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatTableModule} from '@angular/material/table';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreModule} from '@ngrx/store';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {RootComponent} from './root/root.component';
+import {ApiService} from './core/services/api-service.service';
+import {RootModule} from './root/root.module';
 
 @NgModule({
-  declarations: [AppComponent, RootComponent],
+  declarations: [AppComponent],
   imports: [
-    BrowserModule,
+    RootModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatTableModule
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([])
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

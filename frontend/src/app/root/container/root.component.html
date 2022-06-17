@@ -1,0 +1,50 @@
+<div class="xsb-grid">
+  <form [formGroup]="accountForm" class="xsb-grid-cell-span-8">
+    <mat-form-field appearance="outline">
+      <mat-label>Account ID</mat-label>
+      <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let id of ids" [value]="id">
+          {{ id }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="isAccountIdInvalid">{{ errorMessage }}</mat-error>
+    </mat-form-field>
+  </form>
+  <button mat-button [disabled]="isAccountIdInvalid" (click)="research()" class="xsb-grid-cell-span-4 xsb-submit">Ricerca</button>
+</div>
+<div *ngIf="account$ | async as account">
+  Proprietario: {{ account.name }} {{ account.surname }}
+  <br />
+  Saldo: {{ account.balance }}
+</div>
+<table *ngIf="history$ | async as history" mat-table [dataSource]="history">
+  <!-- Colonna ID -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+  <!-- Colonna Ammontare -->
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef>Ammontare</th>
+    <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+  </ng-container>
+  <!-- Colonna Data -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>Data</th>
+    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+  </ng-container>
+  <!-- Colonna Mittente -->
+  <ng-container matColumnDef="sender">
+    <th mat-header-cell *matHeaderCellDef>Mittente</th>
+    <td mat-cell *matCellDef="let element">{{ element.from || "-" }}</td>
+  </ng-container>
+  <!-- Colonna Destinatario -->
+  <ng-container matColumnDef="recipient">
+    <th mat-header-cell *matHeaderCellDef>Destinatario</th>
+    <td mat-cell *matCellDef="let element">{{ element.to || "-" }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

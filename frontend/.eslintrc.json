@@ -533,6 +533,14 @@
         "jasmine/no-global-setup": "error",
         "jasmine/no-unsafe-spy": "error"
       }
+    },
+    {
+      "files": [
+        "*.reducers.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/default-param-last": "off"
+      }
     }
   ],
   "ignorePatterns": [
