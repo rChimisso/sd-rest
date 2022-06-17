@@ -28,3 +28,8 @@ export const getHistory = createSelector(
   getRootState,
   (state: Nullable<State>) => state ? state.history : null
 );
+
+export const getAccountIds = createSelector(
+  getRootState,
+  (state: Nullable<State>) => state ? state.accountIds : []
+);

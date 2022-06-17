@@ -17,3 +17,10 @@ export const saveHistory = createAction(
   '[Root] Save History',
   props<{history: Movement[]}>()
 );
+
+export const retrieveAccountIds = createAction('[Root] Retrieve Account Ids');
+
+export const saveAccountIds = createAction(
+  '[Root] Save Account Ids',
+  props<{accountIds: string[]}>()
+);

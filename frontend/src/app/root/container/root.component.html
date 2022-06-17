@@ -4,7 +4,7 @@
       <mat-label>Account ID</mat-label>
       <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" />
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let id of ids" [value]="id">
+        <mat-option *ngFor="let id of accountIds$ | async" [value]="id">
           {{ id }}
         </mat-option>
       </mat-autocomplete>

@@ -7,7 +7,7 @@ export class ApiService {
   public constructor(private readonly httpClient: HttpClient) {}
 
   // TODO: remove and implements actual calls.
-  public anyCall<T>(result: T) {
+  public mockCall<T>(result: T) {
     return of(result);
   }
 }

@@ -8,8 +8,8 @@ import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
 import {Nullable} from 'src/app/core/models/nullable.type';
 
-import {getAccount, getHistory, RootState} from '../redux';
-import {retrieveAccountData} from '../redux/root.actions';
+import {getAccount, getAccountIds, getHistory, RootState} from '../redux';
+import {retrieveAccountData, retrieveAccountIds} from '../redux/root.actions';
 
 @Component({
   selector: 'root',
@@ -17,7 +17,7 @@ import {retrieveAccountData} from '../redux/root.actions';
   styleUrls: ['./root.component.scss']
 })
 export class RootComponent {
-  public ids = ['12345678901234567890', 'adf345678abc345de54f'];
+  public accountIds$: Observable<string[]> = this.appState$.select(getAccountIds);
 
   public account$: Observable<Nullable<Account>> = this.appState$.select(getAccount);
 
@@ -58,6 +58,7 @@ export class RootComponent {
   }
 
   public constructor(private readonly appState$: Store<RootState>) {
+    this.appState$.dispatch(retrieveAccountIds());
     this.accountForm = new FormGroup({
       accountId: new FormControl(
         '',

@@ -4,16 +4,18 @@ import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
 import {clearData} from 'src/app/core/redux/core.actions';
 
-import {saveAccount, saveHistory} from './root.actions';
+import {saveAccount, saveAccountIds, saveHistory} from './root.actions';
 
 interface State {
   account: Account | null;
   history: Movement[] | null;
+  accountIds: string[];
 }
 
 const INITIAL_STATE: State = {
   account: null,
-  history: null
+  history: null,
+  accountIds: []
 };
 
 const rootReducer = createReducer(
@@ -26,6 +28,10 @@ const rootReducer = createReducer(
   on(saveHistory, (state, {history}) => ({
     ...state,
     history
+  })),
+  on(saveAccountIds, (state, {accountIds}) => ({
+    ...state,
+    accountIds
   }))
 );
 
