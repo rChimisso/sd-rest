@@ -5,6 +5,23 @@
     td.mat-cell,
     th.mat-header-cell {
       padding-left: 24px;
+      border-color: black;
+    }
+
+    tr.mat-row:first-of-type {
+      font-weight: bold;
+    }
+
+    .xsb-amount-positive {
+      color: green;
+    }
+
+    .xsb-amount-negative {
+      color: red;
+    }
+
+    .xsb-amount-neutral {
+      color: gray;
     }
   }
 }

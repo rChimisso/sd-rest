@@ -23,19 +23,19 @@ const mockAccountData: {
     {
       accountId: '12345678901234567890',
       amount: 20,
-      date: new Date('2022/06/17'),
+      date: new Date('2022/06/15'),
       id: '123456789012345678901234567890ab'
     },
     {
       accountId: '12345678901234567890',
       amount: -10,
-      date: new Date('2022/06/15'),
+      date: new Date('2022/06/17'),
       id: '123456789012345678901234567890cd'
     },
     {
       accountId: '12345678901234567890',
       amount: 0,
-      date: new Date('2022/06/15'),
+      date: new Date('2022/06/16'),
       id: '123456789012345678901234567890ef'
     }
   ]
