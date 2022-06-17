@@ -10,6 +10,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ApiService} from './core/services/api-service.service';
 import {RootModule} from './root/root.module';
+import {TransferModule} from './transfer/transfer.module';
 
 registerLocaleData(localeIt, 'it-IT');
 
@@ -17,6 +18,7 @@ registerLocaleData(localeIt, 'it-IT');
   declarations: [AppComponent],
   imports: [
     RootModule,
+    TransferModule,
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({}),

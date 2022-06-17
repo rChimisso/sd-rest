@@ -16,10 +16,10 @@ import {RootEffects} from './redux/root.effects';
 @NgModule({
   imports: [
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    BrowserAnimationsModule,
     MatButtonModule,
     MatTableModule,
     StoreModule.forFeature(rootFeatureKey, reducers),

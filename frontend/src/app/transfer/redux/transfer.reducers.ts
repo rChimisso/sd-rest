@@ -2,13 +2,21 @@ import {Action, createReducer, on} from '@ngrx/store';
 
 import {clearData} from 'src/app/core/redux/core.actions';
 
-interface State {}
+import {saveAccountIds} from './transfer.actions';
 
-const INITIAL_STATE: State = {};
+interface State {
+  accountIds: string[];
+}
+
+const INITIAL_STATE: State = {accountIds: []};
 
 const transferReducer = createReducer(
   INITIAL_STATE,
-  on(clearData, () => INITIAL_STATE)
+  on(clearData, () => INITIAL_STATE),
+  on(saveAccountIds, (state, {accountIds}) => ({
+    ...state,
+    accountIds
+  }))
 );
 
 function reducer(state: State = INITIAL_STATE, action: Action): State {

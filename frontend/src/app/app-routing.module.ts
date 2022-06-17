@@ -2,11 +2,16 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {RootComponent} from './root/container/root.component';
+import {TransferComponent} from './transfer/container/transfer.component';
 
 const routes: Routes = [
   {
     path: '',
     component: RootComponent
+  },
+  {
+    path: 'transfer',
+    component: TransferComponent
   }
 ];
 
