@@ -1,4 +1,3 @@
-import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -23,7 +22,6 @@ import {RootEffects} from './redux/root.effects';
     BrowserAnimationsModule,
     MatButtonModule,
     MatTableModule,
-    HttpClientModule,
     StoreModule.forFeature(rootFeatureKey, reducers),
     EffectsModule.forFeature([RootEffects])
   ],

@@ -1,4 +1,3 @@
-import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
@@ -9,11 +8,7 @@ import {TransferComponent} from './container/transfer.component';
 import {reducers} from './redux';
 
 @NgModule({
-  imports: [
-    HttpClientModule,
-    StoreModule.forFeature(rootFeatureKey, reducers),
-    EffectsModule.forFeature([RootEffects])
-  ],
+  imports: [StoreModule.forFeature(rootFeatureKey, reducers), EffectsModule.forFeature([RootEffects])],
   declarations: [TransferComponent]
 })
 export class TransferModule {}
