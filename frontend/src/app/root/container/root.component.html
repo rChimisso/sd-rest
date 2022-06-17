@@ -14,9 +14,9 @@
   <button mat-button [disabled]="isAccountIdInvalid" (click)="research()" class="xsb-grid-cell-span-4 xsb-submit">Ricerca</button>
 </div>
 <div *ngIf="account$ | async as account">
-  Proprietario: {{ account.name }} {{ account.surname }}
+  Proprietario: <b>{{ account.name }} {{ account.surname }}</b>
   <br />
-  Saldo: {{ account.balance }}
+  Saldo: <b>{{ account.balance }}</b>
 </div>
 <table mat-table *ngIf="history$ | async as history" [dataSource]="history">
   <!-- Colonna ID -->
@@ -27,7 +27,7 @@
   <!-- Colonna Ammontare -->
   <ng-container matColumnDef="amount">
     <th mat-header-cell *matHeaderCellDef>Ammontare</th>
-    <td mat-cell *matCellDef="let element" [ngClass]="getAmountClass(element.amount)">{{ element.amount }}</td>
+    <td mat-cell *matCellDef="let element" [ngClass]="getAmountClass(element.amount)">{{ element.amount | currency }}</td>
   </ng-container>
   <!-- Colonna Data -->
   <ng-container matColumnDef="date">
