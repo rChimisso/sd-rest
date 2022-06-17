@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 import {SHORT_UUID_LENGTH, UUID_REGEX} from 'src/app/core/constants/constants';
 
 import {getAccountIds, TransferState} from '../redux';
-import {retrieveAccountIds} from '../redux/transfer.actions';
+import {performTranfer, retrieveAccountIds} from '../redux/transfer.actions';
 
 @Component({
   selector: 'transfer',
@@ -125,5 +125,11 @@ export class TransferComponent {
     });
   }
 
-  public perform() {}
+  public perform() {
+    this.appState$.dispatch(performTranfer({
+      from: this.transferForm.controls.senderId.value,
+      to: this.transferForm.controls.recipientId.value,
+      amount: this.transferForm.controls.amount.value
+    }));
+  }
 }
