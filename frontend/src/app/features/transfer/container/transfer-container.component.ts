@@ -9,7 +9,6 @@ import {UUID_VALIDATORS} from 'src/app/core/constants/constants';
 import {Nullable} from 'src/app/core/models/nullable.type';
 import {clearData} from 'src/app/core/redux/core.actions';
 import {State} from 'src/app/core/redux/core.reducers';
-import {getUUIDErrorMessage} from 'src/app/shared/functions/shared.functions';
 
 import {TransferResultDialogComponent} from '../components/transfer-result-dialog/transfer-result-dialog.component';
 import {FormInterface} from '../models/form.interface';
@@ -24,36 +23,6 @@ import {performTransfer} from '../redux/transfer.actions';
 })
 export class TransferContainerComponent extends AbstractFormContainer<FormInterface> {
   private readonly transferResult$: Observable<Nullable<TransferResult>> = this.appState$.select(getTransferResult);
-
-  public get senderErrorMessage() {
-    const {invalid, errors} = this.formGroup.controls.senderId;
-    if (invalid && errors) {
-      return getUUIDErrorMessage(errors);
-    }
-    return '';
-  }
-
-  public get recipientErrorMessage() {
-    const {invalid, errors} = this.formGroup.controls.recipientId;
-    if (invalid && errors) {
-      return getUUIDErrorMessage(errors);
-    }
-    return '';
-  }
-
-  public get amountErrorMessage() {
-    const {invalid, errors} = this.formGroup.controls.amount;
-    if (invalid && errors) {
-      const {required, min} = errors;
-      if (required) {
-        return 'L\'ammontare è richiesto.';
-      }
-      if (min) {
-        return 'L\'ammontare deve essere maggiore o uguale a 0.';
-      }
-    }
-    return '';
-  }
 
   public constructor(appState$: Store<State>, private readonly dialog: MatDialog) {
     super(

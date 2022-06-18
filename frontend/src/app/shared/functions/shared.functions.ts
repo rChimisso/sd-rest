@@ -20,3 +20,7 @@ export function getUUIDErrorMessage({required, pattern, minlength, maxlength}: V
 export function isTransfer(movement: Movement): movement is Transfer {
   return !!('sender' in movement && movement.sender && 'recipient' in movement && movement.recipient);
 }
+
+export function filterAccountIds(value: string, accountIds: string[]) {
+  return value ? accountIds.filter(accountId => accountId.toLowerCase().includes(value.toLowerCase())) : [...accountIds];
+}

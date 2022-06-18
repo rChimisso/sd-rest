@@ -9,7 +9,6 @@ import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
 import {Nullable} from 'src/app/core/models/nullable.type';
 import {State} from 'src/app/core/redux/core.reducers';
-import {getUUIDErrorMessage} from 'src/app/shared/functions/shared.functions';
 
 import {FormInterface} from '../models/form.interface';
 import {getAccount, getSortedHistory} from '../redux';
@@ -24,14 +23,6 @@ export class RootContainerComponent extends AbstractFormContainer<FormInterface>
   public account$: Observable<Nullable<Account>> = this.appState$.select(getAccount);
 
   public history$: Observable<Nullable<Movement[]>> = this.appState$.select(getSortedHistory);
-
-  public get errorMessage() {
-    const {invalid, errors} = this.formGroup.controls.accountId;
-    if (invalid && errors) {
-      return getUUIDErrorMessage(errors);
-    }
-    return '';
-  }
 
   public constructor(appState$: Store<State>) {
     super(
