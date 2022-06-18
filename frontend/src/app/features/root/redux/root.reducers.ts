@@ -1,10 +1,10 @@
-import {Action, createReducer, on} from '@ngrx/store';
+import {createReducer, on} from '@ngrx/store';
 
 import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
-import {clearData} from 'src/app/core/redux/core.actions';
+import {clearData, saveAccountIds} from 'src/app/core/redux/core.actions';
 
-import {saveAccount, saveAccountIds, saveHistory} from './root.actions';
+import {saveAccount, saveHistory} from './root.actions';
 
 interface State {
   account: Account | null;
@@ -35,8 +35,4 @@ const rootReducer = createReducer(
   }))
 );
 
-function reducer(state: State = INITIAL_STATE, action: Action): State {
-  return rootReducer(state, action);
-}
-
-export {State, reducer};
+export {State, rootReducer};

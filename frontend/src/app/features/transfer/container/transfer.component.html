@@ -1,4 +1,4 @@
-<form [formGroup]="transferForm" class="xsb-grid">
+<form [formGroup]="formGroup" class="xsb-grid">
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-3">
     <mat-label>ID Mittente</mat-label>
     <input matInput type="text" formControlName="senderId" [matAutocomplete]="senderAuto" />
@@ -7,7 +7,7 @@
         {{ id }}
       </mat-option>
     </mat-autocomplete>
-    <mat-error *ngIf="isSenderIdInvalid">{{ senderErrorMessage }}</mat-error>
+    <mat-error *ngIf="isControlInvalid('senderId')">{{ senderErrorMessage }}</mat-error>
   </mat-form-field>
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-3">
     <mat-label>ID Destinatario</mat-label>
@@ -17,12 +17,12 @@
         {{ id }}
       </mat-option>
     </mat-autocomplete>
-    <mat-error *ngIf="isRecipientIdInvalid">{{ recipientErrorMessage }}</mat-error>
+    <mat-error *ngIf="isControlInvalid('recipientId')">{{ recipientErrorMessage }}</mat-error>
   </mat-form-field>
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-2">
     <mat-label>Ammontare da trasferire</mat-label>
     <input matInput type="number" formControlName="amount" />
-    <mat-error *ngIf="isAmountInvalid">{{ amountErrorMessage }}</mat-error>
+    <mat-error *ngIf="isControlInvalid('amount')">{{ amountErrorMessage }}</mat-error>
   </mat-form-field>
   <button mat-button [disabled]="isFormInvalid" (click)="perform()" class="xsb-grid-cell-span-2 xsb-submit">Esegui</button>
 </form>

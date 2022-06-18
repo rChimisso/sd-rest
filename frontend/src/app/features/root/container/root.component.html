@@ -1,5 +1,5 @@
 <div class="xsb-grid">
-  <form [formGroup]="accountForm" class="xsb-grid-cell-span-8">
+  <form [formGroup]="formGroup" class="xsb-grid-cell-span-8">
     <mat-form-field appearance="outline">
       <mat-label>Account ID</mat-label>
       <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" />
@@ -8,10 +8,10 @@
           {{ id }}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="isAccountIdInvalid">{{ errorMessage }}</mat-error>
+      <mat-error *ngIf="isControlInvalid('accountId')">{{ errorMessage }}</mat-error>
     </mat-form-field>
   </form>
-  <button mat-button [disabled]="isAccountIdInvalid" (click)="research()" class="xsb-grid-cell-span-4 xsb-submit">Ricerca</button>
+  <button mat-button [disabled]="isFormInvalid" (click)="research()" class="xsb-grid-cell-span-4 xsb-submit">Ricerca</button>
 </div>
 <div *ngIf="account$ | async as account">
   Proprietario: <b>{{ account.name }} {{ account.surname }}</b>

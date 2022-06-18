@@ -4,13 +4,15 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
-import {TransferComponent} from './container/transfer.component';
-import {reducers, transferFeatureKey} from './redux';
-import {TransferEffects} from './redux/transfer.effects';
+import {RootComponent} from './container/root.component';
+import {rootFeatureKey} from './redux';
+import {RootEffects} from './redux/root.effects';
+import {rootReducer} from './redux/root.reducers';
 
 @NgModule({
   imports: [
@@ -20,9 +22,10 @@ import {TransferEffects} from './redux/transfer.effects';
     MatInputModule,
     MatAutocompleteModule,
     MatButtonModule,
-    StoreModule.forFeature(transferFeatureKey, reducers),
-    EffectsModule.forFeature([TransferEffects])
+    MatTableModule,
+    StoreModule.forFeature(rootFeatureKey, rootReducer),
+    EffectsModule.forFeature([RootEffects])
   ],
-  declarations: [TransferComponent]
+  declarations: [RootComponent]
 })
-export class TransferModule {}
+export class RootModule {}

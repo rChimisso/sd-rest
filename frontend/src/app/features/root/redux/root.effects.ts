@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, map, of, switchMap} from 'rxjs';
+import {catchError, of, switchMap} from 'rxjs';
 
 import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
 import {handleError} from 'src/app/core/redux/core.actions';
 import {ApiService} from 'src/app/core/services/api-service.service';
 
-import {retrieveAccountData, retrieveAccountIds, saveAccount, saveAccountIds, saveHistory} from './root.actions';
+import {retrieveAccountData, saveAccount, saveHistory} from './root.actions';
 
 const mockAccountData: {
   account: Account;
@@ -48,15 +48,6 @@ export class RootEffects {
     // TODO: call service
     switchMap(() => this.apiService.mockCall(mockAccountData).pipe(
       switchMap(({account, history}) => [saveAccount({account}), saveHistory({history})]),
-      catchError(error => of(handleError({error})))
-    ))
-  ));
-
-  public retrieveAccountIds$ = createEffect(() => this.actions$.pipe(
-    ofType(retrieveAccountIds),
-    // TODO: call service
-    switchMap(() => this.apiService.mockCall(['12345678901234567890', '0123456789abcdef1234']).pipe(
-      map(accountIds => saveAccountIds({accountIds})),
       catchError(error => of(handleError({error})))
     ))
   ));

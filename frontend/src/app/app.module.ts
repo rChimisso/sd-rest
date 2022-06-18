@@ -8,9 +8,10 @@ import {StoreModule} from '@ngrx/store';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {CoreEffects} from './core/redux/core.effects';
 import {ApiService} from './core/services/api-service.service';
-import {RootModule} from './root/root.module';
-import {TransferModule} from './transfer/transfer.module';
+import {RootModule} from './features/root/root.module';
+import {TransferModule} from './features/transfer/transfer.module';
 
 registerLocaleData(localeIt, 'it-IT');
 
@@ -22,7 +23,7 @@ registerLocaleData(localeIt, 'it-IT');
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([CoreEffects]),
     HttpClientModule
   ],
   providers: [
