@@ -1,7 +1,5 @@
 package zorchi.rest;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import zorchi.entities.Account.AccountData;
 import zorchi.entities.Account.AccountFullData;
 import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
-import zorchi.entities.Transaction.TransactionFullData;
 import zorchi.entities.Transfer;
 import zorchi.entities.Transfer.TransferData;
 import zorchi.entities.Transfer.TransferId;
@@ -127,8 +124,11 @@ public class ApiController {
 	    	
 	      //return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK); account.getID()
 	    	
-	    	return new ResponseEntity<AccountFullData>(new AccountFullData(account.getName(), account.getSurname(), transactionRepository.findTransactionFormAccountId(account.getID())), HttpStatus.OK);
-	    
+	    	return new ResponseEntity<AccountFullData>(
+          new AccountFullData(account.getName(), account.getSurname(), transactionRepository.findTransactionFormAccountId(account.getID())),
+          CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()),
+          HttpStatus.OK
+        );
 	    }
 	   // return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		return null;
@@ -219,7 +219,7 @@ public class ApiController {
 
   /**
    * TODO
-   *  Da sistemare ,è quella da modificare inserendo i controlli nel costruttore
+   *  Da sistemare ,ï¿½ quella da modificare inserendo i controlli nel costruttore
    * @param transferData
    * @return
    */

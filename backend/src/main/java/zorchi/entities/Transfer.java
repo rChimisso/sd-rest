@@ -27,8 +27,8 @@ public class Transfer{
 	final String UUID;
 	
 	/*
-	 * Tassa per il trasferimento / bonifico, per ora è 0
-	 * Non so se lasciarla per ora c'è 
+	 * Tassa per il trasferimento / bonifico, per ora ï¿½ 0
+	 * Non so se lasciarla per ora c'ï¿½ 
 	 */
 	private static int tassa = 0;
 	
@@ -36,14 +36,14 @@ public class Transfer{
 	 * Transazione del ricevente
 	 */
 	@ManyToOne
-    @JoinColumn(name = "to_id")
+  @JoinColumn(name = "to_id")
 	private Transaction to; 
 	
 	/**
 	 * Tranzazione del destinatario
 	 */
 	@ManyToOne
-    @JoinColumn(name = "from_id")
+  @JoinColumn(name = "from_id")
 	private Transaction from;
 
 	/**
