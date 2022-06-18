@@ -2,7 +2,9 @@ import {registerLocaleData} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import localeIt from '@angular/common/locales/it';
 import {DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrowserModule} from '@angular/platform-browser';
@@ -32,6 +34,8 @@ registerLocaleData(localeIt, 'it-IT');
     AppRoutingModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
     StoreModule.forRoot({core: coreReducer}),
     EffectsModule.forRoot([CoreEffects]),
     HttpClientModule

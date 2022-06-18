@@ -1,6 +1,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 
@@ -20,11 +21,15 @@ export class AppComponent {
 
   public readonly showLoader$: Observable<boolean> = this.appState$.select(getShowLoader);
 
-  public constructor(private readonly appState$: Store<State>, private readonly dialog: MatDialog) {
+  public constructor(private readonly appState$: Store<State>, private readonly router: Router, private readonly route: ActivatedRoute, private readonly dialog: MatDialog) {
     this.error$.subscribe(error => {
       if (error) {
         this.dialog.open(ErrorDialogComponent, {data: error}).afterClosed().subscribe(() => this.appState$.dispatch(clearError()));
       }
     });
+  }
+
+  public navigateHome() {
+    this.router.navigate(['home'], {relativeTo: this.route.root});
   }
 }

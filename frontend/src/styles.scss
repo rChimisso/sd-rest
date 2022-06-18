@@ -9,11 +9,14 @@
 html,
 body {
   font-family: "Roboto", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .xsb-grid {
   @include mdc-layout-grid-inner(desktop, 0, $grid-col-gap);
   align-items: center;
+  padding: 0 $grid-col-gap;
 
   .xsb-grid-cell-span {
     @for $i from 1 to 13 {

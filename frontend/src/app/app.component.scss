@@ -1,4 +1,26 @@
 :host {
+  .app-banner {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    margin-bottom: 16px;
+    border-bottom: 4px solid black;
+
+    mat-icon {
+      transform: scale(2);
+      margin-left: 24px;
+    }
+
+    p {
+      font-size: xx-large;
+      margin-left: 48px;
+    }
+  }
+
+  router-outlet + * {
+    padding: 8px;
+  }
+
   .loader-container {
     position: absolute;
     top: 0;

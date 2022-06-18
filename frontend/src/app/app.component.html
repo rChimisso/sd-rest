@@ -1,4 +1,10 @@
 <!-- Banner -->
+<div class="app-banner">
+  <button mat-icon-button color="primary" (click)="navigateHome()">
+    <mat-icon>home</mat-icon>
+  </button>
+  <p>X Sistema Bancario</p>
+</div>
 <router-outlet></router-outlet>
 <div *ngIf="showLoader$ | async" class="loader-container">
   <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'" [diameter]="200" [strokeWidth]="10"> </mat-progress-spinner>
