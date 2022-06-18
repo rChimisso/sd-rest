@@ -223,24 +223,22 @@ public class ApiController {
 	public ResponseEntity<TransferResponseBody> postTransfer(@RequestBody TransferData transferData) {
 	  Account accountTo = accountRepository.findById(transferData.getTo()).orElseGet(Account::new);
 	  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
-	  String uuid = "";
     if (accountTo.isValid() && accountFrom.isValid()) {
       long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
       long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
       if (newFromBalance >= 0) {
         accountFrom.setBalance(newFromBalance);
         accountTo.setBalance(newToBalance);
-        Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById,StandardUUID.randomUUID(transferRepository::existsById));
-        uuid = transfer.getUUID();
+        Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
         
         accountRepository.save(accountFrom);
         accountRepository.save(accountTo);
         transactionRepository.save(transfer.getFrom());
         transactionRepository.save(transfer.getTo());
         transferRepository.save(transfer);
-        return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(newFromBalance, newToBalance,  accountFrom.getID(),accountTo.getID(),transfer.getUUID()), HttpStatus.OK);
+        return new ResponseEntity<>(new TransferResponseBody(newFromBalance, newToBalance, accountFrom.getID(), accountTo.getID(), transfer.getUUID()), HttpStatus.OK);
       }
-      return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(-1, -1,  accountFrom.getID(),accountTo.getID(),uuid), HttpStatus.OK);
+      return new ResponseEntity<>(new TransferResponseBody(-1, -1, accountFrom.getID(), accountTo.getID(), StandardUUID.INVALID_UUID), HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
