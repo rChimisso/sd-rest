@@ -1,0 +1,8 @@
+<div class="xsb-grid">
+  <menu-item
+    *ngFor="let menuItem of menuItems"
+    [menuItem]="menuItem"
+    (click)="navigate(menuItem.route)"
+    class="xsb-grid-cell-span-3"
+  ></menu-item>
+</div>

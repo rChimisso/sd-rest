@@ -1,0 +1,30 @@
+@import "@angular/material/theming";
+
+:host {
+  @include mat-elevation(4);
+  background-color: #ffffff;
+
+  border: 3px solid black;
+  border-radius: 16px;
+  height: 180px;
+  padding: 8px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .xsb-menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+    &-title {
+      font-size: larger;
+      font-weight: 500;
+      color: black;
+    }
+  }
+}
