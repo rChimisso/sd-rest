@@ -1,9 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 import {Account} from '../models/account.interface';
 import {Movement} from '../models/movement.type';
+import {TransferResponseBody} from '../models/transfer-response-body.interface';
 
 interface AccountData {
   account: Account;
@@ -22,8 +23,11 @@ export class ApiService {
     return this.httpClient.get<AccountData>(`http://localhost:8080/api/account/${id}`);
   }
 
-  // TODO: remove and implements actual calls.
-  public mockCall<T>(result: T) {
-    return of(result);
+  public postTransfer(from: string, to: string, amount: number): Observable<TransferResponseBody> {
+    return this.httpClient.post<TransferResponseBody>('http://localhost:8080/api/transfer', {
+      from,
+      to,
+      amount
+    });
   }
 }

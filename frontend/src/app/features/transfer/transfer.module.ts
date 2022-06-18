@@ -2,12 +2,14 @@ import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
+import {TransferResultDialogComponent} from './components/transfer-result-dialog/transfer-result-dialog.component';
 import {TransferContainerComponent} from './container/transfer-container.component';
 import {transferFeatureKey} from './redux';
 import {TransferEffects} from './redux/transfer.effects';
@@ -21,9 +23,10 @@ import {transferReducer} from './redux/transfer.reducers';
     MatInputModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatDialogModule,
     StoreModule.forFeature(transferFeatureKey, transferReducer),
     EffectsModule.forFeature([TransferEffects])
   ],
-  declarations: [TransferContainerComponent]
+  declarations: [TransferContainerComponent, TransferResultDialogComponent]
 })
 export class TransferModule {}

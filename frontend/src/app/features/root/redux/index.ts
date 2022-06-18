@@ -5,10 +5,6 @@ import {Nullable} from 'src/app/core/models/nullable.type';
 
 import {State} from './root.reducers';
 
-export interface RootState {
-  root: State;
-}
-
 export const rootFeatureKey = 'root';
 
 export const selectRootState = createFeatureSelector<State>(rootFeatureKey);
