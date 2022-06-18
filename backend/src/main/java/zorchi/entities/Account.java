@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import zorchi.utility.StandardUUID;
 import zorchi.entities.Transaction.TransactionFullData;
@@ -137,6 +138,7 @@ public class Account {
    * @return risultato del controllo.
    */
   @Transient
+  @JsonProperty(access = Access.WRITE_ONLY)
   public boolean isValid() {
     return !StandardUUID.isInvalid(SHORT_UUID);
   }
