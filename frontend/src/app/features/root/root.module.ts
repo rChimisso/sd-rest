@@ -9,7 +9,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
-import {RootComponent} from './container/root.component';
+import {RootContainerComponent} from './container/root-container.component';
 import {rootFeatureKey} from './redux';
 import {RootEffects} from './redux/root.effects';
 import {rootReducer} from './redux/root.reducers';
@@ -26,6 +26,6 @@ import {rootReducer} from './redux/root.reducers';
     StoreModule.forFeature(rootFeatureKey, rootReducer),
     EffectsModule.forFeature([RootEffects])
   ],
-  declarations: [RootComponent]
+  declarations: [RootContainerComponent]
 })
 export class RootModule {}

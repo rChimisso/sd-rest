@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 
-import {AbstractContainer} from 'src/app/abstract/containers/abstract-container';
+import {AbstractFormContainer} from 'src/app/abstract/containers/abstract-form-container';
 import {UUID_VALIDATORS} from 'src/app/core/constants/constants';
 import {Account} from 'src/app/core/models/account.interface';
 import {Movement} from 'src/app/core/models/movement.type';
@@ -19,11 +19,11 @@ interface FormInterface {
 }
 
 @Component({
-  selector: 'root',
-  templateUrl: './root.component.html',
-  styleUrls: ['./root.component.scss']
+  selector: 'root-container',
+  templateUrl: './root-container.component.html',
+  styleUrls: ['./root-container.component.scss']
 })
-export class RootComponent extends AbstractContainer<FormInterface> {
+export class RootContainerComponent extends AbstractFormContainer<FormInterface> {
   public account$: Observable<Nullable<Account>> = this.appState$.select(getAccount);
 
   public history$: Observable<Nullable<Movement[]>> = this.appState$.select(getSortedHistory);

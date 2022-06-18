@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
 
-import {AbstractContainer} from 'src/app/abstract/containers/abstract-container';
+import {AbstractFormContainer} from 'src/app/abstract/containers/abstract-form-container';
 import {UUID_VALIDATORS} from 'src/app/core/constants/constants';
 import {State} from 'src/app/core/redux/core.reducers';
 import {getUUIDErrorMessage} from 'src/app/shared/functions/shared.functions';
@@ -16,11 +16,11 @@ interface FormInterface {
 }
 
 @Component({
-  selector: 'transfer',
-  templateUrl: './transfer.component.html',
-  styleUrls: ['./transfer.component.scss']
+  selector: 'transfer-container',
+  templateUrl: './transfer-container.component.html',
+  styleUrls: ['./transfer-container.component.scss']
 })
-export class TransferComponent extends AbstractContainer<FormInterface> {
+export class TransferContainerComponent extends AbstractFormContainer<FormInterface> {
   public get senderErrorMessage() {
     const {invalid, errors} = this.formGroup.controls.senderId;
     if (invalid && errors) {

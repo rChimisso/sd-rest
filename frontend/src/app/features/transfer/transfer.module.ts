@@ -8,7 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
-import {TransferComponent} from './container/transfer.component';
+import {TransferContainerComponent} from './container/transfer-container.component';
 import {transferFeatureKey} from './redux';
 import {TransferEffects} from './redux/transfer.effects';
 import {transferReducer} from './redux/transfer.reducers';
@@ -24,6 +24,6 @@ import {transferReducer} from './redux/transfer.reducers';
     StoreModule.forFeature(transferFeatureKey, transferReducer),
     EffectsModule.forFeature([TransferEffects])
   ],
-  declarations: [TransferComponent]
+  declarations: [TransferContainerComponent]
 })
 export class TransferModule {}

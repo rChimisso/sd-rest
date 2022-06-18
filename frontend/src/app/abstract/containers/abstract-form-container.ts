@@ -6,7 +6,7 @@ import {getAccountIds} from 'src/app/core/redux';
 import {retrieveAccountIds} from 'src/app/core/redux/core.actions';
 import {State} from 'src/app/core/redux/core.reducers';
 
-export abstract class AbstractContainer<T extends {[K in keyof T]: AbstractControl}> {
+export abstract class AbstractFormContainer<T extends {[K in keyof T]: AbstractControl}> {
   public accountIds$: Observable<string[]> = this.appState$.select(getAccountIds(this.featureKey));
 
   public get isFormInvalid() {
