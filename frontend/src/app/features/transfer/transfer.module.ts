@@ -9,6 +9,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
+import {TwoDigitDecimalNumberDirective} from 'src/app/core/directives/TwoDigitDecimalNumberDirective.directive';
+
 import {TransferFormComponent} from './components/transfer-form/transfer-form.component';
 import {TransferResultDialogComponent} from './components/transfer-result-dialog/transfer-result-dialog.component';
 import {TransferContainerComponent} from './container/transfer-container.component';
@@ -31,7 +33,8 @@ import {transferReducer} from './redux/transfer.reducers';
   declarations: [
     TransferContainerComponent,
     TransferResultDialogComponent,
-    TransferFormComponent
+    TransferFormComponent,
+    TwoDigitDecimalNumberDirective
   ]
 })
 export class TransferModule {}

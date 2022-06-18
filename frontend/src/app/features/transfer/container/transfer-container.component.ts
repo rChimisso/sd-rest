@@ -43,10 +43,10 @@ export class TransferContainerComponent extends AbstractFormContainer<FormInterf
           }
         ),
         amount: new FormControl(
-          0,
+          '',
           {
             nonNullable: true,
-            validators: [Validators.min(0), Validators.required]
+            validators: [Validators.required]
           }
         )
       }),
@@ -63,7 +63,7 @@ export class TransferContainerComponent extends AbstractFormContainer<FormInterf
     this.appState$.dispatch(performTransfer({
       from: this.formGroup.controls.senderId.value,
       to: this.formGroup.controls.recipientId.value,
-      amount: this.formGroup.controls.amount.value
+      amount: +this.formGroup.controls.amount.value
     }));
   }
 }

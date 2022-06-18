@@ -21,7 +21,7 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-2">
     <mat-label>Ammontare da trasferire</mat-label>
-    <input matInput type="number" formControlName="amount" />
+    <input matInput type="text" formControlName="amount" autocomplete="off" twoDigitDecimalNumber />
     <mat-error *ngIf="isControlInvalid('amount')">{{ amountErrorMessage }}</mat-error>
   </mat-form-field>
   <button mat-button [disabled]="isFormInvalid" (click)="emit()" class="xsb-grid-cell-span-2 xsb-submit">Esegui</button>
