@@ -1,10 +1,13 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {finalize, Observable} from 'rxjs';
 
 import {Account} from '../models/account.interface';
 import {Movement} from '../models/movement.type';
 import {TransferResponseBody} from '../models/transfer-response-body.interface';
+import {updateLoader} from '../redux/core.actions';
+import {State} from '../redux/core.reducers';
 
 interface AccountData {
   account: Account;
@@ -13,21 +16,39 @@ interface AccountData {
 
 @Injectable()
 export class ApiService {
-  public constructor(private readonly httpClient: HttpClient) {}
+  public constructor(private readonly httpClient: HttpClient, private readonly appState$: Store<State>) {}
 
   public getAccount(): Observable<Account[]> {
-    return this.httpClient.get<Account[]>('http://localhost:8080/api/account');
+    return this.get<Account[]>('account');
   }
 
   public getAccountId(id: string): Observable<AccountData> {
-    return this.httpClient.get<AccountData>(`http://localhost:8080/api/account/${id}`);
+    return this.get<AccountData>(`account/${id}`);
   }
 
   public postTransfer(from: string, to: string, amount: number): Observable<TransferResponseBody> {
-    return this.httpClient.post<TransferResponseBody>('http://localhost:8080/api/transfer', {
+    return this.post<TransferResponseBody>('transfer', {
       from,
       to,
       amount
     });
+  }
+
+  private get<T>(endpoint: string): Observable<T> {
+    this.initialize();
+    return this.httpClient.get<T>(`http://localhost:8080/api/${endpoint}`).pipe(finalize(this.finalize));
+  }
+
+  private post<T>(endpoint: string, body: unknown): Observable<T> {
+    this.initialize();
+    return this.httpClient.post<T>(`http://localhost:8080/api/${endpoint}`, body).pipe(finalize(this.finalize));
+  }
+
+  private initialize() {
+    this.appState$.dispatch(updateLoader({showLoader: true}));
+  }
+
+  private finalize() {
+    this.appState$.dispatch(updateLoader({showLoader: false}));
   }
 }

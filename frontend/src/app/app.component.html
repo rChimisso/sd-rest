@@ -1,2 +1,5 @@
 <!-- Banner -->
 <router-outlet></router-outlet>
+<div *ngIf="showLoader$ | async" class="loader-container">
+  <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'" [diameter]="200" [strokeWidth]="10"> </mat-progress-spinner>
+</div>

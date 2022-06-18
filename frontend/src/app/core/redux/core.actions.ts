@@ -14,3 +14,10 @@ export const handleError = createAction(
   '[Core] Handle Error',
   props<{error: HttpErrorResponse}>()
 );
+
+export const clearError = createAction('[Core] Clear Error');
+
+export const updateLoader = createAction(
+  '[Core] Update Loader',
+  props<{showLoader: boolean}>()
+);
