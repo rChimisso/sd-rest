@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: 'transfer',
     component: TransferContainerComponent
+  },
+  {
+    path: '**',
+    component: RootContainerComponent
   }
 ];
 

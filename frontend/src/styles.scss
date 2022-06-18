@@ -4,6 +4,7 @@
 @import "@material/layout-grid/mdc-layout-grid";
 
 @include material.core();
+@include material.all-component-themes($theme);
 
 .xsb-grid {
   @include mdc-layout-grid-inner(desktop, 0, $grid-col-gap);

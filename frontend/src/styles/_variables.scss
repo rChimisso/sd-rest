@@ -1,1 +1,14 @@
+$theme-primary: material.define-palette(material.$indigo-palette);
+$theme-accent: material.define-palette(material.$pink-palette, A200, A100, A400);
+$theme-warn: material.define-palette(material.$red-palette);
+$theme: material.define-light-theme(
+  (
+    color: (
+      primary: $theme-primary,
+      accent: $theme-accent,
+      warn: $theme-warn,
+    ),
+  )
+);
+
 $grid-col-gap: 16px;
