@@ -1,12 +1,9 @@
 package zorchi.entities;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.springframework.lang.NonNull;
@@ -211,55 +208,20 @@ public class Account {
   }
   
   public static class AccountFullData {
-	    /**
-	     * Nome del proprietario dell'account.
-	     */
-	    @NonNull
-	    private final String name;
-	    /**
-	     * Cognome del proprietario dell'account.
-	     */
-	    @NonNull
-	    private final String surname;
-	    
-	   // Vedere se si riesce ad averla final
-	    private  final List<TransactionFullDataInterface> transfers;
+    private final Account account;
+    private final List<TransactionFullDataInterface> history;
 
-	    /**
-	     * @param name - {@link #name nome}, passabile come proprietà {@code "name"} di un JSON.
-	     * @param surname - {@link #surname cognome}, passabile come proprietà {@code "surname"} di un JSON.
-	     */
-	    public AccountFullData(@JsonProperty("name") String name, @JsonProperty("surname") String surname, @JsonProperty("id") List<TransactionFullDataInterface> transfers) {
-	      this.name = name;
-	      this.surname = surname;
-	      this.transfers = transfers;
-	      
-	    }
+    public AccountFullData(Account account, List<TransactionFullDataInterface> transfers) {
+      this.account = account;
+      this.history = transfers;
+    }
 
-	    /**
-	     * Restituisce il {@link #name nome}.
-	     * 
-	     * @return {@link #name}.
-	     */
-	    public String getName() {
-	      return name;
-	    }
+    public Account getAccount() {
+      return account;
+    }
 
-	    /**
-	     * Restituisce il {@link #surname cognome}.
-	     * 
-	     * @return {@link #surname}.
-	     */
-	    public String getSurname() {
-	      return surname;
-	    }
-
-		public List<TransactionFullDataInterface> getTransfers() {
-			return transfers;
-		}
-	    
-	   
-	    
-
-	  }
+    public List<TransactionFullDataInterface> getHistory() {
+      return history;
+    }
+  }
 }

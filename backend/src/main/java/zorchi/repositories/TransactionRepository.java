@@ -14,21 +14,20 @@ import zorchi.entities.Transaction.TransactionFullDataInterface;;
  * JPA {@link Transaction} {@link CrudRepository}.
  */
 public interface TransactionRepository extends CrudRepository<Transaction, String> {
-  // ATTENZIONE SE idFrom e IFTO sono NULL allora UUID � una transaction non un transfer
+  // ATTENZIONE SE sender e IFTO sono NULL allora UUID è una transaction non un transfer
   @Query(
     value = "SELECT * FROM ("
-      +" (SELECT h1.UUID, h1.amount, h1.date, h2.f as idFrom, h2.t as idTo FROM "
-      +"	       (SELECT * FROM TRANSACTION  WHERE   SHORT_ID= :UUID ) as h1 LEFT JOIN "
-      +"	             (SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount " 
-      +"	                  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID"
-      +"                        ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  "
-      +"                           WHERE h2.amount IS NULL)" 
-      +"	UNION ALL "
-
-      +"  (SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T " 
-      +"			FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID "
-      +"	           WHERE  s1.SHORT_ID = :UUID or s2.SHORT_ID= :UUID ) "
-      +"	) AS a order by date ASC",
+      + " (SELECT h1.UUID, h1.amount, h1.date, h2.f as sender, h2.t as recipient FROM "
+      + "	       (SELECT * FROM TRANSACTION  WHERE   SHORT_ID= :UUID ) as h1 LEFT JOIN "
+      + "	             (SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount " 
+      + "	                  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID"
+      + "                        ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  "
+      + "                           WHERE h2.amount IS NULL)" 
+      + "	UNION ALL "
+      + "  (SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T " 
+      + "			FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID "
+      + "	           WHERE  s1.SHORT_ID = :UUID or s2.SHORT_ID= :UUID ) "
+      + "	) AS a order by date ASC",
       nativeQuery = true
     )
 	  List<TransactionFullDataInterface> findTransactionFormAccountId(@Param("UUID") String UUID);

@@ -74,40 +74,33 @@ public class Transaction {
   }
 
   public static class TransactionFullData implements TransactionFullDataInterface {
+    @NonNull
+    private final String UUID;
+    
+    @NonNull
+    private final int amount;
+    
+    @NonNull
+    private final Date DATE;
+    
+    
+    private final String sender;
+    
+    private final String recipient;
 	    
-	    @NonNull
-	    private final String UUID;
-	    
-	    @NonNull
-	    private final int amount;
-	    
-	    @NonNull
-	    private final Date DATE;
-	    
-	    
-	    private final String idFrom;
-	    
-	    private final String idTo;
-	    
-	    
-	    
-	   
-
-		
-	    public TransactionFullData(@JsonProperty("UUID") String UUID, 
-	    		@JsonProperty("amount") int amount, 
-	    			@JsonProperty("DATE") Date date, 
-	    				@JsonProperty("idFrom")String idFrom,  
-	    					@JsonProperty("idTo")String idTo) 
-	    {
-	      this.UUID = UUID;
-	      this.amount = amount;
-	      this.DATE = date;
-	      this.idFrom = idFrom;
-	      this.idTo = idTo;
-	    }
-
-	
+    public TransactionFullData(
+      @JsonProperty("UUID") String UUID, 
+      @JsonProperty("amount") int amount, 
+      @JsonProperty("DATE") Date date, 
+      @JsonProperty("sender")String sender,  
+      @JsonProperty("recipient")String recipient
+    ) {
+      this.UUID = UUID;
+      this.amount = amount;
+      this.DATE = date;
+      this.sender = sender;
+      this.recipient = recipient;
+    }
 
 		public String getUUID() {
 			return UUID;
@@ -121,28 +114,24 @@ public class Transaction {
 			return DATE;
 		}
 
-		public String getIdFrom() {
-			return idFrom;
+		public String getSender() {
+			return sender;
 		}
 
-		public String getIdTo() {
-			return idTo;
+		public String getRecipient() {
+			return recipient;
 		}
+  }
 
-	    
-
-	  }
   public interface TransactionFullDataInterface {
-
-	   String getUUID();
+    String getUUID();
+    
+    int getAmount();
+    
+    Date getDATE();
 	    
-	   int getAmount();
+	  String getSender();
 	    
-	   Date getDATE();
-	    
-	    
-	  String getIdFrom();
-	    
-	  String getIdTo();
+	  String getRecipient();
 	}
 }
