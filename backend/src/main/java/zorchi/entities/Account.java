@@ -1,5 +1,7 @@
 package zorchi.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -7,7 +9,9 @@ import javax.persistence.Transient;
 import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import zorchi.entities.Transaction.TransactionFullDataInterface;
 import zorchi.utility.StandardUUID;
 
 /**
@@ -43,9 +47,8 @@ public class Account {
   }
 
   /**
-   * @param name - {@link #name nome}.
-   * @param surname - {@link #surname cognome}.
-   * @param ID - {@link #SHORT_UUID}.
+   * @param accountData - dati dell'account.
+   * @param ID - 
    */
   public Account(AccountData accountData, String ID) {
     this.name = accountData.name;
@@ -98,7 +101,7 @@ public class Account {
   public long getBalance() {
     return balance;
   }
-
+  
   /**
    * Imposta il nuovo valore del {@link #balance saldo} dell'account.
    * 
@@ -116,6 +119,17 @@ public class Account {
   public String getID() {
     return SHORT_UUID;
   }
+  
+  /**
+   * Controlla se questo account puoi trasferire l'{@code amount} specificato.
+   * 
+   * @param amount - ammontare da trasferire.
+   * @return risultato del controllo.
+   */
+  @Transient
+  public boolean canTransfer(int amount) {
+    return this.balance >= amount;
+  }
 
   /**
    * Controlla se questo account è valido.
@@ -123,6 +137,7 @@ public class Account {
    * @return risultato del controllo.
    */
   @Transient
+  @JsonProperty(access = Access.WRITE_ONLY)
   public boolean isValid() {
     return !StandardUUID.isInvalid(SHORT_UUID);
   }
@@ -187,6 +202,26 @@ public class Account {
      */
     public String getSurname() {
       return surname;
+    }
+    
+
+  }
+  
+  public static class AccountFullData {
+    private final Account account;
+    private final List<TransactionFullDataInterface> history;
+
+    public AccountFullData(Account account, List<TransactionFullDataInterface> transfers) {
+      this.account = account;
+      this.history = transfers;
+    }
+
+    public Account getAccount() {
+      return account;
+    }
+
+    public List<TransactionFullDataInterface> getHistory() {
+      return history;
     }
   }
 }

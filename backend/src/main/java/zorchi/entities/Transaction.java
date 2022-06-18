@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.lang.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import zorchi.utility.StandardUUID;
@@ -14,7 +16,7 @@ import zorchi.utility.StandardUUID;
 @Entity
 public class Transaction {
   @ManyToOne
-  @JoinColumn(name = "SHORT_ID")
+  @JoinColumn(name = "SHORT_UUID")
   private final Account ACCOUNT;
 
   @Id
@@ -64,5 +66,65 @@ public class Transaction {
     public int getAmount() {
       return amount;
     }
+  }
+
+  public static class TransactionFullData implements TransactionFullDataInterface {
+    @NonNull
+    private final String UUID;
+
+    @NonNull
+    private final int amount;
+
+    @NonNull
+    private final Date DATE;
+
+    private final String sender;
+
+    private final String recipient;
+
+    public TransactionFullData(
+        @JsonProperty("UUID") String UUID,
+        @JsonProperty("amount") int amount,
+        @JsonProperty("DATE") Date date,
+        @JsonProperty("sender") String sender,
+        @JsonProperty("recipient") String recipient) {
+      this.UUID = UUID;
+      this.amount = amount;
+      this.DATE = date;
+      this.sender = sender;
+      this.recipient = recipient;
+    }
+
+    public String getUUID() {
+      return UUID;
+    }
+
+    public int getAmount() {
+      return amount;
+    }
+
+    public Date getDATE() {
+      return DATE;
+    }
+
+    public String getSender() {
+      return sender;
+    }
+
+    public String getRecipient() {
+      return recipient;
+    }
+  }
+
+  public interface TransactionFullDataInterface {
+    String getUUID();
+
+    int getAmount();
+
+    Date getDATE();
+
+    String getSender();
+
+    String getRecipient();
   }
 }

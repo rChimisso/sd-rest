@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,11 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import zorchi.entities.Account;
 import zorchi.entities.Account.AccountData;
+import zorchi.entities.Account.AccountFullData;
 import zorchi.entities.Transaction;
 import zorchi.entities.Transaction.TransactionData;
+import zorchi.entities.Transfer;
+import zorchi.entities.Transfer.TransferData;
+import zorchi.entities.Transfer.TransferId;
 import zorchi.repositories.AccountRepository;
 import zorchi.repositories.TransactionRepository;
+import zorchi.repositories.TransferRepository;
 import zorchi.responses.bodies.TransactionResponseBody;
+import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
 import zorchi.utility.StandardUUID;
 import zorchi.utility.StandardUUID.ShortUUID;
@@ -32,6 +39,7 @@ import zorchi.utility.StandardUUID.ShortUUID;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ApiController {
   /**
    * JPA {@link AccountRepository}.
@@ -42,14 +50,20 @@ public class ApiController {
    * JPA {@link TransactionRepository}.
    */
   private final TransactionRepository transactionRepository;
+  
+  /**
+   * JPA {@link TransferRepository}.
+   */
+  private final TransferRepository transferRepository;
 
   /**
    * @param accountRepository - JPA {@link AccountRepository} iniettata da Spring.
    * @param transactionRepository - JPA {@link TransactionRepository} iniettata da Spring.
    */
-  ApiController(AccountRepository accountRepository, TransactionRepository transactionRepository) {
+  ApiController(AccountRepository accountRepository, TransactionRepository transactionRepository, TransferRepository transferRepository) {
     this.accountRepository = accountRepository;
     this.transactionRepository = transactionRepository;
+    this.transferRepository = transferRepository;
   }
 
   /**
@@ -99,13 +113,21 @@ public class ApiController {
 
   /**
    * TODO
-   * 
-   * @param id
+   *  // Ricordarsi di scrivere sulla documentazione che cambiamo la risposta aggiungendo data amount e destinatario
+   * @param id - variabile di percorso: {@link Account#ID ID} dell'{@link Account} di cui recuperare le informazioni.
    * @return
    */
   @GetMapping("/account/{id}")
-	public ResponseEntity<String> getAccountId(@PathVariable String id) {
-    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	public ResponseEntity<AccountFullData> getAccountId(@PathVariable String id) {
+	  Account account = accountRepository.findById(id).orElseGet(Account::new);
+    if (account.isValid()) {
+      return new ResponseEntity<>(
+        new AccountFullData(account, transactionRepository.findTransactionFormAccountId(account.getID())),
+        CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()),
+        HttpStatus.OK
+      );
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
   /**
@@ -193,23 +215,72 @@ public class ApiController {
 
   /**
    * TODO
-   * 
-   * @param body
+   *  Da sistemare ,� quella da modificare inserendo i controlli nel costruttore
+   * @param transferData
    * @return
    */
   @PostMapping("/transfer")
-	public ResponseEntity<String> postTransfer(@RequestBody String body) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-	}
+	public ResponseEntity<TransferResponseBody> postTransfer(@RequestBody TransferData transferData) {
+	  Account accountTo = accountRepository.findById(transferData.getTo()).orElseGet(Account::new);
+	  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
+	  String uuid = "";
+    if (accountTo.isValid() && accountFrom.isValid()) {
+      long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
+      long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
+      if (newFromBalance >= 0) {
+        accountFrom.setBalance(newFromBalance);
+        accountTo.setBalance(newToBalance);
+        Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById,StandardUUID.randomUUID(transferRepository::existsById));
+        uuid = transfer.getUUID();
+        
+        accountRepository.save(accountFrom);
+        accountRepository.save(accountTo);
+        transactionRepository.save(transfer.getFrom());
+        transactionRepository.save(transfer.getTo());
+        transferRepository.save(transfer);
+        return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(newFromBalance, newToBalance,  accountFrom.getID(),accountTo.getID(),transfer.getUUID()), HttpStatus.OK);
+      }
+      return new ResponseEntity<TransferResponseBody>(new TransferResponseBody(-1, -1,  accountFrom.getID(),accountTo.getID(),uuid), HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
 
   /**
    * TODO
-   * 
-   * @param body
+   * Da sistemare
+   * @param transferId
    * @return
    */
 	@PostMapping("/divert")
-	public ResponseEntity<String> postDivert(@RequestBody String body) {
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-	}		
-}
+	public ResponseEntity<String> postDivert(@RequestBody TransferId transferId) {
+		//RICORDARSI DI INSERIRE CONTROLLO SU ID PER LANCIARE BAD REQUEST
+		
+		
+		Transfer transfer = transferRepository.findById(transferId.getId()).orElseGet(Transfer::new);
+		if (transfer.isValid()) {
+		   
+				Account to = transfer.getTo().getACCOUNT();
+				Account from = transfer.getFrom().getACCOUNT();
+				
+				if(from.canTransfer(transfer.getAmount()))
+					{
+				
+						Transfer newTransfer = new Transfer(from, to, Math.abs(transfer.getAmount()), transactionRepository::existsById,StandardUUID.randomUUID(transferRepository::existsById));
+						transactionRepository.save(newTransfer.getFrom());
+						transactionRepository.save(newTransfer.getTo());
+						transferRepository.save(newTransfer);
+						return new ResponseEntity<>(HttpStatus.OK);
+					}
+				else
+					{
+					return new ResponseEntity<>("Saldo del destinatari non sufficente, operazione annulata ",HttpStatus.OK);
+					}
+		        
+		      }
+		
+		
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		
+	}		 
+
