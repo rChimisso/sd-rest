@@ -21,7 +21,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Strin
       + "	       (SELECT * FROM TRANSACTION  WHERE   SHORT_ID= :UUID ) as h1 LEFT JOIN "
       + "	             (SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount " 
       + "	                  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID"
-      + "                        ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  "
+      + "                        WHERE  s1.SHORT_ID = :UUID or s2.SHORT_ID= :UUID ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  "
       + "                           WHERE h2.amount IS NULL)" 
       + "	UNION ALL "
       + "  (SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T " 

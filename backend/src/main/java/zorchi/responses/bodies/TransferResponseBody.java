@@ -10,36 +10,92 @@ public class TransferResponseBody {
   /**
    * Dati dell'Attore from
    */
-  public final TransferActor from;
+	private final TransferActor from;
   
   /**
    * Dati dell'Attore to
    */
-  public final TransferActor to;
+  private final TransferActor to;
   
   /**
    * UUID della transferimenti coinvolta.
    */
-  public final String transferId;
+  private final String transferId;
   
-  public final String message;
+  private final String message;
+  
+  private final boolean performed;
 
   /**
    * @param newBalance - {@link #newBalance}.
    * @param transactionId - {@link #transactionId}.
    */
-  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId) {
+  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId, boolean performed, String message) {
     this.from = new TransferActor(fromId, fromBalance);
     this.to = new TransferActor(toId, toBalance);
     this.transferId = transferId;
-    if (fromBalance >= 0 && !StandardUUID.isInvalid(toId) && !StandardUUID.isInvalid(fromId) && !StandardUUID.isInvalid(transferId)) {
-      this.message = HttpStatus.OK.getReasonPhrase();
-    } else {
-      this.message = "Trasferimento non eseguito: il bilancio è inferiore a quanto richiesto.";
-    }
+    this.performed = performed;
+    this.message = message;
+    
   }
   
-  static class TransferActor {
+  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId, boolean performed) {
+	    this.from = new TransferActor(fromId, fromBalance);
+	    this.to = new TransferActor(toId, toBalance);
+	    this.transferId = transferId;
+	    this.performed = performed;
+	    if (fromBalance >= 0 && !StandardUUID.isInvalid(toId) && !StandardUUID.isInvalid(fromId) && !StandardUUID.isInvalid(transferId)) {
+	      this.message = "Operazione eseguita con sucesso.";
+	    } else {
+	      this.message = "Trasferimento non eseguito: il bilancio e' inferiore a quanto richiesto.";
+	    }
+	  }
+  
+  
+  /**
+   * Risposta 404, la risposta standart HTTP crea problemi con front end
+   */
+  public TransferResponseBody() {
+	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false,"Account non tovato");
+
+	  }
+  public TransferResponseBody(String message) {
+	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false, message);
+
+	  }
+  
+  
+  public TransferActor getFrom() {
+	return from;
+}
+
+
+
+public TransferActor getTo() {
+	return to;
+}
+
+
+
+public String getTransferId() {
+	return transferId;
+}
+
+
+
+public String getMessage() {
+	return message;
+}
+
+
+
+public boolean isPerformed() {
+	return performed;
+}
+
+
+
+static class TransferActor {
 	  private final String id;
 	  
 	  private final long newBalance;

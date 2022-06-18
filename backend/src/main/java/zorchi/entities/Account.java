@@ -161,6 +161,12 @@ public class Account {
   public String toString() {
     return "Account [ID=" + SHORT_UUID + ", name=" + name + ", surname=" + surname + "]";
   }
+  
+  public static boolean goodRequest(String request)
+  {
+	  return (request.length() == 20 && request.matches("^[A-Fa-f0-9]"));
+		  
+  }
 
   /**
    * Dati per la creazione di un {@link zorchi.entities.Account Account bancario}.

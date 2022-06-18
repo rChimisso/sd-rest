@@ -221,27 +221,50 @@ public class ApiController {
    */
   @PostMapping("/transfer")
 	public ResponseEntity<TransferResponseBody> postTransfer(@RequestBody TransferData transferData) {
-	  Account accountTo = accountRepository.findById(transferData.getTo()).orElseGet(Account::new);
-	  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
-    if (accountTo.isValid() && accountFrom.isValid()) {
-      long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
-      long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
-      if (newFromBalance >= 0) {
-        accountFrom.setBalance(newFromBalance);
-        accountTo.setBalance(newToBalance);
-        Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
-        
-        accountRepository.save(accountFrom);
-        accountRepository.save(accountTo);
-        transactionRepository.save(transfer.getFrom());
-        transactionRepository.save(transfer.getTo());
-        transferRepository.save(transfer);
-        return new ResponseEntity<>(new TransferResponseBody(newFromBalance, newToBalance, accountFrom.getID(), accountTo.getID(), transfer.getUUID()), HttpStatus.OK);
-      }
-      return new ResponseEntity<>(new TransferResponseBody(-1, -1, accountFrom.getID(), accountTo.getID(), StandardUUID.INVALID_UUID), HttpStatus.OK);
-    }
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-  }
+	  System.out.println(transferData.getTo());
+	  System.out.println(transferData.getFrom());
+	  // Verificare che amount si un intero
+	  if(Account.goodRequest(transferData.getTo()) && Account.goodRequest(transferData.getFrom()))
+	  {
+		  
+			  Account accountTo = accountRepository.findById(transferData.getTo()).orElseGet(Account::new);
+			  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
+		    if (accountTo.isValid() && accountFrom.isValid()) 
+		    {
+		    	long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
+		    	long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
+		    	if (newFromBalance >= 0) 
+		    	{
+		    		accountFrom.setBalance(newFromBalance);
+		        	accountTo.setBalance(newToBalance);
+		        	Transfer transfer = new Transfer(accountTo, accountFrom, Math.abs(transferData.getAmount()), transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
+		        
+		        	accountRepository.save(accountFrom);
+		        	accountRepository.save(accountTo);
+		        	transactionRepository.save(transfer.getFrom());
+		        	transactionRepository.save(transfer.getTo());
+		        	transferRepository.save(transfer);
+		        	return new ResponseEntity<>(new TransferResponseBody(newFromBalance, newToBalance, accountFrom.getID(), accountTo.getID(), transfer.getUUID(), true), HttpStatus.OK);
+		    	}
+		    	else
+		    	{
+		    		return new ResponseEntity<>(new TransferResponseBody(""), HttpStatus.OK);
+		    	}
+	    
+		    }
+		    else
+		    {
+		    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    }
+		}
+		
+	  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+	 
+		  
+	  }
+      
+  
 
   /**
    * TODO

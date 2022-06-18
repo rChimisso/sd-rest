@@ -9615,3 +9615,182 @@ SELECT * FROM ( (SELECT h1.UUID, h1.amount, h1.date, h2.f as from, h2.t as to FR
 2022-06-18 15:24:56 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM ( (SELECT h1.UUID, h1.amount, h1.date, h2.f as [*]from, h2.t as to FROM \0009       (SELECT * FROM TRANSACTION  WHERE   SHORT_ID= ? ) as h1 LEFT JOIN \0009             (SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount \0009                  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID                        ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid                             WHERE h2.amount IS NULL)\0009UNION ALL   (SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T \0009\0009\0009FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID \0009           WHERE  s1.SHORT_ID = ? or s2.SHORT_ID= ? ) \0009) AS a order by date ASC"; expected "identifier"; SQL statement:
 SELECT * FROM ( (SELECT h1.UUID, h1.amount, h1.date, h2.f as from, h2.t as to FROM 	       (SELECT * FROM TRANSACTION  WHERE   SHORT_ID= ? ) as h1 LEFT JOIN 	             (SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount 	                  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID                        ) as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid                             WHERE h2.amount IS NULL)	UNION ALL   (SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T 			FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID 	           WHERE  s1.SHORT_ID = ? or s2.SHORT_ID= ? ) 	) AS a order by date ASC [42001-212]
+2022-06-18 18:54:21 database: wrong user or password; user: "ZORCHI"
+org.h2.message.DbException: Wrong user name or password [28000-212]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.engine.Engine.openSession(Engine.java:154)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:338)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:122)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:808)
+	at org.h2.server.web.WebApp.login(WebApp.java:1033)
+	at org.h2.server.web.WebApp.process(WebApp.java:226)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.WebServlet.doGet(WebServlet.java:129)
+	at org.h2.server.web.WebServlet.doPost(WebServlet.java:166)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:890)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-212]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:510)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 50 more
+2022-06-18 18:56:44 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM (\000d\000a\000d\000a(SELECT h1.UUID, h1.amount, h1.date, h2.f, h2.t FROM\000d\000a\000d\000a(SELECT * FROM TRANSACTION  ) as h1 LEFT JOIN\000d\000a\000d\000a(SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount, t1.date  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID [*]')\000d\000aas h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  WHERE h2.amount IS NULL)\000d\000a\000d\000aUNION ALL\000d\000a\000d\000a(SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID)) AS a\000d\000a\000d\000aorder by date ASC"; SQL statement:
+SELECT * FROM (
+
+(SELECT h1.UUID, h1.amount, h1.date, h2.f, h2.t FROM
+
+(SELECT * FROM TRANSACTION  ) as h1 LEFT JOIN
+
+(SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount, t1.date  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID ')
+as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  WHERE h2.amount IS NULL)
+
+UNION ALL
+
+(SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID)) AS a
+
+order by date ASC [42000-212]
+2022-06-18 18:59:39 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "F" not found; SQL statement:
+SELECT * FROM (
+
+(SELECT h1.UUID, h1.amount, h1.date, h2.f, h2.t FROM
+
+(SELECT * FROM TRANSACTION ) as h1 LEFT JOIN
+
+(SELECT s1.SHORT_ID AS F , s1.UUID AS Fuuid , s2.SHORT_ID AS T,  s2.UUID AS Tuuid, t1.amount, t1.date  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID Where f = '2C5629D92A96BEB161F0'  OR  t = '2C5629D92A96BEB161F0')
+as h2 ON h1.UUID = h2.Fuuid OR h1.UUID = h2.Tuuid  WHERE h2.amount IS NULL)
+
+UNION ALL
+
+(SELECT t1.UUID,  t1.amount ,  t1.date, s1.SHORT_ID AS F  , s2.SHORT_ID AS T  FROM TRANSFER as t1 JOIN TRANSACTION as s1 ON t1.FROM_ID = s1.UUID JOIN TRANSACTION AS s2 on t1.TO_ID  = s2.UUID)) AS a
+Where f = '2C5629D92A96BEB161F0'  OR  t = '2C5629D92A96BEB161F0'
+order by date ASC [42122-212]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
+	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
+	at org.h2.expression.condition.Comparison.optimize(Comparison.java:139)
+	at org.h2.expression.condition.ConditionAndOr.optimize(ConditionAndOr.java:136)
+	at org.h2.expression.condition.ConditionAndOr.optimize(ConditionAndOr.java:136)
+	at org.h2.expression.Expression.optimizeCondition(Expression.java:148)
+	at org.h2.command.query.Select.prepareExpressions(Select.java:1177)
+	at org.h2.table.DerivedTable.<init>(DerivedTable.java:41)
+	at org.h2.command.query.Query.toTable(Query.java:1004)
+	at org.h2.command.Parser.readDerivedTableWithCorrelation(Parser.java:1936)
+	at org.h2.command.Parser.readTablePrimary(Parser.java:1816)
+	at org.h2.command.Parser.readTableReference(Parser.java:2359)
+	at org.h2.command.Parser.readTableReference(Parser.java:2376)
+	at org.h2.command.Parser.parseSelectFromPart(Parser.java:2810)
+	at org.h2.command.Parser.parseSelect(Parser.java:2917)
+	at org.h2.command.Parser.parseQueryPrimary(Parser.java:2800)
+	at org.h2.command.Parser.parseQueryTerm(Parser.java:2667)
+	at org.h2.command.Parser.parseQueryExpressionBody(Parser.java:2646)
+	at org.h2.command.Parser.parseQueryExpressionBodyAndEndOfQuery(Parser.java:2639)
+	at org.h2.command.Parser.parseQueryPrimary(Parser.java:2794)
+	at org.h2.command.Parser.parseQueryTerm(Parser.java:2667)
+	at org.h2.command.Parser.parseQueryExpressionBody(Parser.java:2646)
+	at org.h2.command.Parser.parseQueryExpressionBodyAndEndOfQuery(Parser.java:2639)
+	at org.h2.command.Parser.parseQueryExpression(Parser.java:2632)
+	at org.h2.command.Parser.readDerivedTableWithCorrelation(Parser.java:1915)
+	at org.h2.command.Parser.readTablePrimary(Parser.java:1816)
+	at org.h2.command.Parser.readTableReference(Parser.java:2359)
+	at org.h2.command.Parser.parseSelectFromPart(Parser.java:2810)
+	at org.h2.command.Parser.parseSelect(Parser.java:2917)
+	at org.h2.command.Parser.parseQueryPrimary(Parser.java:2800)
+	at org.h2.command.Parser.parseQueryTerm(Parser.java:2667)
+	at org.h2.command.Parser.parseQueryExpressionBody(Parser.java:2646)
+	at org.h2.command.Parser.parseQueryExpressionBodyAndEndOfQuery(Parser.java:2639)
+	at org.h2.command.Parser.parseQueryExpression(Parser.java:2632)
+	at org.h2.command.Parser.parseQuery(Parser.java:2593)
+	at org.h2.command.Parser.parsePrepared(Parser.java:724)
+	at org.h2.command.Parser.parse(Parser.java:691)
+	at org.h2.command.Parser.parse(Parser.java:661)
+	at org.h2.command.Parser.prepareCommand(Parser.java:568)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:631)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:554)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1116)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:237)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:223)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1339)
+	at org.h2.server.web.WebApp.query(WebApp.java:1137)
+	at org.h2.server.web.WebApp.query(WebApp.java:1113)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.WebServlet.doGet(WebServlet.java:129)
+	at org.h2.server.web.WebServlet.doPost(WebServlet.java:166)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:890)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
