@@ -21,8 +21,7 @@ import zorchi.utility.StandardUUID;
 @Entity
 public class Transaction {
   @ManyToOne
-  @JoinColumn(name = "SHORT_ID")
-
+  @JoinColumn(name = "SHORT_UUID")
   private final Account ACCOUNT;
 
   @Id
@@ -44,8 +43,6 @@ public class Transaction {
     this.ACCOUNT = account;
     this.UUID = UUID;
     this.DATE = new Date();
-    
-   
   }
 
   public Account getACCOUNT() {
@@ -74,8 +71,8 @@ public class Transaction {
     public int getAmount() {
       return amount;
     }
-    
   }
+
   public static class TransactionFullData implements TransactionFullDataInterface {
 	    
 	    @NonNull

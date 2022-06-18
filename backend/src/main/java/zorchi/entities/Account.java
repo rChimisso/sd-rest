@@ -1,22 +1,21 @@
 package zorchi.entities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import zorchi.utility.StandardUUID;
-import zorchi.entities.Transaction.TransactionFullData;
 import zorchi.entities.Transaction.TransactionFullDataInterface;
-import zorchi.entities.Transfer.TransferId;
+import zorchi.utility.StandardUUID;
 
 /**
  * Account bancario.
@@ -51,9 +50,8 @@ public class Account {
   }
 
   /**
-   * @param name - {@link #name nome}.
-   * @param surname - {@link #surname cognome}.
-   * @param ID - {@link #SHORT_UUID}.
+   * @param accountData - dati dell'account.
+   * @param ID - 
    */
   public Account(AccountData accountData, String ID) {
     this.name = accountData.name;
@@ -125,11 +123,15 @@ public class Account {
     return SHORT_UUID;
   }
   
-  
-  public boolean canTransfer(int amount)
-  {
-	  return this.balance >= amount;
-		  
+  /**
+   * Controlla se questo account puoi trasferire l'{@code amount} specificato.
+   * 
+   * @param amount - ammontare da trasferire.
+   * @return risultato del controllo.
+   */
+  @Transient
+  public boolean canTransfer(int amount) {
+    return this.balance >= amount;
   }
 
   /**
