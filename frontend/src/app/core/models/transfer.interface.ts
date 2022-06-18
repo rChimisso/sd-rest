@@ -1,7 +1,7 @@
 export interface Transfer {
-  id: string;
   amount: number;
   date: Date;
-  to: string;
-  from: string;
+  sender: string;
+  recipient: string;
+  uuid: string;
 }

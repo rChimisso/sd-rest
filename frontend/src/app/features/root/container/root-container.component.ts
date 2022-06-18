@@ -11,12 +11,9 @@ import {Nullable} from 'src/app/core/models/nullable.type';
 import {State} from 'src/app/core/redux/core.reducers';
 import {getUUIDErrorMessage} from 'src/app/shared/functions/shared.functions';
 
+import {FormInterface} from '../models/form.interface';
 import {getAccount, getSortedHistory} from '../redux';
 import {retrieveAccountData} from '../redux/root.actions';
-
-interface FormInterface {
-  accountId: FormControl<string>;
-}
 
 @Component({
   selector: 'root-container',
@@ -27,14 +24,6 @@ export class RootContainerComponent extends AbstractFormContainer<FormInterface>
   public account$: Observable<Nullable<Account>> = this.appState$.select(getAccount);
 
   public history$: Observable<Nullable<Movement[]>> = this.appState$.select(getSortedHistory);
-
-  public readonly columns = [
-    'id',
-    'amount',
-    'date',
-    'sender',
-    'recipient'
-  ];
 
   public get errorMessage() {
     const {invalid, errors} = this.formGroup.controls.accountId;
@@ -62,17 +51,5 @@ export class RootContainerComponent extends AbstractFormContainer<FormInterface>
 
   public research() {
     this.appState$.dispatch(retrieveAccountData({accountId: this.formGroup.controls.accountId.value}));
-  }
-
-  public getAmountClass(amount: number) {
-    let type: string;
-    if (amount > 0) {
-      type = 'positive';
-    } else if (amount < 0) {
-      type = 'negative';
-    } else {
-      type = 'neutral';
-    }
-    return `xsb-amount-${type}`;
   }
 }

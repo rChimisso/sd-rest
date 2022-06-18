@@ -2,12 +2,14 @@ import {registerLocaleData} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import localeIt from '@angular/common/locales/it';
 import {DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule} from '@angular/core';
+import {MatPaginatorIntl} from '@angular/material/paginator';
 import {BrowserModule} from '@angular/platform-browser';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {getItalianPaginatorIntl} from './core/paginator-intls/italian-paginator-intl';
 import {CoreEffects} from './core/redux/core.effects';
 import {ApiService} from './core/services/api-service.service';
 import {RootModule} from './features/root/root.module';
@@ -34,6 +36,10 @@ registerLocaleData(localeIt, 'it-IT');
     {
       provide: DEFAULT_CURRENCY_CODE,
       useValue: 'EUR'
+    },
+    {
+      provide: MatPaginatorIntl,
+      useValue: getItalianPaginatorIntl()
     },
     ApiService
   ],

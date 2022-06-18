@@ -6,6 +6,11 @@
 @include material.core();
 @include material.all-component-themes($theme);
 
+html,
+body {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
 .xsb-grid {
   @include mdc-layout-grid-inner(desktop, 0, $grid-col-gap);
   align-items: center;

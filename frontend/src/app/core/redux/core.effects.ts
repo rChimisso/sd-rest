@@ -9,9 +9,8 @@ import {retrieveAccountIds, handleError, saveAccountIds} from './core.actions';
 export class CoreEffects {
   public retrieveAccountIds$ = createEffect(() => this.actions$.pipe(
     ofType(retrieveAccountIds),
-    // TODO: call service
-    switchMap(() => this.apiService.mockCall(['12345678901234567890', '0123456789abcdef1234']).pipe(
-      map(accountIds => saveAccountIds({accountIds})),
+    switchMap(() => this.apiService.getAccount().pipe(
+      map(accounts => saveAccountIds({accountIds: accounts.map(account => account.id)})),
       catchError(error => of(handleError({error})))
     ))
   ));

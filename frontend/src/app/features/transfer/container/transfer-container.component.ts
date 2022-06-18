@@ -7,13 +7,8 @@ import {UUID_VALIDATORS} from 'src/app/core/constants/constants';
 import {State} from 'src/app/core/redux/core.reducers';
 import {getUUIDErrorMessage} from 'src/app/shared/functions/shared.functions';
 
+import {FormInterface} from '../models/form.interface';
 import {performTranfer} from '../redux/transfer.actions';
-
-interface FormInterface {
-  senderId: FormControl<string>;
-  recipientId: FormControl<string>;
-  amount: FormControl<number>;
-}
 
 @Component({
   selector: 'transfer-container',

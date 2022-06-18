@@ -1,0 +1,37 @@
+<table mat-table [dataSource]="dataSource">
+  <!-- Colonna Tipo Operazione -->
+  <ng-container matColumnDef="operationType">
+    <th mat-header-cell *matHeaderCellDef>Tipo Operazione</th>
+    <td mat-cell *matCellDef="let element">{{ getOperationType(element) }}</td>
+  </ng-container>
+  <!-- Colonna Ammontare -->
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef>Ammontare</th>
+    <td mat-cell *matCellDef="let element" [ngClass]="getAmountClass(element)">{{ element.amount | currency }}</td>
+  </ng-container>
+  <!-- Colonna Data -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Data</th>
+    <td mat-cell *matCellDef="let element">{{ element.date.toLocaleString() }}</td>
+  </ng-container>
+  <!-- Colonna Mittente -->
+  <ng-container matColumnDef="sender">
+    <th mat-header-cell *matHeaderCellDef>Mittente</th>
+    <td mat-cell *matCellDef="let element">{{ element.sender || "-" }}</td>
+  </ng-container>
+  <!-- Colonna Destinatario -->
+  <ng-container matColumnDef="recipient">
+    <th mat-header-cell *matHeaderCellDef>Destinatario</th>
+    <td mat-cell *matCellDef="let element">{{ element.recipient || "-" }}</td>
+  </ng-container>
+  <!-- Colonna ID -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID Movimento</th>
+    <td mat-cell *matCellDef="let element">{{ element.uuid }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns" [ngClass]="{ 'most-recent': row === history[0] }"></tr>
+</table>
+<mat-paginator [length]="history.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons aria-label="Seleziona pagina">
+</mat-paginator>

@@ -1,5 +1,8 @@
 import {ValidationErrors} from '@angular/forms';
 
+import {Movement} from 'src/app/core/models/movement.type';
+import {Transfer} from 'src/app/core/models/transfer.interface';
+
 export function getUUIDErrorMessage({required, pattern, minlength, maxlength}: ValidationErrors) {
   if (required) {
     return 'L\'ID è richiesto.';
@@ -12,4 +15,8 @@ export function getUUIDErrorMessage({required, pattern, minlength, maxlength}: V
     return 'L\'ID deve essere composto unicamente da numeri e caratteri alfabetici tra la A e la F.';
   }
   return '';
+}
+
+export function isTransfer(movement: Movement): movement is Transfer {
+  return !!('sender' in movement && movement.sender && 'recipient' in movement && movement.recipient);
 }

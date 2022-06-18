@@ -218,7 +218,7 @@
         ],
         "max-nested-callbacks": [
           "error",
-          3
+          5
         ],
         "no-labels": "error",
         "max-depth": [
