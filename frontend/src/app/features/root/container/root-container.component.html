@@ -1,6 +1,6 @@
 <account-form [formGroup]="formGroup" [accountIds]="(accountIds$ | async) || []" (submit)="research()"></account-form>
 <ng-container *ngIf="account$ | async as account">
-  <div>
+  <div class="account-info">
     Proprietario: <b>{{ account.name }} {{ account.surname }}</b>
     <br />
     Saldo: <b>{{ account.balance | currency }}</b>

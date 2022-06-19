@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, of, switchMap} from 'rxjs';
 
-import {handleError} from 'src/app/core/redux/core.actions';
 import {ApiService} from 'src/app/core/services/api-service.service';
+import {handleError} from 'src/app/features/app-overlay/redux/app-overlay.actions';
 
 import {retrieveAccountData, saveAccount, saveHistory} from './root.actions';
 

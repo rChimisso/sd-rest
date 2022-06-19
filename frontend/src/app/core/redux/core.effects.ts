@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {createEffect, ofType, Actions} from '@ngrx/effects';
 import {switchMap, map, catchError, of} from 'rxjs';
 
+import {handleError} from '../../features/app-overlay/redux/app-overlay.actions';
 import {ApiService} from '../services/api-service.service';
-import {retrieveAccountIds, handleError, saveAccountIds} from './core.actions';
+import {retrieveAccountIds, saveAccountIds} from './core.actions';
 
 @Injectable()
 export class CoreEffects {

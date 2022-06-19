@@ -3,10 +3,10 @@ import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {finalize, Observable} from 'rxjs';
 
+import {updateLoader} from '../../features/app-overlay/redux/app-overlay.actions';
 import {Account} from '../models/account.interface';
 import {Movement} from '../models/movement.type';
 import {TransferResponseBody} from '../models/transfer-response-body.interface';
-import {updateLoader} from '../redux/core.actions';
 import {State} from '../redux/core.reducers';
 
 interface AccountData {

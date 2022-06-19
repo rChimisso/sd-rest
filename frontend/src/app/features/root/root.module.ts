@@ -1,14 +1,10 @@
 import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
+
+import {SharedModule} from 'src/app/shared/shared.module';
 
 import {AccountFormComponent} from './components/account-form/account-form.component';
 import {HistoryTableComponent} from './components/history-table/history-table.component';
@@ -19,12 +15,7 @@ import {rootReducer} from './redux/root.reducers';
 
 @NgModule({
   imports: [
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatButtonModule,
+    SharedModule,
     MatTableModule,
     MatPaginatorModule,
     StoreModule.forFeature(rootFeatureKey, rootReducer),
