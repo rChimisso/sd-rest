@@ -12,15 +12,5 @@ export const getFeatureState = (featureKey: keyof State) => createSelector(
 
 export const getAccountIds = (featureKey: keyof State) => createSelector(
   getFeatureState(featureKey),
-  (state: Nullable<State[keyof State]>) => state && typeof state !== 'boolean' && 'accountIds' in state ? state.accountIds : []
-);
-
-export const getError = createSelector(
-  getCoreState,
-  (state: State) => state ? state.error : null
-);
-
-export const getShowLoader = createSelector(
-  getCoreState,
-  (state: State) => state ? state.showLoader : true
+  (state: Nullable<State[keyof State]>) => state && 'accountIds' in state ? state.accountIds : []
 );

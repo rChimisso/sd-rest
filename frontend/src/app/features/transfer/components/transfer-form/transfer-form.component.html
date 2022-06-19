@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" class="xsb-grid">
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-3">
     <mat-label>ID Mittente</mat-label>
-    <input matInput type="text" formControlName="senderId" [matAutocomplete]="senderAuto" />
+    <input matInput type="text" formControlName="senderId" [matAutocomplete]="senderAuto" uuid />
     <mat-autocomplete #senderAuto="matAutocomplete">
       <mat-option *ngFor="let id of (filteredSenderIds$ | async) || accountIds" [value]="id">
         {{ id }}
@@ -11,7 +11,7 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="xsb-grid-cell-span-3">
     <mat-label>ID Destinatario</mat-label>
-    <input matInput type="text" formControlName="recipientId" [matAutocomplete]="recipientAuto" />
+    <input matInput type="text" formControlName="recipientId" [matAutocomplete]="recipientAuto" uuid />
     <mat-autocomplete #recipientAuto="matAutocomplete">
       <mat-option *ngFor="let id of (filteredRecipientIds$ | async) || accountIds" [value]="id">
         {{ id }}

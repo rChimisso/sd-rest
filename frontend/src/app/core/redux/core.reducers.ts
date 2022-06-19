@@ -1,41 +1,27 @@
-import {HttpErrorResponse} from '@angular/common/http';
 import {createReducer, on} from '@ngrx/store';
 
+import * as fromAppOverlay from 'src/app/features/app-overlay/redux/app-overlay.reducers';
 import * as fromRoot from 'src/app/features/root/redux/root.reducers';
 import * as fromTransfer from 'src/app/features/transfer/redux/transfer.reducers';
 
 import {Nullable} from '../models/nullable.type';
-import {clearData, clearError, handleError, updateLoader} from './core.actions';
+import {clearData} from './core.actions';
 
 interface State {
   root: Nullable<fromRoot.State>;
   transfer: Nullable<fromTransfer.State>;
-  error: Nullable<HttpErrorResponse>;
-  showLoader: boolean;
+  appOverlay: Nullable<fromAppOverlay.State>;
 }
 
 const INITIAL_STATE: State = {
   root: null,
   transfer: null,
-  error: null,
-  showLoader: false
+  appOverlay: null
 };
 
 const coreReducer = createReducer(
   INITIAL_STATE,
-  on(clearData, () => INITIAL_STATE),
-  on(handleError, (state, {error}) => ({
-    ...state,
-    error
-  })),
-  on(clearError, state => ({
-    ...state,
-    error: null
-  })),
-  on(updateLoader, (state, {showLoader}) => ({
-    ...state,
-    showLoader
-  }))
+  on(clearData, () => INITIAL_STATE)
 );
 
 export {State, coreReducer};
