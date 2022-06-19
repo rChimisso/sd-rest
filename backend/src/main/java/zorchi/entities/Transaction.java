@@ -2,7 +2,9 @@ package zorchi.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +17,7 @@ import zorchi.utility.StandardUUID;
 
 @Entity
 public class Transaction {
-  @ManyToOne
+  @ManyToOne()
   @JoinColumn(name = "SHORT_UUID")
   private final Account ACCOUNT;
 
@@ -34,11 +36,22 @@ public class Transaction {
   }
 
   public Transaction(TransactionData transactionData, Account account, String UUID) {
-    this.AMOUNT = transactionData.amount;
+	  
+	if(account.isDelete()) {
+    this.AMOUNT = 0;
     this.ACCOUNT = account;
-    this.UUID = UUID;
+    this.UUID = StandardUUID.INVALID_UUID;
     this.DATE = new Date();
   }
+	else {
+		
+		this.AMOUNT = transactionData.amount;
+	    this.ACCOUNT = account;
+	    this.UUID = UUID;
+	    this.DATE = new Date();
+		
+	}
+}
 
   public Account getACCOUNT() {
     return ACCOUNT;

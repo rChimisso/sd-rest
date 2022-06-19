@@ -1,11 +1,15 @@
 package zorchi.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,6 +42,10 @@ public class Account {
    */
   @Id
   private final String SHORT_UUID;
+  
+  private boolean isDeleted = false;
+  
+
 
   /**
    * Costruttore senza argomenti per il funzionamento di Hibernate.
@@ -169,7 +177,15 @@ public class Account {
 		  
   }
 
-  /**
+  public boolean isDelete() {
+	return isDeleted;
+}
+
+public void delete() {
+	this.isDeleted = true;
+}
+
+/**
    * Dati per la creazione di un {@link zorchi.entities.Account Account bancario}.
    */
   public static class AccountData {

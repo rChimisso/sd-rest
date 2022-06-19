@@ -73,7 +73,7 @@ public class ApiController {
    */
   @GetMapping("/account")
   public ResponseEntity<Iterable<Account>> getAccount() {
-    return new ResponseEntity<>(accountRepository.findAll(), HttpStatus.OK);
+    return new ResponseEntity<>(accountRepository.getAllNotDeleted(), HttpStatus.OK);
   }
 
   /**
@@ -87,12 +87,16 @@ public class ApiController {
   @PostMapping("/account")
   public ResponseEntity<String> postAccount(@Valid @RequestBody AccountData accountData) {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
+    if(account.isDelete())
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     if (account.isValid()) {
       accountRepository.save(account);
       return new ResponseEntity<>(account.getID(), HttpStatus.OK);
     }
-    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
+  
+  
 
   /**
    * Gestisce le richieste di tipo {@link RequestMethod#DELETE DELETE} per il percorso relativo {@code "/account"}.
@@ -104,11 +108,15 @@ public class ApiController {
    */
   @DeleteMapping("/account")
   public ResponseEntity<String> deleteAccount(@Valid @RequestParam String id) {
-    if (accountRepository.existsById(id)) {
-      accountRepository.deleteById(id);
-      return new ResponseEntity<>(HttpStatus.OK);
-    }
+	  if(Account.goodRequest(id)) {
+		  if (accountRepository.existsById(id)) {
+			  accountRepository.accountDeleted(id);
+			  
+			  return new ResponseEntity<>(HttpStatus.OK);
+		  }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	  }
+	 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -119,16 +127,21 @@ public class ApiController {
    */
   @GetMapping("/account/{id}")
 	public ResponseEntity<AccountFullData> getAccountId(@PathVariable String id) {
-	  Account account = accountRepository.findById(id).orElseGet(Account::new);
-    if (account.isValid()) {
-      return new ResponseEntity<>(
-        new AccountFullData(account, transactionRepository.findTransactionFormAccountId(account.getID())),
-        CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()),
-        HttpStatus.OK
-      );
-    }
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
+	  if(Account.goodRequest(id)) {
+		  Account account = accountRepository.findById(id).orElseGet(Account::new);
+		  if(account.isDelete())
+	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	      if (account.isValid()) {
+	      return new ResponseEntity<>(
+	        new AccountFullData(account, transactionRepository.findTransactionFormAccountId(account.getID())),
+	        CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()),
+	        HttpStatus.OK
+	      );
+	    }
+	    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+}
 
   /**
    * Gestisce le richieste di tipo {@link RequestMethod#POST POST} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
@@ -139,20 +152,26 @@ public class ApiController {
    */
   @PostMapping("/account/{id}")
 	public ResponseEntity<TransactionResponseBody> postAccountId(@PathVariable String id, @Valid @RequestBody TransactionData transactionData) {
-    Account account = accountRepository.findById(id).orElseGet(Account::new);
-    if (account.isValid()) {
-      long newBalance = account.getBalance() + transactionData.getAmount();
-      if (newBalance >= 0) {
-        account.setBalance(newBalance);
-        Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
-        accountRepository.save(account);
-        transactionRepository.save(transaction);
-        return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.OK);
-      }
-      return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.OK);
-    }
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
+	if(Account.goodRequest(id)) {
+		Account account = accountRepository.findById(id).orElseGet(Account::new);
+		 if(account.isDelete())
+	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    if (account.isValid()) {
+	      long newBalance = account.getBalance() + transactionData.getAmount();
+	      if (newBalance >= 0) {
+	        account.setBalance(newBalance);
+	        Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
+	       
+	        accountRepository.save(account);
+	        transactionRepository.save(transaction);
+	        return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.OK);
+	      }
+	      return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.OK);
+	    }
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
 	
   /**
    * Gestisce le richieste di tipo {@link RequestMethod#PUT PUT} per il percorso relativo {@code "/account"} con variabile di percorso {@code "/{id}"}.
@@ -162,14 +181,22 @@ public class ApiController {
    */
 	@PutMapping("/account/{id}")
 	public ResponseEntity<String> putAccountId(@PathVariable String id, @Valid @RequestBody AccountData accountData) {
-    Account account = accountRepository.findById(id).orElseGet(Account::new);
-    if (account.isValid()) {
-      account.setName(accountData.getName());
-      account.setSurname(accountData.getSurname());
-      accountRepository.save(account);
-      return new ResponseEntity<>(HttpStatus.OK);
-    }
+		 
+	if(Account.goodRequest(id)) {
+		
+		Account account = accountRepository.findById(id).orElseGet(Account::new);
+		 if(account.isDelete())
+	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		if (account.isValid()) {
+			account.setName(accountData.getName());
+			account.setSurname(accountData.getSurname());
+			accountRepository.save(account);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
   /**
@@ -180,22 +207,30 @@ public class ApiController {
    */
 	@PatchMapping("/account/{id}")
 	public ResponseEntity<String> patchAccountId(@PathVariable String id, @RequestBody AccountData accountData) {
-    Account account = accountRepository.findById(id).orElseGet(Account::new);
-    if (account.isValid()) {
-      String name = accountData.getName(), surname = accountData.getSurname();
-      if (name != null || surname != null) {
-        if (name != null) {
-          account.setName(name);
-        }
-        if (surname != null) {
-          account.setSurname(surname);
-        }
-        accountRepository.save(account);
-        return new ResponseEntity<>(HttpStatus.OK);
-      }
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    
+	if(Account.goodRequest(id)) {
+		Account account = accountRepository.findById(id).orElseGet(Account::new);
+		 if(account.isDelete())
+	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    if (account.isValid()) {
+	      String name = accountData.getName(), surname = accountData.getSurname();
+	      if (name != null || surname != null) {
+	        if (name != null) {
+	          account.setName(name);
+	        }
+	        if (surname != null) {
+	          account.setSurname(surname);
+	        }
+	        accountRepository.save(account);
+	        return new ResponseEntity<>(HttpStatus.OK);
+	      }
+	      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+	    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	 
+	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	
 	}
 	
   /**
@@ -206,12 +241,24 @@ public class ApiController {
    */
 	@RequestMapping(value = "/account/{id}", method = RequestMethod.HEAD)
 	public ResponseEntity<String> headAccountId(@PathVariable String id) {
-    Account account = accountRepository.findById(id).orElseGet(Account::new);
-    if (account.isValid()) {
-      return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK);
-    }
+		
+	if(Account.goodRequest(id))
+	{	
+	    Account account = accountRepository.findById(id).orElseGet(Account::new);
+	    
+	    if(account.isDelete())
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		
+    	
+	    if (account.isValid()) {
+	      return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK);
+	    }
+	    return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
     return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+
 	}
+	
 
   /**
    * TODO
@@ -230,8 +277,12 @@ public class ApiController {
 			  Account accountFrom = accountRepository.findById(transferData.getFrom()).orElseGet(Account::new);
 		    if (accountTo.isValid() && accountFrom.isValid()) 
 		    {
+		    	if(accountFrom.isDelete() || accountTo.isDelete())
+		    		return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: Account non trovato"), HttpStatus.OK);
+		    		
+		    	
 		    	long newFromBalance = accountFrom.getBalance() - Math.abs(transferData.getAmount());
-		    	long newToBalance = accountFrom.getBalance() + Math.abs(transferData.getAmount());
+		    	long newToBalance = accountTo.getBalance() + Math.abs(transferData.getAmount());
 		    	if (newFromBalance >= 0) 
 		    	{
 		    		accountFrom.setBalance(newFromBalance);
@@ -247,13 +298,14 @@ public class ApiController {
 		    	}
 		    	else
 		    	{
+		    		
 		    		return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: il bilancio e' inferiore a quanto richiesto."), HttpStatus.OK);
 		    	}
 	    
 		    }
 		    else
 		    {
-		    	//Ci vorrebbe un 404 HttpStatus.NOT_FOUND
+		    	
 		    	return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: Account non trovato"), HttpStatus.OK);
 	    	
 		    }
@@ -275,14 +327,18 @@ public class ApiController {
    */
 	@PostMapping("/divert")
 	public ResponseEntity<String> postDivert(@RequestBody TransferId transferId) {
-		//RICORDARSI DI INSERIRE CONTROLLO SU ID PER LANCIARE BAD REQUEST
 		
+		if(Transfer.goodRequest(transferId.getId())){
+			
 		
 		Transfer transfer = transferRepository.findById(transferId.getId()).orElseGet(Transfer::new);
 		if (transfer.isValid()) {
 		   
 				Account to = transfer.getTo().getACCOUNT();
 				Account from = transfer.getFrom().getACCOUNT();
+				if(to.isDelete() || from.isDelete())
+		    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    		
 				
 				if(from.canTransfer(transfer.getAmount()))
 					{
@@ -304,5 +360,9 @@ public class ApiController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		
-	}		 
+	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+	}	
+	
+}
 

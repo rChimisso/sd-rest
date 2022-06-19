@@ -4,8 +4,9 @@ package zorchi.entities;
 import java.util.Date;
 import java.util.function.Predicate;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,23 +27,19 @@ public class Transfer{
 	@Id
 	final String UUID;
 	
-	/*
-	 * Tassa per il trasferimento / bonifico, per ora � 0
-	 * Non so se lasciarla per ora c'� 
-	 */
-	private static int tassa = 0;
+
 	
 	/**
 	 * Transazione del ricevente
 	 */
-	@ManyToOne
-  @JoinColumn(name = "to_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "to_id")
 	private Transaction to; 
 	
 	/**
 	 * Tranzazione del destinatario
 	 */
-	@ManyToOne
+	@ManyToOne()
   @JoinColumn(name = "from_id")
 	private Transaction from;
 
@@ -76,9 +73,9 @@ public class Transfer{
 		int absAmount = Math.abs(amount);
 		
 		// Orribile da cambiare
-		if(from.getBalance() - (absAmount+tassa) >= 0)
+		if(from.getBalance() - (absAmount) >= 0)
 		{
-			TransactionData f = new TransactionData(absAmount+tassa);
+			TransactionData f = new TransactionData(absAmount);
 			TransactionData t = new TransactionData(-absAmount);
 			this.to = new Transaction(t ,to ,StandardUUID.randomUUID(duplicated));
 			this.from = new Transaction(f ,from ,StandardUUID.randomUUID(duplicated));
@@ -154,7 +151,7 @@ public class Transfer{
 	    int result = 1;
 	    result = prime * result + UUID.hashCode();
 	    result = prime * result + amount;
-	    result = prime * result + tassa;
+
 	    result = prime * result + DATE.hashCode();
 	    return result;
 	  }
@@ -162,6 +159,13 @@ public class Transfer{
 	  @Override
 	  public String toString() {
 	    return "Account [ID=" + UUID + ", amount=" + amount + ", DATE=" + DATE + "]";
+	  }
+	  
+	  public static boolean goodRequest(String request)
+	  {
+		  
+		  return request.matches("[A-Fa-f0-9]{32}");
+			  
 	  }
 	
 
