@@ -10,3 +10,14 @@ export const UUID_VALIDATORS = [
   Validators.pattern(UUID_REGEX),
   Validators.required
 ];
+
+export const specialKeys: string[] = [
+  'Backspace',
+  'Tab',
+  'End',
+  'Home',
+  'ArrowLeft',
+  'ArrowRight',
+  'Del',
+  'Delete'
+];
