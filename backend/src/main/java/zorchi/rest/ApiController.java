@@ -221,8 +221,7 @@ public class ApiController {
    */
   @PostMapping("/transfer")
 	public ResponseEntity<TransferResponseBody> postTransfer(@RequestBody TransferData transferData) {
-	  System.out.println(transferData.getTo());
-	  System.out.println(transferData.getFrom());
+
 	  // Verificare che amount si un intero
 	  if(Account.goodRequest(transferData.getTo()) && Account.goodRequest(transferData.getFrom()))
 	  {
@@ -244,21 +243,23 @@ public class ApiController {
 		        	transactionRepository.save(transfer.getFrom());
 		        	transactionRepository.save(transfer.getTo());
 		        	transferRepository.save(transfer);
-		        	return new ResponseEntity<>(new TransferResponseBody(newFromBalance, newToBalance, accountFrom.getID(), accountTo.getID(), transfer.getUUID(), true), HttpStatus.OK);
+		        	return new ResponseEntity<>(new TransferResponseBody(newFromBalance, newToBalance, accountFrom.getID(), accountTo.getID(), transfer.getUUID()), HttpStatus.OK);
 		    	}
 		    	else
 		    	{
-		    		return new ResponseEntity<>(new TransferResponseBody(""), HttpStatus.OK);
+		    		return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: il bilancio e' inferiore a quanto richiesto."), HttpStatus.OK);
 		    	}
 	    
 		    }
 		    else
 		    {
-		    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    	//Ci vorrebbe un 404 HttpStatus.NOT_FOUND
+		    	return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: Account non trovato"), HttpStatus.OK);
+	    	
 		    }
 		}
 		
-	  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	  return new ResponseEntity<>(new TransferResponseBody("Trasferimento fallisto: Campi compilati erroneamente"), HttpStatus.BAD_REQUEST);
 		
 	 
 		  

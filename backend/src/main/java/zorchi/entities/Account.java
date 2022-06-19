@@ -164,7 +164,8 @@ public class Account {
   
   public static boolean goodRequest(String request)
   {
-	  return (request.length() == 20 && request.matches("^[A-Fa-f0-9]"));
+	  
+	  return request.matches("[A-Fa-f0-9]{20}");
 		  
   }
 
@@ -229,5 +230,7 @@ public class Account {
     public List<TransactionFullDataInterface> getHistory() {
       return history;
     }
+    
+   
   }
 }

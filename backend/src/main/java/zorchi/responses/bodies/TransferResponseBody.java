@@ -1,5 +1,5 @@
 package zorchi.responses.bodies;
-import org.springframework.http.HttpStatus;
+
 
 import zorchi.utility.StandardUUID;
 
@@ -22,6 +22,9 @@ public class TransferResponseBody {
    */
   private final String transferId;
   
+  /**
+   * Messagio front end
+   */
   private final String message;
   
   private final boolean performed;
@@ -39,16 +42,13 @@ public class TransferResponseBody {
     
   }
   
-  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId, boolean performed) {
+  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId) {
 	    this.from = new TransferActor(fromId, fromBalance);
 	    this.to = new TransferActor(toId, toBalance);
 	    this.transferId = transferId;
-	    this.performed = performed;
-	    if (fromBalance >= 0 && !StandardUUID.isInvalid(toId) && !StandardUUID.isInvalid(fromId) && !StandardUUID.isInvalid(transferId)) {
-	      this.message = "Operazione eseguita con sucesso.";
-	    } else {
-	      this.message = "Trasferimento non eseguito: il bilancio e' inferiore a quanto richiesto.";
-	    }
+	    this.performed = true;
+	    this.message = "Operazione eseguita con sucesso.";
+	   
 	  }
   
   
@@ -56,7 +56,7 @@ public class TransferResponseBody {
    * Risposta 404, la risposta standart HTTP crea problemi con front end
    */
   public TransferResponseBody() {
-	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false,"Account non tovato");
+	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false,"Error");
 
 	  }
   public TransferResponseBody(String message) {
@@ -92,6 +92,8 @@ public String getMessage() {
 public boolean isPerformed() {
 	return performed;
 }
+
+
 
 
 

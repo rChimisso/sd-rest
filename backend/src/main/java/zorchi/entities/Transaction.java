@@ -114,6 +114,8 @@ public class Transaction {
     public String getRecipient() {
       return recipient;
     }
+    
+    
   }
 
   public interface TransactionFullDataInterface {
@@ -126,5 +128,6 @@ public class Transaction {
     String getSender();
 
     String getRecipient();
+    
   }
 }
