@@ -3,16 +3,16 @@ import {createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
 import {clearData} from 'src/app/core/redux/core.actions';
-import {handleError, clearError, updateLoader} from 'src/app/features/app-overlay/redux/app-overlay.actions';
+import {handleError, clearError, incrementActiveCalls, decrementActiveCalls} from 'src/app/features/app-overlay/redux/app-overlay.actions';
 
 interface State {
   error: Nullable<HttpErrorResponse>;
-  loading: boolean;
+  activeCalls: number;
 }
 
 const INITIAL_STATE: State = {
   error: null,
-  loading: false
+  activeCalls: 0
 };
 
 const appOverlayReducer = createReducer(
@@ -26,9 +26,13 @@ const appOverlayReducer = createReducer(
     ...state,
     error: null
   })),
-  on(updateLoader, (state, {loading}) => ({
+  on(incrementActiveCalls, state => ({
     ...state,
-    loading
+    activeCalls: state.activeCalls + 1
+  })),
+  on(decrementActiveCalls, state => ({
+    ...state,
+    activeCalls: state.activeCalls - 1
   }))
 );
 

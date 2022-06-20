@@ -1,22 +1,48 @@
-import {createReducer, on} from '@ngrx/store';
+import {ActionReducer, createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
+import {TransferResponseBody} from 'src/app/core/models/responses/transfer-response-body.interface';
 import {clearData, saveAccountIds} from 'src/app/core/redux/core.actions';
 
-import {TransferResult} from '../models/transfer-result.interface';
 import {saveTransferResult} from './transfer.actions';
 
+/**
+ * Stato.
+ *
+ * @interface State
+ * @typedef {State}
+ */
 interface State {
+  /**
+   * Lista degli account id.
+   *
+   * @type {string[]}
+   */
   accountIds: string[];
-  transferResult: Nullable<TransferResult>;
+  /**
+   * Risposta della richiesta di Trasferimento.
+   *
+   * @type {Nullable<TransferResponseBody>}
+   */
+  transferResult: Nullable<TransferResponseBody>;
 }
 
+/**
+ * Stato iniziale.
+ *
+ * @type {State}
+ */
 const INITIAL_STATE: State = {
   accountIds: [],
   transferResult: null
 };
 
-const transferReducer = createReducer(
+/**
+ * Reducer per l'intercettazione delle action e il salvataggio del loro payload sullo store.
+ *
+ * @type {ActionReducer<State>}
+ */
+const transferReducer: ActionReducer<State> = createReducer(
   INITIAL_STATE,
   on(clearData, () => INITIAL_STATE),
   on(saveAccountIds, (state, {accountIds}) => ({

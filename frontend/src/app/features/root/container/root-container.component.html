@@ -1,9 +1,9 @@
-<account-form [formGroup]="formGroup" [accountIds]="(accountIds$ | async) || []" (submit)="research()"></account-form>
+<account-form [formGroup]="formGroup" [accountIds]="(accountIds$ | async) || []" (perform)="research()"></account-form>
 <ng-container *ngIf="account$ | async as account">
   <div class="account-info">
     Proprietario: <b>{{ account.name }} {{ account.surname }}</b>
     <br />
     Saldo: <b>{{ account.balance | currency }}</b>
   </div>
-  <history-table *ngIf="history$ | async as history" [history]="history" [accountId]="account.id"></history-table>
+  <history-table *ngIf="history$ | async as history" [history]="history" [accountId]="account.uuid"></history-table>
 </ng-container>

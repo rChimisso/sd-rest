@@ -10,8 +10,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {TwoDigitDecimalNumberDirective} from 'src/app/shared/directives/TwoDigitDecimalNumberDirective.directive';
 
+import {MovementResultDialogComponent} from './components/movement-result-dialog/movement-result-dialog.component';
 import {UUIDDirective} from './directives/UUIDDirective.directive';
 
+/**
+ * Shared Module.
+ *
+ * @export
+ * @class SharedModule
+ * @typedef {SharedModule}
+ */
 @NgModule({
   imports: [
     ReactiveFormsModule,
@@ -23,7 +31,11 @@ import {UUIDDirective} from './directives/UUIDDirective.directive';
     MatIconModule,
     MatDialogModule
   ],
-  declarations: [TwoDigitDecimalNumberDirective, UUIDDirective],
+  declarations: [
+    TwoDigitDecimalNumberDirective,
+    UUIDDirective,
+    MovementResultDialogComponent
+  ],
   exports: [
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -34,7 +46,8 @@ import {UUIDDirective} from './directives/UUIDDirective.directive';
     MatIconModule,
     MatDialogModule,
     TwoDigitDecimalNumberDirective,
-    UUIDDirective
+    UUIDDirective,
+    MovementResultDialogComponent
   ]
 })
 export class SharedModule {}

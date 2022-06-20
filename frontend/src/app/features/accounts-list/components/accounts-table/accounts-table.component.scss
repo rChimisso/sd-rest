@@ -1,0 +1,38 @@
+:host {
+  table {
+    width: 100%;
+    padding: 8px;
+
+    td.mat-cell,
+    th.mat-header-cell {
+      &:nth-of-type(4) {
+        text-align: right;
+      }
+
+      padding-left: 24px;
+      border-color: black;
+    }
+
+    td.mat-cell.xsb-balance- {
+      &positive {
+        color: green;
+      }
+      &negative {
+        color: red;
+      }
+      &neutral {
+        color: gray;
+      }
+    }
+  }
+
+  .xsb-table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    mat-checkbox {
+      margin-left: 16px;
+    }
+  }
+}

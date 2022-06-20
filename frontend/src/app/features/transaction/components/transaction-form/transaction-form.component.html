@@ -1,0 +1,18 @@
+<form [formGroup]="formGroup" class="xsb-grid">
+  <mat-form-field appearance="outline" class="xsb-grid-cell-span-8">
+    <mat-label>ID Destinatario</mat-label>
+    <input matInput type="text" formControlName="accountId" [matAutocomplete]="recipientAuto" uuid [length]="20" />
+    <mat-autocomplete #recipientAuto="matAutocomplete">
+      <mat-option *ngFor="let id of (filteredAccountIds$ | async) || accountIds" [value]="id">
+        {{ id }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="isControlInvalid('accountId')">{{ idErrorMessage }}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="xsb-grid-cell-span-2">
+    <mat-label>Ammontare da trasferire</mat-label>
+    <input matInput type="text" formControlName="amount" autocomplete="off" twoDigitDecimalNumber />
+    <mat-error *ngIf="isControlInvalid('amount')">{{ amountErrorMessage }}</mat-error>
+  </mat-form-field>
+  <button mat-button [disabled]="isFormInvalid" (click)="emit()" class="xsb-grid-cell-span-2 xsb-submit">Esegui</button>
+</form>
