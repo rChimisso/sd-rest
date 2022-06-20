@@ -1,38 +1,37 @@
-# sd-rest
+# Membri Gruppo
+
+Riccardo Chimisso -
+Mauro Zorzin - 866001
+
+# Descrizione Progetto
 Progetto Endpoint REST di Sistemi Distribuiti.
 
 In questo file devono essere indicati nome, cognome e matricola di ogni componente
 del gruppo.  
-Eventualmente è possibile inserire una descrizione o introduzione al lavoro che
-il gruppo ha svolto, per meglio comprendere l’architettura del sistema implementato. In
-caso di espansione dalle specifiche del progetto, questo è il file dove indicare la descrizione
+Eventualmente e' possibile inserire una descrizione o introduzione al lavoro che
+il gruppo ha svolto, per meglio comprendere l'architettura del sistema implementato. In
+caso di espansione dalle specifiche del progetto, questo e' il file dove indicare la descrizione
 di quanto svolto.
 
-# Angular Frontend
+# FrontEnd
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.1.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# BackEnd
 
-## Code scaffolding
+- Gestione account eliminati:
+    Quando gli account non vengono mai eliminati, in modo da poter sempre tenere traccia dello storico delle transazioni. Quando un account viene eliminato non e' piu' possibile modificare l'account (Eseguire depositi, prelievi e trasferimenti da e verso tale account) ad accezione della visualizzazione degli stessi.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Aggiunto endpoint GET("/api/active"):
+    Esso che mostra esclusivamente gli account non eliminati.
 
-## Build
+- Modifica GET(/api/account/{id})
+    Aggiunti campi nella responce body in modo da fornire informazioni aggiuntive per il frontend
+    (Maggiorni informazioni riguardanti l'account  indicato in id).
+    Gli id passati nel responceBody indicano, in caso sender e recipient siano nulli una trasazione ( Deposito / Prelievo) altrimenti un trasverimento.
+    I campi sender e recipient nel responceBody indicano da chi e verso dove il trasferimento avviene
+    (Indicati con id degli account).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Message
+    Introdotto il paramentro message in alcuni responceBody per la visualizzazione di messagi frontEnd
 

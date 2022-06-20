@@ -112,7 +112,7 @@ public class ApiController {
 		  if (accountRepository.existsById(id)) {
 			  accountRepository.accountDeleted(id);
 			  
-			  return new ResponseEntity<>(HttpStatus.OK);
+			  return new ResponseEntity<>(HttpStatus.OK.);
 		  }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	  }
