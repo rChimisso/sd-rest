@@ -29,7 +29,7 @@ export abstract class AbstractFormComponent<T extends {[K in keyof T]: AbstractC
    * @type {EventEmitter<E>}
    */
   @Output()
-  public submit: EventEmitter<E> = new EventEmitter<E>();
+  public perform: EventEmitter<E> = new EventEmitter<E>();
 
   /**
    * Se il {@link FormGroup} non è valido.
@@ -61,9 +61,9 @@ export abstract class AbstractFormComponent<T extends {[K in keyof T]: AbstractC
    */
   public emit(arg?: E) {
     if (arg) {
-      this.submit.emit(arg);
+      this.perform.emit(arg);
     } else {
-      this.submit.emit();
+      this.perform.emit();
     }
   }
 }

@@ -11,7 +11,12 @@ export const getError = createSelector(
   (state: State) => state ? state.error : null
 );
 
-export const getShowLoader = createSelector(
+export const getActiveCalls = createSelector(
   selectAppOverlayState,
-  (state: State) => state ? state.loading : true
+  (state: State) => state ? state.activeCalls : 0
+);
+
+export const getShowLoader = createSelector(
+  getActiveCalls,
+  (state: number) => state > 0
 );

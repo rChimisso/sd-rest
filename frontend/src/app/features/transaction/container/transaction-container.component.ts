@@ -11,8 +11,10 @@ import {TransactionResponseBody} from 'src/app/core/models/responses/transaction
 import {clearData} from 'src/app/core/redux/core.actions';
 import {State} from 'src/app/core/redux/core.reducers';
 
+import {TransactionResultDialogComponent} from '../components/transaction-result-dialog/transaction-result-dialog.component';
 import {FormInterface} from '../models/form.interface';
 import {getTransactionResult} from '../redux';
+import {performTransaction} from '../redux/transaction.actions';
 
 @Component({
   selector: 'transaction-container',
@@ -45,15 +47,14 @@ export class TransactionContainerComponent extends AbstractFormContainer<FormInt
     );
     this.transactionResult$.subscribe(transferResult => {
       if (transferResult) {
-        this.dialog.open(TransferResultDialogComponent, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
+        this.dialog.open(TransactionResultDialogComponent, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
       }
     });
   }
 
   public perform() {
-    this.appState$.dispatch(performTransfer({
-      from: this.formGroup.controls.senderId.value,
-      to: this.formGroup.controls.recipientId.value,
+    this.appState$.dispatch(performTransaction({
+      accountId: this.formGroup.controls.accountId.value,
       amount: +this.formGroup.controls.amount.value
     }));
   }

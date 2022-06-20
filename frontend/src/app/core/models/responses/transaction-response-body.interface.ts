@@ -11,7 +11,7 @@ import {MovementResponseBody} from './movement-response-body.interface';
  */
 export interface TransactionResponseBody extends MovementResponseBody<Messages> {
   /**
-   * {@link MovementActor}.
+   * MovementActor.
    *
    * @type {MovementActor}
    */

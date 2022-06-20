@@ -20,7 +20,7 @@ export const STANDARD_UUID_LENGTH = 32;
 export const UUID_REGEX = '[a-fA-F0-9]+';
 
 /**
- * {@link Validators Validatori} per un FormControl contenente uno UUID.
+ * I {@link Validators Validatori} per un FormControl contenente uno UUID.
  *
  * @type {ValidatorFn[]}
  */

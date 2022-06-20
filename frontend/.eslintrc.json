@@ -519,28 +519,6 @@
             }
           }
         ],
-        "jsdoc/require-jsdoc": [
-          "warn",
-          {
-            "require": {
-              "FunctionDeclaration": true,
-              "ClassDeclaration": true,
-              "MethodDefinition": true
-            },
-            "checkSetters": true,
-            "checkGetters": true,
-            "enableFixer": false,
-            "contexts": [
-              "ClassProperty",
-              "Interface",
-              "TSPropertySignature",
-              "TSMethodSignature",
-              "TSTypeAliasDeclaration",
-              "TSInterfaceDeclaration",
-              "TSEnumDeclaration"
-            ]
-          }
-        ],
         "jsdoc/require-param-name": [
           "warn",
           {

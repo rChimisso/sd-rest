@@ -8,7 +8,6 @@ export const handleError = createAction(
 
 export const clearError = createAction('[AppOverlay] Clear Error');
 
-export const updateLoader = createAction(
-  '[AppOverlay] Update Loader',
-  props<{ loading: boolean }>()
-);
+export const incrementActiveCalls = createAction('[AppOverlay] Increment Active Calls');
+
+export const decrementActiveCalls = createAction('[AppOverlay] Decrement Active Calls');

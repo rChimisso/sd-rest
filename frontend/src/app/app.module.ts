@@ -18,6 +18,7 @@ import {ApiService} from './core/services/api-service.service';
 import {AppOverlayModule} from './features/app-overlay/app-overlay.module';
 import {HomeModule} from './features/home/home.module';
 import {RootModule} from './features/root/root.module';
+import {TransactionModule} from './features/transaction/transaction.module';
 import {TransferModule} from './features/transfer/transfer.module';
 
 registerLocaleData(localeIt, 'it-IT');
@@ -35,6 +36,7 @@ registerLocaleData(localeIt, 'it-IT');
     HomeModule,
     RootModule,
     TransferModule,
+    TransactionModule,
     AppOverlayModule,
     BrowserModule,
     AppRoutingModule,

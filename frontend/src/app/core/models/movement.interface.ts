@@ -9,7 +9,7 @@ import {Entity} from './entity.interface';
  */
 export interface Movement extends Entity {
   /**
-   * {@link Date Data} in cui è stato effettuato il movimento.
+   * Data in cui è stato effettuato il movimento.
    *
    * @type {Date}
    */

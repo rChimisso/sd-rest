@@ -17,6 +17,10 @@ export class HomeContainerComponent {
     {
       route: 'transfer',
       label: 'Trasferimento'
+    },
+    {
+      route: 'transaction',
+      label: 'Transazione'
     }
   ];
 

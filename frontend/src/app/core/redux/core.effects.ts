@@ -6,8 +6,21 @@ import {handleError} from '../../features/app-overlay/redux/app-overlay.actions'
 import {ApiService} from '../services/api-service.service';
 import {retrieveAccountIds, saveAccountIds} from './core.actions';
 
+/**
+ * 
+ *
+ * @export
+ * @class CoreEffects
+ * @typedef {CoreEffects}
+ */
 @Injectable()
 export class CoreEffects {
+  /**
+   * 
+   *
+   * @public
+   * @type {*}
+   */
   public retrieveAccountIds$ = createEffect(() => this.actions$.pipe(
     ofType(retrieveAccountIds),
     switchMap(() => this.apiService.getActive().pipe(
@@ -16,5 +29,11 @@ export class CoreEffects {
     ))
   ));
 
+  /**
+   * @constructor
+   * @public
+   * @param {Actions} actions$
+   * @param {ApiService} apiService
+   */
   public constructor(private readonly actions$: Actions, private readonly apiService: ApiService) {}
 }

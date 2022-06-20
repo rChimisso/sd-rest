@@ -22,12 +22,15 @@ export class AppOverlayContainerComponent {
 
   public readonly showLoader$: Observable<boolean> = this.appState$.select(getShowLoader);
 
+  private showLoader = false;
+
   public constructor(private readonly appState$: Store<State>, private readonly router: Router, private readonly route: ActivatedRoute, private readonly dialog: MatDialog) {
     this.error$.subscribe(error => {
       if (error) {
         this.dialog.open(ErrorDialogComponent, {data: error}).afterClosed().subscribe(() => this.appState$.dispatch(clearError()));
       }
     });
+    this.showLoader$.subscribe(showLoader => (this.showLoader = showLoader));
   }
 
   public navigateHome() {

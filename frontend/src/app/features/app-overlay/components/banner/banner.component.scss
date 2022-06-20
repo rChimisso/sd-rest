@@ -11,14 +11,17 @@
     background-color: white;
     z-index: 1;
 
-    mat-icon {
-      transform: scale(2);
+    .mat-icon-button {
       margin-left: 32px;
+
+      mat-icon {
+        transform: scale(2);
+      }
     }
 
     p {
       font-size: xx-large;
-      margin-left: 48px;
+      margin-left: 32px;
     }
   }
 }

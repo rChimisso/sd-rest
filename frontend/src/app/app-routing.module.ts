@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {HomeContainerComponent} from './features/home/container/home-container.component';
 import {RootContainerComponent} from './features/root/container/root-container.component';
+import {TransactionContainerComponent} from './features/transaction/container/transaction-container.component';
 import {TransferContainerComponent} from './features/transfer/container/transfer-container.component';
 
 /**
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'transfer',
     component: TransferContainerComponent
+  },
+  {
+    path: 'transaction',
+    component: TransactionContainerComponent
   },
   {
     path: 'home',

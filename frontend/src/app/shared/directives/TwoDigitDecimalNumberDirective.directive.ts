@@ -28,7 +28,7 @@ export class TwoDigitDecimalNumberDirective implements OnChanges {
    * @readonly
    * @type {RegExp}
    */
-  private regex = new RegExp(`^${this.allowNegative ? '-' : ''}\d+\.?\d{0,2}$`, 'g');
+  private regex = this.getRegExp();
 
   /**
    * @constructor
@@ -58,8 +58,12 @@ export class TwoDigitDecimalNumberDirective implements OnChanges {
    * @param {SimpleChanges} changes cambiamenti.
    */
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['length'] && changes['length'].currentValue !== changes['length'].previousValue) {
-      this.regex = new RegExp(`^${this.allowNegative ? '-?' : ''}\d+\.?\d{0,2}$`, 'g');
+    if (changes['allowNegative'] && changes['allowNegative'].currentValue !== changes['allowNegative'].previousValue) {
+      this.regex = this.getRegExp();
     }
+  }
+
+  private getRegExp() {
+    return this.allowNegative ? /^-?\d*\.?\d{0,2}$/g : /^\d+\.?\d{0,2}$/g;
   }
 }

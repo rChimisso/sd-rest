@@ -49,9 +49,9 @@ const transactionReducer: ActionReducer<State> = createReducer(
     ...state,
     accountIds
   })),
-  on(saveTransactionResult, (state, transferResult) => ({
+  on(saveTransactionResult, (state, transactionResult) => ({
     ...state,
-    transactionResult: transferResult
+    transactionResult
   }))
 );
 
