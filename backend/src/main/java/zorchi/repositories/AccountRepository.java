@@ -29,22 +29,22 @@ public interface AccountRepository extends CrudRepository<Account, String> {
     value =
       "SELECT * FROM (" +
         "(" + 
-          "SELECT Transactions.UUID, Transactions.amount, Transactions.date, Movements.sender, Movements.recipient" +
-          "FROM" +
-            "(SELECT * FROM TRANSACTION WHERE ACCOUNT_UUID = :UUID) as Transactions" +
-            "LEFT JOIN" +
+          "SELECT Transactions.UUID, Transactions.amount, Transactions.date, Movements.sender, Movements.recipient " +
+          "FROM " +
+            "(SELECT * FROM TRANSACTION WHERE ACCOUNT_UUID = :UUID) as Transactions " +
+            "LEFT JOIN " +
             "(" +
-              "SELECT STransaction.ACCOUNT_UUID AS sender, STransaction.UUID AS Suuid, RTransaction.ACCOUNT_UUID AS recipient, RTransaction.UUID AS Ruuid, Transfers.amount, Transfers.date" +
+              "SELECT STransaction.ACCOUNT_UUID AS sender, STransaction.UUID AS Suuid, RTransaction.ACCOUNT_UUID AS recipient, RTransaction.UUID AS Ruuid, Transfers.amount, Transfers.date " +
               "FROM TRANSFER as Transfers JOIN TRANSACTION as STransaction ON Transfers.SENDER_TRANSACTION = STransaction.UUID JOIN TRANSACTION AS RTransaction ON Transfers.RECIPIENT_TRANSACTION = RTransaction.UUID" +
-            ") as Movements" +
-            "ON Transactions.UUID = Movements.Suuid OR Transactions.UUID = Movements.Ruuid" +
+            ") as Movements " +
+            "ON Transactions.UUID = Movements.Suuid OR Transactions.UUID = Movements.Ruuid " +
           "WHERE Movements.amount IS NULL" +
         ")" +
-        "UNION ALL" +
+        "UNION ALL " +
         "(" +
-          "SELECT Transfers.UUID, Transfers.amount, Transfers.date, STransaction.ACCOUNT_UUID AS sender, RTransaction.ACCOUNT_UUID AS recipient" +
-          "FROM TRANSFER as Transfers JOIN TRANSACTION as STransaction ON Transfers.SENDER_TRANSACTION = STransaction.UUID JOIN TRANSACTION AS RTransaction ON Transfers.RECIPIENT_TRANSACTION = RTransaction.UUID" +
-          "WHERE sender = :UUID OR recipient = :UUID" +
+          "SELECT Transfers.UUID, Transfers.amount, Transfers.date, STransaction.ACCOUNT_UUID AS sender, RTransaction.ACCOUNT_UUID AS recipient " +
+          "FROM TRANSFER as Transfers JOIN TRANSACTION as STransaction ON Transfers.SENDER_TRANSACTION = STransaction.UUID JOIN TRANSACTION AS RTransaction ON Transfers.RECIPIENT_TRANSACTION = RTransaction.UUID " +
+          "WHERE STransaction.ACCOUNT_UUID = :UUID OR RTransaction.ACCOUNT_UUID = :UUID" +
         ")" +
       ") ORDER BY date DESC",
     nativeQuery = true

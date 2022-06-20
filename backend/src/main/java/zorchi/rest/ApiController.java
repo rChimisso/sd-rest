@@ -31,6 +31,7 @@ import zorchi.responses.bodies.AccountHistoryResponseBody;
 import zorchi.responses.bodies.TransactionResponseBody;
 import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
+import zorchi.utility.Currency;
 import zorchi.utility.StandardUUID;
 import zorchi.utility.StandardUUID.ShortUUID;
 
@@ -163,7 +164,7 @@ public class ApiController {
     if (ShortUUID.isValidShortUUID(id)) {
       Account account = findAccount(id);
       if (account.isValid()) {
-        double newBalance = account.getBalance() + transactionData.getAmount();
+        double newBalance = Currency.sum(account.getBalance(), transactionData.getAmount());
         if (newBalance >= 0) {
           account.setBalance(newBalance);
           Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
@@ -257,7 +258,7 @@ public class ApiController {
       if (sender.isValid() && recipient.isValid()) {
         Transfer transfer = new Transfer(sender, recipient, Math.abs(transferData.getAmount()), transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
         if (transfer.isValid()) {
-          double newSenderBalance = sender.getBalance() - transfer.getAmount(), newRecipientBalance = recipient.getBalance() + transfer.getAmount();
+          double newSenderBalance = Currency.sub(sender.getBalance(), transfer.getAmount()), newRecipientBalance = Currency.sum(recipient.getBalance(), transfer.getAmount());
           sender.setBalance(newSenderBalance);
           recipient.setBalance(newRecipientBalance);
           accountRepository.save(sender);
