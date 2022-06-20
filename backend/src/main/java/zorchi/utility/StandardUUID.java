@@ -40,7 +40,7 @@ public class StandardUUID {
    * @return {@link UUID} sottoforma di stringa.
    */
   public static String randomUUID(Predicate<String> duplicated) {
-    String standardUUID = UUID.randomUUID().toString().replace("-", "");
+    String standardUUID = UUID.randomUUID().toString().replace("-", "").toUpperCase();
     while (duplicated.test(standardUUID)) {
       standardUUID = UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }

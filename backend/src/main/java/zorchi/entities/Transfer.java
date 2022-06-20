@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -21,7 +22,7 @@ import zorchi.utility.StandardUUID;
 @Entity
 public class Transfer extends Movement {
 	/**
-	 * Tranzazione del mittente
+	 * Transazione del mittente.
 	 */
 	@ManyToOne()
   @JoinColumn(name = "SENDER_TRANSACTION")
@@ -102,14 +103,17 @@ public class Transfer extends Movement {
     /**
      * Ammontare coinvolto.
      */
+    @NotNull
     private final float amount;
     /**
      * UUID dell'{@link Account Account bancario} del mittente.
      */
+    @NotNull
     private final String from;
     /**
      * UUID dell'{@link Account Account bancario} del destinatario.
      */
+    @NotNull
     private final String to;
 
     /**
@@ -158,6 +162,7 @@ public class Transfer extends Movement {
     /**
      * UUID del {@link Transfer Trasferimento} di cui fare il divert.
      */
+    @NotNull
     private final String id;
 
     /**
