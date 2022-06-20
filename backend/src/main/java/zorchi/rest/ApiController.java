@@ -28,6 +28,8 @@ import zorchi.repositories.AccountRepository;
 import zorchi.repositories.TransactionRepository;
 import zorchi.repositories.TransferRepository;
 import zorchi.responses.bodies.AccountHistoryResponseBody;
+import zorchi.responses.bodies.GenericResponseBody;
+import zorchi.responses.bodies.IndexableResponseBody;
 import zorchi.responses.bodies.TransactionResponseBody;
 import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
@@ -97,11 +99,11 @@ public class ApiController {
    * @return L'ID del nuovo {@link Account Account bancario} creato.
    */
   @PostMapping("/account")
-  public ResponseEntity<String> postAccount(@Valid @RequestBody AccountData accountData) {
+  public ResponseEntity<IndexableResponseBody> postAccount(@Valid @RequestBody AccountData accountData) {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
     if (account.isValid()) {
       accountRepository.save(account);
-      return new ResponseEntity<>(account.getUUID(), HttpStatus.CREATED);
+      return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), ""), HttpStatus.CREATED);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -170,9 +172,9 @@ public class ApiController {
           Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
           accountRepository.save(account);
           transactionRepository.save(transaction);
-          return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.CREATED);
+          return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID(), account.getUUID()), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID), HttpStatus.BAD_REQUEST);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -207,15 +209,14 @@ public class ApiController {
    * @return esito dell'operazione.
    */
   @PatchMapping("/account/{id}")
-  public ResponseEntity<String> patchAccountId(@PathVariable String id, @Valid @RequestBody AccountData accountData) {
+  public ResponseEntity<String> patchAccountId(@PathVariable String id, @RequestBody AccountData accountData) {
     String name = accountData.getName(), surname = accountData.getSurname();
-    if (ShortUUID.isValidShortUUID(id) && (name != null || surname != null)) {
+    if (ShortUUID.isValidShortUUID(id) && (name != null ^ surname != null)) {
       Account account = findAccount(id);
       if (account.isValid()) {
         if (name != null) {
           account.setName(name);
-        }
-        if (surname != null) {
+        } else {
           account.setSurname(surname);
         }
         accountRepository.save(account);
@@ -282,7 +283,7 @@ public class ApiController {
    * @return esito dell'operazione.
    */
   @PostMapping("/divert")
-  public ResponseEntity<String> postDivert(@Valid @RequestBody TransferDivertData transferDivertData) {
+  public ResponseEntity<GenericResponseBody> postDivert(@Valid @RequestBody TransferDivertData transferDivertData) {
     String transferId = transferDivertData.getId();
     if (StandardUUID.isValidStandardUUID(transferId)) {
       Transfer transfer = findTransfer(transferId);
@@ -293,9 +294,9 @@ public class ApiController {
           transactionRepository.save(divertedTransfer.getSenderTransaction());
           transactionRepository.save(divertedTransfer.getRecipientTransaction());
           transferRepository.save(divertedTransfer);
-          return new ResponseEntity<>(TransferResponseBody.Messages.SUCCESS.get(), HttpStatus.CREATED);
+          return new ResponseEntity<>(new GenericResponseBody(TransferResponseBody.Messages.SUCCESS.get()), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(TransferResponseBody.Messages.FAILURE.get(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GenericResponseBody(TransferResponseBody.Messages.FAILURE.get()), HttpStatus.BAD_REQUEST);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

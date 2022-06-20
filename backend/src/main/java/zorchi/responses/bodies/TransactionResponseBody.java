@@ -1,13 +1,12 @@
 package zorchi.responses.bodies;
 
-import zorchi.responses.bodies.abstractions.AbstractMovementResponseBody;
 import zorchi.responses.models.MovementActor;
 import zorchi.utility.StandardUUID;
 
 /**
  * Dati per il corpo della risposta di una richiesta di Transazione.
  */
-public class TransactionResponseBody extends AbstractMovementResponseBody {
+public class TransactionResponseBody extends IndexableResponseBody {
   /**
    * {@link MovementActor}.
    */
@@ -15,11 +14,11 @@ public class TransactionResponseBody extends AbstractMovementResponseBody {
   
   /**
    * @param newBalance - {@link #newBalance}.
-   * @param id - {@link #transactionId}.
+   * @param transactionId - {@link #transactionId}.
    */
-  public TransactionResponseBody(double newBalance, String id) {
-    super(id, newBalance >= 0 && !StandardUUID.isInvalid(id) ? Messages.SUCCESS.get() : Messages.FAILURE.get());
-    this.movementActor = new MovementActor(id, newBalance);
+  public TransactionResponseBody(double newBalance, String transactionId, String accountId) {
+    super(transactionId, newBalance >= 0 && !StandardUUID.isInvalid(transactionId) ? Messages.SUCCESS.get() : Messages.FAILURE.get());
+    this.movementActor = new MovementActor(accountId, newBalance);
   }
 
   /**

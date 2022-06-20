@@ -1,13 +1,12 @@
 package zorchi.responses.bodies;
 
-import zorchi.responses.bodies.abstractions.AbstractMovementResponseBody;
 import zorchi.responses.models.MovementActor;
 import zorchi.utility.StandardUUID;
 
 /**
  * Dati per il corpo della risposta di una richiesta di Trasferimento.
  */
-public class TransferResponseBody extends AbstractMovementResponseBody {
+public class TransferResponseBody extends IndexableResponseBody {
   /**
    * {@link MovementActor} mittente.
    */

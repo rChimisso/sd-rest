@@ -4,12 +4,11 @@ import java.util.List;
 
 import zorchi.entities.Account;
 import zorchi.entities.abstractions.Movement.GenericMovement;
-import zorchi.responses.bodies.abstractions.AbstractResponseBody;
 
 /**
  * Dati per il corpo della risposta di una richiesta dello storico di un {@link Account Account bancario}.
  */
-public class AccountHistoryResponseBody extends AbstractResponseBody {
+public class AccountHistoryResponseBody extends GenericResponseBody {
   /**
    * {@link Account Account bancario}.
    */

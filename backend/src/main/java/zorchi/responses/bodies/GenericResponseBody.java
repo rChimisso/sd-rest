@@ -1,9 +1,9 @@
-package zorchi.responses.bodies.abstractions;
+package zorchi.responses.bodies;
 
 /**
  * Generica Response Body.
  */
-public abstract class AbstractResponseBody {
+public class GenericResponseBody {
   /**
    * Messaggio da mostrare a Frontend.
    */
@@ -12,7 +12,7 @@ public abstract class AbstractResponseBody {
   /**
    * @param message - messaggio da mostrare a Frontend.
    */
-  protected AbstractResponseBody(String message) {
+  public GenericResponseBody(String message) {
     this.message = message;
   }
 
