@@ -2,7 +2,7 @@
   <form [formGroup]="formGroup" class="xsb-grid-cell-span-8">
     <mat-form-field appearance="outline">
       <mat-label>Account ID</mat-label>
-      <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" uuid />
+      <input matInput type="text" formControlName="accountId" [matAutocomplete]="auto" uuid [length]="20" />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let id of (filteredAccountIds$ | async) || accountIds" [value]="id">
           {{ id }}

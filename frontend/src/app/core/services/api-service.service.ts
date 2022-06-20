@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {catchError, finalize, map, Observable} from 'rxjs';
+import {catchError, finalize, map, Observable, take} from 'rxjs';
 
 import {State} from 'src/app/features/app-overlay/redux/app-overlay.reducers';
 
@@ -38,6 +38,7 @@ export class ApiService {
   private get<T>(endpoint: string): Observable<T> {
     this.initialize();
     return this.httpClient.get<T>(`http://localhost:8080/api/${endpoint}`).pipe(
+      take(1),
       map(response => response),
       catchError(error => {
         throw error;
@@ -49,6 +50,7 @@ export class ApiService {
   private post<T>(endpoint: string, body: unknown): Observable<T> {
     this.initialize();
     return this.httpClient.post<T>(`http://localhost:8080/api/${endpoint}`, body).pipe(
+      take(1),
       map(response => response),
       catchError(error => {
         throw error;
