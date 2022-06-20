@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
+import {AccountsListContainerComponent} from './features/accounts-list/container/accounts-list-container.component';
 import {HomeContainerComponent} from './features/home/container/home-container.component';
 import {RootContainerComponent} from './features/root/container/root-container.component';
 import {TransactionContainerComponent} from './features/transaction/container/transaction-container.component';
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: '',
     component: RootContainerComponent
+  },
+  {
+    path: 'accounts-list',
+    component: AccountsListContainerComponent
   },
   {
     path: 'transfer',

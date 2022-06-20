@@ -1,0 +1,5 @@
+<accounts-table
+  [accounts]="(accounts$ | async) || []"
+  [showDeleted]="!!(showDeleted$ | async)"
+  (flagChange)="updateShowDeleted($event)"
+></accounts-table>

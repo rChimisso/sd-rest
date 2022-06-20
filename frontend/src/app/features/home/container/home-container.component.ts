@@ -11,6 +11,10 @@ import {MenuItem} from '../models/menu-item.interface';
 export class HomeContainerComponent {
   public readonly menuItems: MenuItem[] = [
     {
+      route: 'accounts-list',
+      label: 'Elenco Account'
+    },
+    {
       route: '',
       label: 'Storico Account'
     },
