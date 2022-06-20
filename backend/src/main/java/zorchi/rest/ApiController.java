@@ -237,11 +237,11 @@ public class ApiController {
     if (ShortUUID.isValidShortUUID(id)) {	
       Account account = findAccount(id);
       if (account.isValid()) {
-        return new ResponseEntity<String>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK);
+        return new ResponseEntity<>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()), HttpStatus.OK);
       }
-      return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
   /**
