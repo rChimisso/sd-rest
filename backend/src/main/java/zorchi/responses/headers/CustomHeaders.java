@@ -9,6 +9,13 @@ import org.springframework.util.LinkedMultiValueMap;
  * Utility per la generazione di header custom.
  */
 public abstract class CustomHeaders {
+  /**
+   * Restituisce l'header "X-Sistema-Bancario".
+   * 
+   * @param name - {@link zorchi.entities.Account#name nome} di un {@link zorchi.entities.Account Account bancario}.
+   * @param surname - {@link zorchi.entities.Account#surname cognome} di un {@link zorchi.entities.Account Account bancario}.
+   * @return l'header "X-Sistema-Bancario".
+   */
   public static LinkedMultiValueMap<String, String> getXSistemaBancarioHeader(String name, String surname) {
     return getCustomHeader("X-Sistema-Bancario", name + ";" + surname);
   }

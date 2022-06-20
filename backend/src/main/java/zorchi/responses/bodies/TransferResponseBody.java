@@ -1,118 +1,84 @@
 package zorchi.responses.bodies;
 
-
+import zorchi.responses.bodies.abstractions.AbstractMovementResponseBody;
+import zorchi.responses.models.MovementActor;
 import zorchi.utility.StandardUUID;
 
 /**
- * Dati per il corpo della risposta di una richiesta di trasferimento.
+ * Dati per il corpo della risposta di una richiesta di Trasferimento.
  */
-public class TransferResponseBody {
+public class TransferResponseBody extends AbstractMovementResponseBody {
   /**
-   * Dati dell'Attore from
+   * {@link MovementActor} mittente.
    */
-	private final TransferActor from;
+	private final MovementActor sender;
+  /**
+   * {@link MovementActor} destinatario.
+   */
+  private final MovementActor recipient;
   
   /**
-   * Dati dell'Attore to
+   * @param senderBalance - saldo del mittente.
+   * @param recipientBalance - saldo del destinatario.
+   * @param senderId - id del mittente.
+   * @param recipientId - id del destinatario.
+   * @param transferId - id del Trasferimento.
    */
-  private final TransferActor to;
-  
-  /**
-   * UUID della transferimenti coinvolta.
-   */
-  private final String transferId;
-  
-  /**
-   * Messagio front end
-   */
-  private final String message;
-  
-  private final boolean performed;
-
-  /**
-   * @param newBalance - {@link #newBalance}.
-   * @param transactionId - {@link #transactionId}.
-   */
-  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId, boolean performed, String message) {
-    this.from = new TransferActor(fromId, fromBalance);
-    this.to = new TransferActor(toId, toBalance);
-    this.transferId = transferId;
-    this.performed = performed;
-    this.message = message;
-    
+  public TransferResponseBody(double senderBalance, double recipientBalance, String senderId, String recipientId, String transferId) {
+    super(transferId, StandardUUID.isInvalid(transferId) ? Messages.FAILURE.get() : Messages.SUCCESS.get());
+    this.sender = new MovementActor(senderId, senderBalance);
+    this.recipient = new MovementActor(recipientId, recipientBalance);
   }
   
-  public TransferResponseBody(long fromBalance, long toBalance, String fromId, String toId, String transferId) {
-	    this.from = new TransferActor(fromId, fromBalance);
-	    this.to = new TransferActor(toId, toBalance);
-	    this.transferId = transferId;
-	    this.performed = true;
-	    this.message = "Operazione eseguita con sucesso.";
-	   
-	  }
-  
-  
   /**
-   * Risposta 404, la risposta standart HTTP crea problemi con front end
+   * Restituisce il {@link #sender MovementActor} mittente.
+   * 
+   * @return {@link #sender}.
    */
-  public TransferResponseBody() {
-	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false,"Error");
+  public MovementActor getSender() {
+    return sender;
+  }
 
-	  }
-  public TransferResponseBody(String message) {
-	  this(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, false, message);
+  /**
+   * Restituisce il {@link #recipient MovementActor} destinatario.
+   * 
+   * @return {@link #recipient}.
+   */
+  public MovementActor getRecipient() {
+    return recipient;
+  }
 
-	  }
-  
-  
-  public TransferActor getFrom() {
-	return from;
-}
+  /**
+   * Possibli messaggi da mostrare a Frontend.
+   */
+  public static enum Messages {
+    SUCCESS("Trasferimento eseguito con successo."),
+    FAILURE("Trasferimento non eseguito: il bilancio è inferiore a quanto richiesto.");
 
+    /**
+     * Messaggio.
+     */
+    private final String message;
 
-
-public TransferActor getTo() {
-	return to;
-}
-
-
-
-public String getTransferId() {
-	return transferId;
-}
-
-
-
-public String getMessage() {
-	return message;
-}
-
-
-
-public boolean isPerformed() {
-	return performed;
-}
-
-
-
-
-
-static class TransferActor {
-	  private final String id;
-	  
-	  private final long newBalance;
-	  
-	  public TransferActor(String id, long fromBalance) {
-      this.id = id;
-      this.newBalance = fromBalance;
-	  }
-
-    public String getId() {
-      return id;
+    /**
+     * @param message - messaggio.
+     */
+    Messages(String message) {
+      this.message = message;
     }
 
-    public long getNewBalance() {
-      return newBalance;
+    /**
+     * Restituisce il valore del messaggio.
+     * 
+     * @return {@link #message}.
+     */
+    public String get() {
+      return this.message;
+    }
+
+    @Override
+    public String toString() {
+      return this.message;
     }
   }
 }

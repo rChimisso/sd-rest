@@ -5,5 +5,5 @@
     <br />
     Saldo: <b>{{ account.balance | currency }}</b>
   </div>
-  <history-table *ngIf="history$ | async as history" [history]="history" [accoundId]="account.id"></history-table>
+  <history-table *ngIf="history$ | async as history" [history]="history" [accountId]="account.id"></history-table>
 </ng-container>

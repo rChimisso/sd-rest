@@ -1,68 +1,60 @@
 package zorchi.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import zorchi.entities.Transaction.TransactionFullDataInterface;
+import zorchi.entities.abstractions.AbstractEntity;
 import zorchi.utility.StandardUUID;
 
 /**
  * Account bancario.
  */
 @Entity
-public class Account {
+public class Account extends AbstractEntity {
   /**
-   * Nome del proprietario dell'account.
+   * Nome del proprietario dell'Account.
    */
   private String name;
   /**
-   * Cognome del proprietario dell'account.
+   * Cognome del proprietario dell'Account.
    */
   private String surname;
   /**
-   * Saldo dell'account.
+   * Saldo dell'Account.
    */
-  private long balance;
+  private double balance;
   /**
-   * ID dell'account.
-   * <p>
-   * Composto da una sequenza di 20 caratteri esadecimali rappresentanti una sequenza di 10 byte (80 bit).
+   * Se l'Account è stato eliminato.
    */
-  @Id
-  private final String SHORT_UUID;
+  private boolean deleted = false;
   
-  private boolean isDeleted = false;
-  
-
+  /**
+   * Referenza statica per un Account non valido.
+   */
+  @Transient
+  @JsonProperty(access = Access.WRITE_ONLY)
+  public static Account INVALID_ACCOUNT = new Account();
 
   /**
    * Costruttore senza argomenti per il funzionamento di Hibernate.
    */
   public Account() {
-    this.SHORT_UUID = StandardUUID.INVALID_UUID;
+    super(StandardUUID.INVALID_UUID);
   }
 
   /**
-   * @param accountData - dati dell'account.
-   * @param ID - 
+   * @param accountData - dati dell'Account.
+   * @param UUID - Short UUID usato per identificare univocamente l'Account.
    */
-  public Account(AccountData accountData, String ID) {
+  public Account(AccountData accountData, String UUID) {
+    super(UUID);
     this.name = accountData.name;
     this.surname = accountData.surname;
     this.balance = 0;
-    this.SHORT_UUID = ID;
 	}
 
   /**
@@ -106,7 +98,7 @@ public class Account {
    * 
    * @return {@link #balance saldo}.
    */
-  public long getBalance() {
+  public double getBalance() {
     return balance;
   }
   
@@ -115,51 +107,57 @@ public class Account {
    * 
    * @param balance - nuovo {@link #balance saldo}.
    */
-  public void setBalance(long balance) {
+  public void setBalance(double balance) {
     this.balance = balance;
   }
 
   /**
-   * Restituisce l'{@link #SHORT_UUID} dell'account.
+   * Se l'Account è stato eliminato.
    * 
-   * @return {@link #SHORT_UUID}.
+   * @return {@link #deleted}.
    */
-  public String getID() {
-    return SHORT_UUID;
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  /**
+   * Segna l'Account come eliminato.
+   */
+  public void delete() {
+    this.deleted = true;
   }
   
   /**
-   * Controlla se questo account puoi trasferire l'{@code amount} specificato.
+   * Controlla se questo Account puoi trasferire l'{@code amount} specificato.
    * 
    * @param amount - ammontare da trasferire.
    * @return risultato del controllo.
    */
   @Transient
-  public boolean canTransfer(int amount) {
+  public boolean canTransfer(float amount) {
     return this.balance >= amount;
   }
 
   /**
-   * Controlla se questo account è valido.
+   * Controlla se l'Account è valido.
    * 
    * @return risultato del controllo.
    */
   @Transient
   @JsonProperty(access = Access.WRITE_ONLY)
-  public boolean isValid() {
-    return !StandardUUID.isInvalid(SHORT_UUID);
-  }
-
   @Override
-  public boolean equals(Object obj) {
-    return this == obj || (obj != null && getClass() == obj.getClass() && SHORT_UUID.equals(((Account) obj).SHORT_UUID));
+  public boolean isValid() {
+    return super.isValid() && !this.deleted;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
-    int result = 1;
-    result = prime * result + SHORT_UUID.hashCode();
+    int result = super.hashCode();
+    long temp;
+    temp = Double.doubleToLongBits(balance);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (deleted ? 1231 : 1237);
     result = prime * result + name.hashCode();
     result = prime * result + surname.hashCode();
     return result;
@@ -167,37 +165,22 @@ public class Account {
 
   @Override
   public String toString() {
-    return "Account [ID=" + SHORT_UUID + ", name=" + name + ", surname=" + surname + "]";
-  }
-  
-  public static boolean goodRequest(String request)
-  {
-	  
-	  return request.matches("[A-Fa-f0-9]{20}");
-		  
+    return "Account [" + super.toString() + ", balance=" + balance + ", deleted=" + deleted + ", name=" + name + ", surname=" + surname + "]";
   }
 
-  public boolean isDelete() {
-	return isDeleted;
-}
-
-public void delete() {
-	this.isDeleted = true;
-}
-
-/**
-   * Dati per la creazione di un {@link zorchi.entities.Account Account bancario}.
+  /**
+   * Dati per la creazione di un {@link Account Account bancario}.
    */
   public static class AccountData {
     /**
      * Nome del proprietario dell'account.
      */
-    @NonNull
+    @NotNull
     private final String name;
     /**
      * Cognome del proprietario dell'account.
      */
-    @NonNull
+    @NotNull
     private final String surname;
 
     /**
@@ -226,27 +209,5 @@ public void delete() {
     public String getSurname() {
       return surname;
     }
-    
-
-  }
-  
-  public static class AccountFullData {
-    private final Account account;
-    private final List<TransactionFullDataInterface> history;
-
-    public AccountFullData(Account account, List<TransactionFullDataInterface> transfers) {
-      this.account = account;
-      this.history = transfers;
-    }
-
-    public Account getAccount() {
-      return account;
-    }
-
-    public List<TransactionFullDataInterface> getHistory() {
-      return history;
-    }
-    
-   
   }
 }

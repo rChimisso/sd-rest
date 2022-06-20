@@ -30,6 +30,7 @@
     "@angular-devkit/build-angular": "^14.0.1",
     "@angular/cli": "~14.0.1",
     "@angular/compiler-cli": "^14.0.0",
+    "@ngrx/store-devtools": "^14.0.0-rc.0",
     "@types/jasmine": "~4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",

@@ -6,12 +6,14 @@ import {MatPaginatorIntl} from '@angular/material/paginator';
 import {BrowserModule} from '@angular/platform-browser';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+
+import {environment} from 'src/environments/environment';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {getItalianPaginatorIntl} from './core/paginator-intls/italian-paginator-intl';
 import {CoreEffects} from './core/redux/core.effects';
-import {coreReducer} from './core/redux/core.reducers';
 import {ApiService} from './core/services/api-service.service';
 import {AppOverlayModule} from './features/app-overlay/app-overlay.module';
 import {HomeModule} from './features/home/home.module';
@@ -29,8 +31,13 @@ registerLocaleData(localeIt, 'it-IT');
     AppOverlayModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({core: coreReducer}),
+    StoreModule.forRoot({}),
     EffectsModule.forRoot([CoreEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+      autoPause: true
+    }),
     HttpClientModule
   ],
   providers: [

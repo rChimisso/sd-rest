@@ -1,35 +1,67 @@
 package zorchi.responses.bodies;
 
-import org.springframework.http.HttpStatus;
-
+import zorchi.responses.bodies.abstractions.AbstractMovementResponseBody;
+import zorchi.responses.models.MovementActor;
 import zorchi.utility.StandardUUID;
 
 /**
- * Dati per il corpo della risposta di una richiesta di transazione.
+ * Dati per il corpo della risposta di una richiesta di Transazione.
  */
-public class TransactionResponseBody {
+public class TransactionResponseBody extends AbstractMovementResponseBody {
   /**
-   * Nuovo saldo del conto coinvolto.
+   * {@link MovementActor}.
    */
-  public final long newBalance;
-  /**
-   * UUID della transazione coinvolta.
-   */
-  public final String transactionId;
-
-  public final String message;
-
+  private final MovementActor movementActor;
+  
   /**
    * @param newBalance - {@link #newBalance}.
-   * @param transactionId - {@link #transactionId}.
+   * @param id - {@link #transactionId}.
    */
-  public TransactionResponseBody(long newBalance, String transactionId) {
-    this.newBalance = newBalance;
-    this.transactionId = transactionId;
-    if (newBalance >= 0 && !StandardUUID.isInvalid(transactionId)) {
-      this.message = HttpStatus.OK.getReasonPhrase();
-    } else {
-      this.message = "Transaction failed: account balance was less than required.";
+  public TransactionResponseBody(double newBalance, String id) {
+    super(id, newBalance >= 0 && !StandardUUID.isInvalid(id) ? Messages.SUCCESS.get() : Messages.FAILURE.get());
+    this.movementActor = new MovementActor(id, newBalance);
+  }
+
+  /**
+   * Restituisce il {@link #movementActor MovementActor}.
+   * 
+   * @return {@link #movementActor}.
+   */
+  public MovementActor getMovementActor() {
+    return movementActor;
+  }
+
+  /**
+   * Possibli messaggi da mostrare a Frontend.
+   */
+  static enum Messages {
+    SUCCESS("Transazione eseguita con successo."),
+    FAILURE("Transazione non eseguita: il bilancio è inferiore a quanto richiesto.");
+
+    /**
+     * Messaggio.
+     */
+    private final String message;
+
+    /**
+     * @param message - messaggio.
+     */
+    Messages(String message) {
+      this.message = message;
+    }
+
+    /**
+     * Restituisce il valore del messaggio.
+     * 
+     * @return {@link #message}.
+     */
+    public String get() {
+      return this.message;
+    }
+
+    @Override
+    public String toString() {
+      return this.message;
     }
   }
 }
