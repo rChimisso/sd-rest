@@ -101,7 +101,7 @@ public class ApiController {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
     if (account.isValid()) {
       accountRepository.save(account);
-      return new ResponseEntity<>(account.getUUID(), HttpStatus.OK);
+      return new ResponseEntity<>(account.getUUID(), HttpStatus.CREATED);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -121,7 +121,7 @@ public class ApiController {
       if (account.isValid()) {
         account.delete();
         accountRepository.save(account);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -170,7 +170,7 @@ public class ApiController {
           Transaction transaction = new Transaction(transactionData, account, StandardUUID.randomUUID(transactionRepository::existsById));
           accountRepository.save(account);
           transactionRepository.save(transaction);
-          return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.OK);
+          return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.UNPROCESSABLE_ENTITY);
       }
@@ -193,7 +193,7 @@ public class ApiController {
         account.setName(accountData.getName());
         account.setSurname(accountData.getSurname());
         accountRepository.save(account);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -219,7 +219,7 @@ public class ApiController {
           account.setSurname(surname);
         }
         accountRepository.save(account);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -266,7 +266,7 @@ public class ApiController {
           transactionRepository.save(transfer.getSenderTransaction());
           transactionRepository.save(transfer.getRecipientTransaction());
           transferRepository.save(transfer);
-          return new ResponseEntity<>(new TransferResponseBody(newSenderBalance, newRecipientBalance, sender.getUUID(), recipient.getUUID(), transfer.getUUID()), HttpStatus.OK);
+          return new ResponseEntity<>(new TransferResponseBody(newSenderBalance, newRecipientBalance, sender.getUUID(), recipient.getUUID(), transfer.getUUID()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new TransferResponseBody(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID), HttpStatus.UNPROCESSABLE_ENTITY);
       }
@@ -293,7 +293,7 @@ public class ApiController {
           transactionRepository.save(divertedTransfer.getSenderTransaction());
           transactionRepository.save(divertedTransfer.getRecipientTransaction());
           transferRepository.save(divertedTransfer);
-          return new ResponseEntity<>(HttpStatus.OK);
+          return new ResponseEntity<>(TransferResponseBody.Messages.SUCCESS.get(), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(TransferResponseBody.Messages.FAILURE.get(), HttpStatus.UNPROCESSABLE_ENTITY);
       }
