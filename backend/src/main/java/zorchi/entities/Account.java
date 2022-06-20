@@ -16,15 +16,15 @@ import zorchi.utility.StandardUUID;
 @Entity
 public class Account extends AbstractEntity {
   /**
-   * Nome del proprietario dell'account.
+   * Nome del proprietario dell'Account.
    */
   private String name;
   /**
-   * Cognome del proprietario dell'account.
+   * Cognome del proprietario dell'Account.
    */
   private String surname;
   /**
-   * Saldo dell'account.
+   * Saldo dell'Account.
    */
   private double balance;
   /**

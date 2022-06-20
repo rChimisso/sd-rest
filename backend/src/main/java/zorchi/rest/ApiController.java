@@ -172,7 +172,7 @@ public class ApiController {
           transactionRepository.save(transaction);
           return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID()), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(new TransactionResponseBody(-1, StandardUUID.INVALID_UUID), HttpStatus.BAD_REQUEST);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -268,7 +268,7 @@ public class ApiController {
           transferRepository.save(transfer);
           return new ResponseEntity<>(new TransferResponseBody(newSenderBalance, newRecipientBalance, sender.getUUID(), recipient.getUUID(), transfer.getUUID()), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(new TransferResponseBody(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(new TransferResponseBody(-1, -1, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID, StandardUUID.INVALID_UUID), HttpStatus.BAD_REQUEST);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -295,7 +295,7 @@ public class ApiController {
           transferRepository.save(divertedTransfer);
           return new ResponseEntity<>(TransferResponseBody.Messages.SUCCESS.get(), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(TransferResponseBody.Messages.FAILURE.get(), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(TransferResponseBody.Messages.FAILURE.get(), HttpStatus.BAD_REQUEST);
       }
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

@@ -16,7 +16,7 @@ import org.springframework.lang.Nullable;
    */
   private final float AMOUNT;
 	/**
-	 * {@link Date Data} in cui si è stato effettuato il movimento.
+	 * {@link Date Data} in cui è stato effettuato il movimento.
 	 */
 	private final Date DATE;
 

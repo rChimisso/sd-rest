@@ -22,7 +22,7 @@ import zorchi.utility.StandardUUID;
 @Entity
 public class Transfer extends Movement {
 	/**
-	 * Tranzazione del mittente
+	 * Transazione del mittente.
 	 */
 	@ManyToOne()
   @JoinColumn(name = "SENDER_TRANSACTION")

@@ -7,7 +7,7 @@ public class MovementActor {
   /**
    * ID dell'Account.
    */
-  private final String id;
+  private final String UUID;
   /**
    * Nuovo saldo dell'Account.
    */
@@ -18,17 +18,17 @@ public class MovementActor {
    * @param newBalance - nuovo saldo dell'Account.
    */
   public MovementActor(String id, double newBalance) {
-    this.id = id;
+    this.UUID = id;
     this.newBalance = newBalance;
   }
 
   /**
-   * Restituisce l'{@link #id} dell'Account.
+   * Restituisce l'{@link #UUID} dell'Account.
    * 
-   * @return {@link #id}
+   * @return {@link #UUID}
    */
-  public String getId() {
-    return id;
+  public String getUUID() {
+    return UUID;
   }
 
   /**
