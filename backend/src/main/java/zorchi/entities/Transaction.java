@@ -1,146 +1,95 @@
 package zorchi.entities;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.springframework.lang.NonNull;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import zorchi.entities.abstractions.Movement;
 import zorchi.utility.StandardUUID;
 
+/**
+ * Transazione bancaria su singolo {@link Account Account bancario}, ovvero un prelievo o un versamento.
+ */
 @Entity
-public class Transaction {
+public class Transaction extends Movement {
+  /**
+   * {@link Account Account bancario} che ha effettuato la Transazione.
+   */
   @ManyToOne()
-  @JoinColumn(name = "SHORT_UUID")
+  @JoinColumn(name = "ACCOUNT_UUID")
   private final Account ACCOUNT;
 
-  @Id
-  private final String UUID;
+  /**
+   * Referenza statica per una Transazione non valida.
+   */
+  @Transient
+  @JsonProperty(access = Access.WRITE_ONLY)
+  public static Transaction INVALID_TRANSACTION = new Transaction();
 
-  private final int AMOUNT;
-
-  private final Date DATE;
-
+  /**
+   * Costruttore senza argomenti per il funzionamento di Hibernate.
+   */
   public Transaction() {
+    super(StandardUUID.INVALID_UUID, 0);
     this.ACCOUNT = new Account();
-    this.UUID = StandardUUID.INVALID_UUID;
-    this.AMOUNT = 0;
-    this.DATE = new Date();
   }
 
+  /**
+   * @param transactionData - dati della Transazione.
+   * @param account - {@link Account Account bancario} che ha effettuato la Transazione.
+   * @param UUID - Standard UUID usato per identificare univocamente la Transazione.
+   */
   public Transaction(TransactionData transactionData, Account account, String UUID) {
-	  
-	if(account.isDelete()) {
-    this.AMOUNT = 0;
+    super(account.isValid() ? UUID : StandardUUID.INVALID_UUID, account.isValid() ? transactionData.amount : 0);
     this.ACCOUNT = account;
-    this.UUID = StandardUUID.INVALID_UUID;
-    this.DATE = new Date();
   }
-	else {
-		
-		this.AMOUNT = transactionData.amount;
-	    this.ACCOUNT = account;
-	    this.UUID = UUID;
-	    this.DATE = new Date();
-		
-	}
-}
 
-  public Account getACCOUNT() {
+  /**
+   * Restituisce l'{@link Account Account bancario} che ha effettuato la Transazione.
+   * 
+   * @return {@link #ACCOUNT}.
+   */
+  public Account getAccount() {
     return ACCOUNT;
   }
 
-  public String getUUID() {
-    return UUID;
+  @Override
+  public int hashCode() {
+    return 31 * super.hashCode() + ACCOUNT.hashCode();
   }
 
-  public int getAMOUNT() {
-    return AMOUNT;
+  @Override
+  public String toString() {
+    return "Transaction [" + super.toString() + ", ACCOUNT=" + ACCOUNT + "]";
   }
 
-  public Date getDate() {
-    return DATE;
-  }
-
+  /**
+   * Dati per la creazione di una {@link Transaction Transazione}.
+   */
   public static class TransactionData {
-    private final int amount;
+    /**
+     * Ammontare coinvolto nella Transazione.
+     */
+    private final float amount;
 
-    public TransactionData(@JsonProperty("amount") int amount) {
+    /**
+     * @param amount - ammontare coinvolto nella Transazione.
+     */
+    public TransactionData(@JsonProperty("amount") float amount) {
       this.amount = amount;
     }
 
-    public int getAmount() {
+    /**
+     * Restituisce l'ammontare coinvolto nella Transazione.
+     * 
+     * @return {@link #amount}.
+     */
+    public float getAmount() {
       return amount;
     }
-  }
-
-  public static class TransactionFullData implements TransactionFullDataInterface {
-    @NonNull
-    private final String UUID;
-
-    @NonNull
-    private final int amount;
-
-    @NonNull
-    private final Date DATE;
-
-    private final String sender;
-
-    private final String recipient;
-
-    public TransactionFullData(
-        @JsonProperty("UUID") String UUID,
-        @JsonProperty("amount") int amount,
-        @JsonProperty("DATE") Date date,
-        @JsonProperty("sender") String sender,
-        @JsonProperty("recipient") String recipient) {
-      this.UUID = UUID;
-      this.amount = amount;
-      this.DATE = date;
-      this.sender = sender;
-      this.recipient = recipient;
-    }
-
-    public String getUUID() {
-      return UUID;
-    }
-
-    public int getAmount() {
-      return amount;
-    }
-
-    public Date getDATE() {
-      return DATE;
-    }
-
-    public String getSender() {
-      return sender;
-    }
-
-    public String getRecipient() {
-      return recipient;
-    }
-    
-    
-  }
-
-  public interface TransactionFullDataInterface {
-    String getUUID();
-
-    int getAmount();
-
-    Date getDATE();
-
-    String getSender();
-
-    String getRecipient();
-    
   }
 }

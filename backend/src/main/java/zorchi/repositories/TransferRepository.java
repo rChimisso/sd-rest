@@ -1,8 +1,6 @@
 package zorchi.repositories;
 
-
 import org.springframework.data.repository.CrudRepository;
-
 
 import zorchi.entities.Transfer;
 

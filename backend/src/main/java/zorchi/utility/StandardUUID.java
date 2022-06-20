@@ -14,6 +14,16 @@ public class StandardUUID {
   public static final String INVALID_UUID = "-1";
 
   /**
+   * Controlla se la stringa passata è conforme ad un valido StandardUUID.
+   * 
+   * @param string - stringa da controllare.
+   * @return Risultato del controllo.
+   */
+  public static boolean isValidStandardUUID(String string) {
+    return string.matches("[A-Fa-f0-9]{32}");
+  }
+
+  /**
    * Controlla se l'UUID passato è {@link #INVALID_UUID}.
    * 
    * @param uuid - UUID da controllare.
@@ -32,7 +42,7 @@ public class StandardUUID {
   public static String randomUUID(Predicate<String> duplicated) {
     String standardUUID = UUID.randomUUID().toString().replace("-", "");
     while (duplicated.test(standardUUID)) {
-      standardUUID = UUID.randomUUID().toString().replace("-", "");
+      standardUUID = UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
     return standardUUID;
   }
@@ -45,6 +55,16 @@ public class StandardUUID {
      * Lunghezza in byte di uno ShortUUID.
      */
     private static final int BYTES = 10;
+
+    /**
+     * Controlla se la stringa passata è conforme ad un valido ShortUUID.
+     * 
+     * @param string - stringa da controllare.
+     * @return Risultato del controllo.
+     */
+    public static boolean isValidShortUUID(String string) {
+      return string.matches("[A-Fa-f0-9]{20}");
+    }
 
     /**
      * Restituisce una stringa rappresentante uno ShortUUID, assicurandosi che non sia duplicato in base al {@link Predicate predicato} passato.
@@ -78,4 +98,3 @@ public class StandardUUID {
     }
   }
 }
-
