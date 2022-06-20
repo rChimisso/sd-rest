@@ -2,8 +2,7 @@ package zorchi.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
-
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -176,12 +175,12 @@ public class Account extends AbstractEntity {
     /**
      * Nome del proprietario dell'account.
      */
-    @NonNull
+    @NotNull
     private final String name;
     /**
      * Cognome del proprietario dell'account.
      */
-    @NonNull
+    @NotNull
     private final String surname;
 
     /**

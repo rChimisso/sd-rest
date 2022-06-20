@@ -104,7 +104,7 @@ public class ApiController {
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
-  
+
   /**
    * Gestisce le richieste di tipo {@link RequestMethod#DELETE DELETE} per il percorso relativo {@code "/account"}.
    * <p>
