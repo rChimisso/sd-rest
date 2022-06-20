@@ -13,5 +13,5 @@ export const getError = createSelector(
 
 export const getShowLoader = createSelector(
   selectAppOverlayState,
-  (state: State) => state ? state.showLoader : true
+  (state: State) => state ? state.loading : true
 );

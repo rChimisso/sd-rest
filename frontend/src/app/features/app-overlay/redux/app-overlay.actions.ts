@@ -10,5 +10,5 @@ export const clearError = createAction('[AppOverlay] Clear Error');
 
 export const updateLoader = createAction(
   '[AppOverlay] Update Loader',
-  props<{ showLoader: boolean }>()
+  props<{ loading: boolean }>()
 );

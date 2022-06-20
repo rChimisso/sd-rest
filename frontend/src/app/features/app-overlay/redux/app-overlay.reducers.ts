@@ -7,12 +7,12 @@ import {handleError, clearError, updateLoader} from 'src/app/features/app-overla
 
 interface State {
   error: Nullable<HttpErrorResponse>;
-  showLoader: boolean;
+  loading: boolean;
 }
 
 const INITIAL_STATE: State = {
   error: null,
-  showLoader: false
+  loading: false
 };
 
 const appOverlayReducer = createReducer(
@@ -26,9 +26,9 @@ const appOverlayReducer = createReducer(
     ...state,
     error: null
   })),
-  on(updateLoader, (state, {showLoader}) => ({
+  on(updateLoader, (state, {loading}) => ({
     ...state,
-    showLoader
+    loading
   }))
 );
 

@@ -18,7 +18,7 @@ export class HistoryTableComponent implements AfterViewInit, OnChanges {
   public history!: Movement[];
 
   @Input()
-  public accoundId!: string;
+  public accountId!: string;
 
   @ViewChild(MatPaginator)
   public paginator!: MatPaginator;
@@ -46,10 +46,10 @@ export class HistoryTableComponent implements AfterViewInit, OnChanges {
 
   public getOperationType(movement: Movement): OperationType {
     if (isTransfer(movement)) {
-      if (movement.recipient === this.accoundId) {
+      if (movement.recipient === this.accountId) {
         return 'Trasferimento in entrata';
       }
-      if (movement.sender === this.accoundId) {
+      if (movement.sender === this.accountId) {
         return 'Trasferimento in uscita';
       }
     }
@@ -68,9 +68,9 @@ export class HistoryTableComponent implements AfterViewInit, OnChanges {
     let type: AmountStyle = 'neutral';
     if (amount !== 0) {
       if (isTransfer(movement)) {
-        if (movement.recipient === this.accoundId) {
+        if (movement.recipient === this.accountId) {
           type = 'positive';
-        } else if (movement.sender === this.accoundId) {
+        } else if (movement.sender === this.accountId) {
           type = 'negative';
         }
       } else if (amount > 0) {
