@@ -10,8 +10,8 @@ import {Nullable} from 'src/app/core/models/nullable.type';
 import {TransferResponseBody} from 'src/app/core/models/responses/transfer-response-body.interface';
 import {clearData} from 'src/app/core/redux/core.actions';
 import {State} from 'src/app/core/redux/core.reducers';
+import {MovementResultDialogComponent} from 'src/app/shared/components/movement-result-dialog/movement-result-dialog.component';
 
-import {TransferResultDialogComponent} from '../components/transfer-result-dialog/transfer-result-dialog.component';
 import {FormInterface} from '../models/form.interface';
 import {getTransferResult} from '../redux';
 import {performTransfer} from '../redux/transfer.actions';
@@ -75,7 +75,7 @@ export class TransferContainerComponent extends AbstractFormContainer<FormInterf
     );
     this.transferResult$.subscribe(transferResult => {
       if (transferResult) {
-        this.dialog.open(TransferResultDialogComponent, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
+        this.dialog.open(MovementResultDialogComponent<TransferResponseBody>, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
       }
     });
   }

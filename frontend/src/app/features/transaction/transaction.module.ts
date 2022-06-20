@@ -5,7 +5,6 @@ import {StoreModule} from '@ngrx/store';
 import {SharedModule} from 'src/app/shared/shared.module';
 
 import {TransactionFormComponent} from './components/transaction-form/transaction-form.component';
-import {TransactionResultDialogComponent} from './components/transaction-result-dialog/transaction-result-dialog.component';
 import {TransactionContainerComponent} from './container/transaction-container.component';
 import {transactionFeatureKey} from './redux';
 import {TransactionEffects} from './redux/transaction.effects';
@@ -24,10 +23,6 @@ import {transactionReducer} from './redux/transaction.reducers';
     StoreModule.forFeature(transactionFeatureKey, transactionReducer),
     EffectsModule.forFeature([TransactionEffects])
   ],
-  declarations: [
-    TransactionContainerComponent,
-    TransactionFormComponent,
-    TransactionResultDialogComponent
-  ]
+  declarations: [TransactionContainerComponent, TransactionFormComponent]
 })
 export class TransactionModule {}

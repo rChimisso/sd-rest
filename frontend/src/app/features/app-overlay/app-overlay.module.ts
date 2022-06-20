@@ -6,6 +6,7 @@ import {StoreModule} from '@ngrx/store';
 import {SharedModule} from 'src/app/shared/shared.module';
 
 import {BannerComponent} from './components/banner/banner.component';
+import {ErrorDialogComponent} from './components/error-dialog/error-dialog.component';
 import {LoaderComponent} from './components/loader/loader.component';
 import {AppOverlayContainerComponent} from './container/app-overlay-container.component';
 import {appOverlayFeatureKey} from './redux';
@@ -21,7 +22,8 @@ import {appOverlayReducer} from './redux/app-overlay.reducers';
   declarations: [
     AppOverlayContainerComponent,
     LoaderComponent,
-    BannerComponent
+    BannerComponent,
+    ErrorDialogComponent
   ],
   exports: [AppOverlayContainerComponent]
 })
