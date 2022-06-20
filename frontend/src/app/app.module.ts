@@ -11,7 +11,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {getItalianPaginatorIntl} from './core/paginator-intls/italian-paginator-intl';
 import {CoreEffects} from './core/redux/core.effects';
-import {coreReducer} from './core/redux/core.reducers';
 import {ApiService} from './core/services/api-service.service';
 import {AppOverlayModule} from './features/app-overlay/app-overlay.module';
 import {HomeModule} from './features/home/home.module';
@@ -29,7 +28,7 @@ registerLocaleData(localeIt, 'it-IT');
     AppOverlayModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({core: coreReducer}),
+    StoreModule.forRoot({}),
     EffectsModule.forRoot([CoreEffects]),
     HttpClientModule
   ],

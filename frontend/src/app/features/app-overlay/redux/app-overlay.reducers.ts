@@ -2,6 +2,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
+import {clearData} from 'src/app/core/redux/core.actions';
 import {handleError, clearError, updateLoader} from 'src/app/features/app-overlay/redux/app-overlay.actions';
 
 interface State {
@@ -16,6 +17,7 @@ const INITIAL_STATE: State = {
 
 const appOverlayReducer = createReducer(
   INITIAL_STATE,
+  on(clearData, () => INITIAL_STATE),
   on(handleError, (state, {error}) => ({
     ...state,
     error

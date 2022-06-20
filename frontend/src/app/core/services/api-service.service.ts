@@ -1,13 +1,14 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {finalize, Observable} from 'rxjs';
+import {catchError, finalize, map, Observable} from 'rxjs';
+
+import {State} from 'src/app/features/app-overlay/redux/app-overlay.reducers';
 
 import {updateLoader} from '../../features/app-overlay/redux/app-overlay.actions';
 import {Account} from '../models/account.interface';
 import {Movement} from '../models/movement.type';
 import {TransferResponseBody} from '../models/transfer-response-body.interface';
-import {State} from '../redux/core.reducers';
 
 interface AccountData {
   account: Account;
@@ -36,12 +37,24 @@ export class ApiService {
 
   private get<T>(endpoint: string): Observable<T> {
     this.initialize();
-    return this.httpClient.get<T>(`http://localhost:8080/api/${endpoint}`).pipe(finalize(this.finalize));
+    return this.httpClient.get<T>(`http://localhost:8080/api/${endpoint}`).pipe(
+      map(response => response),
+      catchError(error => {
+        throw error;
+      }),
+      finalize(this.finalize)
+    );
   }
 
   private post<T>(endpoint: string, body: unknown): Observable<T> {
     this.initialize();
-    return this.httpClient.post<T>(`http://localhost:8080/api/${endpoint}`, body).pipe(finalize(this.finalize));
+    return this.httpClient.post<T>(`http://localhost:8080/api/${endpoint}`, body).pipe(
+      map(response => response),
+      catchError(error => {
+        throw error;
+      }),
+      finalize(this.finalize)
+    );
   }
 
   private initialize() {

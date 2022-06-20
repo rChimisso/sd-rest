@@ -1,7 +1,7 @@
 import {createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
-import {saveAccountIds} from 'src/app/core/redux/core.actions';
+import {clearData, saveAccountIds} from 'src/app/core/redux/core.actions';
 
 import {TransferResult} from '../models/transfer-result.interface';
 import {saveTransferResult} from './transfer.actions';
@@ -18,6 +18,7 @@ const INITIAL_STATE: State = {
 
 const transferReducer = createReducer(
   INITIAL_STATE,
+  on(clearData, () => INITIAL_STATE),
   on(saveAccountIds, (state, {accountIds}) => ({
     ...state,
     accountIds
