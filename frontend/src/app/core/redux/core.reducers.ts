@@ -7,5 +7,6 @@ import {Nullable} from '../models/nullable.type';
 export interface State {
   root: Nullable<fromRoot.State>;
   transfer: Nullable<fromTransfer.State>;
+  transaction: Nullable<fromTransfer.State>;
   appOverlay: Nullable<fromAppOverlay.State>;
 }

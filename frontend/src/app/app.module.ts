@@ -22,6 +22,13 @@ import {TransferModule} from './features/transfer/transfer.module';
 
 registerLocaleData(localeIt, 'it-IT');
 
+/**
+ * App Module.
+ *
+ * @export
+ * @class AppModule
+ * @typedef {AppModule}
+ */
 @NgModule({
   declarations: [AppComponent],
   imports: [

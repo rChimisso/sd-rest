@@ -1,10 +1,10 @@
 import {ActionReducer, createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
-import {TransferResponseBody} from 'src/app/core/models/responses/transfer-response-body.interface';
+import {TransactionResponseBody} from 'src/app/core/models/responses/transaction-response-body.interface';
 import {clearData, saveAccountIds} from 'src/app/core/redux/core.actions';
 
-import {saveTransferResult} from './transfer.actions';
+import {saveTransactionResult} from './transaction.actions';
 
 /**
  * Stato.
@@ -20,11 +20,11 @@ interface State {
    */
   accountIds: string[];
   /**
-   * Risposta della richiesta di Trasferimento.
+   * Risposta della richiesta di Transazione.
    *
-   * @type {Nullable<TransferResponseBody>}
+   * @type {Nullable<TransactionResponseBody>}
    */
-  transferResult: Nullable<TransferResponseBody>;
+  transactionResult: Nullable<TransactionResponseBody>;
 }
 
 /**
@@ -34,7 +34,7 @@ interface State {
  */
 const INITIAL_STATE: State = {
   accountIds: [],
-  transferResult: null
+  transactionResult: null
 };
 
 /**
@@ -42,17 +42,17 @@ const INITIAL_STATE: State = {
  *
  * @type {ActionReducer<State>}
  */
-const transferReducer: ActionReducer<State> = createReducer(
+const transactionReducer: ActionReducer<State> = createReducer(
   INITIAL_STATE,
   on(clearData, () => INITIAL_STATE),
   on(saveAccountIds, (state, {accountIds}) => ({
     ...state,
     accountIds
   })),
-  on(saveTransferResult, (state, transferResult) => ({
+  on(saveTransactionResult, (state, transferResult) => ({
     ...state,
-    transferResult
+    transactionResult: transferResult
   }))
 );
 
-export {State, transferReducer};
+export {State, transactionReducer};

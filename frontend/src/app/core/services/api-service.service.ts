@@ -5,25 +5,25 @@ import {catchError, finalize, map, Observable, throwError} from 'rxjs';
 
 import {updateLoader} from '../../features/app-overlay/redux/app-overlay.actions';
 import {Account} from '../models/account.interface';
-import {Movement} from '../models/movement.type';
-import {TransferResponseBody} from '../models/transfer-response-body.interface';
+import {AccountHistory} from '../models/responses/account-history-response-body.interface';
+import {TransactionResponseBody} from '../models/responses/transaction-response-body.interface';
+import {TransferResponseBody} from '../models/responses/transfer-response-body.interface';
 import {State} from '../redux/core.reducers';
-
-interface AccountData {
-  account: Account;
-  history: (Movement & {date: string})[];
-}
 
 @Injectable()
 export class ApiService {
   public constructor(private readonly httpClient: HttpClient, private readonly appState$: Store<State>) {}
 
-  public getAccount(): Observable<Account[]> {
-    return this.get<Account[]>('account');
+  public getActive(): Observable<Account[]> {
+    return this.get<Account[]>('active');
   }
 
-  public getAccountId(id: string): Observable<AccountData> {
-    return this.get<AccountData>(`account/${id}`);
+  public getAccountId(id: string): Observable<AccountHistory> {
+    return this.get<AccountHistory>(`account/${id}`);
+  }
+
+  public postAccountId(accountId: string, amount: number): Observable<TransactionResponseBody> {
+    return this.post<TransactionResponseBody>(`account/${accountId}`, {amount});
   }
 
   public postTransfer(from: string, to: string, amount: number): Observable<TransferResponseBody> {

@@ -2,23 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    // "paths": {
-    //   "xsb-core": [
-    //     "src/app/core/*"
-    //   ],
-    //   "xsb-core-models": [
-    //     "src/app/core/models/*"
-    //   ],
-    //   "xsb-core-consts": [
-    //     "src/app/core/constants/*"
-    //   ],
-    //   "xsb-core-redux": [
-    //     "src/app/core/redux/*"
-    //   ],
-    //   "xsb-core-services": [
-    //     "src/app/core/services/*"
-    //   ]
-    // },
     "outDir": "./dist/out-tsc",
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,

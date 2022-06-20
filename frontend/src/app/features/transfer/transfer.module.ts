@@ -11,6 +11,13 @@ import {transferFeatureKey} from './redux';
 import {TransferEffects} from './redux/transfer.effects';
 import {transferReducer} from './redux/transfer.reducers';
 
+/**
+ * Transfer Module.
+ *
+ * @export
+ * @class TransferModule
+ * @typedef {TransferModule}
+ */
 @NgModule({
   imports: [
     SharedModule,

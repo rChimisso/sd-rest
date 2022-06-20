@@ -5,6 +5,11 @@ import {HomeContainerComponent} from './features/home/container/home-container.c
 import {RootContainerComponent} from './features/root/container/root-container.component';
 import {TransferContainerComponent} from './features/transfer/container/transfer-container.component';
 
+/**
+ * Routes dell'applicazione.
+ *
+ * @type {Routes}
+ */
 const routes: Routes = [
   {
     path: '',
@@ -24,6 +29,13 @@ const routes: Routes = [
   }
 ];
 
+/**
+ * App Routing Module.
+ *
+ * @export
+ * @class AppRoutingModule
+ * @typedef {AppRoutingModule}
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

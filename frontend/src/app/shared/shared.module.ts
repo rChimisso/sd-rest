@@ -12,6 +12,13 @@ import {TwoDigitDecimalNumberDirective} from 'src/app/shared/directives/TwoDigit
 
 import {UUIDDirective} from './directives/UUIDDirective.directive';
 
+/**
+ * Shared Module.
+ *
+ * @export
+ * @class SharedModule
+ * @typedef {SharedModule}
+ */
 @NgModule({
   imports: [
     ReactiveFormsModule,

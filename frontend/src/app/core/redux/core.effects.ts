@@ -10,8 +10,8 @@ import {retrieveAccountIds, saveAccountIds} from './core.actions';
 export class CoreEffects {
   public retrieveAccountIds$ = createEffect(() => this.actions$.pipe(
     ofType(retrieveAccountIds),
-    switchMap(() => this.apiService.getAccount().pipe(
-      map(accounts => saveAccountIds({accountIds: accounts.map(account => account.id)})),
+    switchMap(() => this.apiService.getActive().pipe(
+      map(accounts => saveAccountIds({accountIds: accounts.map(account => account.uuid)})),
       catchError(error => of(handleError({error})))
     ))
   ));
