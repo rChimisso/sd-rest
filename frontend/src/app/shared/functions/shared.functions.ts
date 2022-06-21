@@ -1,8 +1,5 @@
 import {ValidationErrors} from '@angular/forms';
 
-import {Movement} from 'src/app/core/models/movement.type';
-import {Transfer} from 'src/app/core/models/transfer.interface';
-
 /**
  * Restituisce il messaggio di errore da mostrare per l'inserimento di un UUID non valido.
  *
@@ -22,17 +19,6 @@ export function getUUIDErrorMessage({required, pattern, minlength, maxlength}: V
     return 'L\'ID deve essere composto unicamente da numeri e caratteri alfabetici tra la A e la F.';
   }
   return '';
-}
-
-/**
- * Controlla se il {@link Movement movimento} passato è un {@link Transfer trasferimento}.
- *
- * @export
- * @param {Movement} movement movimento.
- * @returns {movement is Transfer} valore del controllo.
- */
-export function isTransfer(movement: Movement): movement is Transfer {
-  return !!('sender' in movement && movement.sender && 'recipient' in movement && movement.recipient);
 }
 
 /**

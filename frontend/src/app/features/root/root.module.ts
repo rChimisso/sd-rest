@@ -13,6 +13,13 @@ import {rootFeatureKey} from './redux';
 import {RootEffects} from './redux/root.effects';
 import {rootReducer} from './redux/root.reducers';
 
+/**
+ * Root Module.
+ *
+ * @export
+ * @class RootModule
+ * @typedef {RootModule}
+ */
 @NgModule({
   imports: [
     SharedModule,

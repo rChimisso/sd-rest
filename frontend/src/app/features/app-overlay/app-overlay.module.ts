@@ -12,6 +12,13 @@ import {AppOverlayContainerComponent} from './container/app-overlay-container.co
 import {appOverlayFeatureKey} from './redux';
 import {appOverlayReducer} from './redux/app-overlay.reducers';
 
+/**
+ * App Overlay Module.
+ *
+ * @export
+ * @class AppOverlayModule
+ * @typedef {AppOverlayModule}
+ */
 @NgModule({
   imports: [
     SharedModule,

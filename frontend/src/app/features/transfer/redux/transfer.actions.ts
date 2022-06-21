@@ -11,7 +11,7 @@ export const performTransfer = createAction(
 );
 
 /**
- * Salva la risposta della richiesta di Trasferimento.
+ * Attiva il salvataggio della risposta della richiesta di Trasferimento.
  */
 export const saveTransferResult = createAction(
   '[Transfer] Save Transfer Result',

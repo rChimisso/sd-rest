@@ -16,14 +16,35 @@ import {FormInterface} from '../models/form.interface';
 import {getTransactionResult} from '../redux';
 import {performTransaction} from '../redux/transaction.actions';
 
+/**
+ * Container per la richiesta di Transazione.
+ *
+ * @export
+ * @class TransactionContainerComponent
+ * @typedef {TransactionContainerComponent}
+ * @extends {AbstractFormContainer<FormInterface>}
+ */
 @Component({
   selector: 'transaction-container',
   templateUrl: './transaction-container.component.html',
   styleUrls: ['./transaction-container.component.scss']
 })
 export class TransactionContainerComponent extends AbstractFormContainer<FormInterface> {
+  /**
+   * Observable del risultato della Response per la richiesta di creazione di Transazione.
+   *
+   * @private
+   * @readonly
+   * @type {Observable<Nullable<TransactionResponseBody>>}
+   */
   private readonly transactionResult$: Observable<Nullable<TransactionResponseBody>> = this.appState$.select(getTransactionResult);
 
+  /**
+   * @constructor
+   * @public
+   * @param {Store<State>} appState$
+   * @param {MatDialog} dialog
+   */
   public constructor(appState$: Store<State>, private readonly dialog: MatDialog) {
     super(
       'transaction',
@@ -52,6 +73,11 @@ export class TransactionContainerComponent extends AbstractFormContainer<FormInt
     });
   }
 
+  /**
+   * Dispatcha la action {@link performTransaction} per attivare la richiesta di Transazione.
+   *
+   * @public
+   */
   public perform() {
     this.appState$.dispatch(performTransaction({
       accountId: this.formGroup.controls.accountId.value,

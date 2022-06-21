@@ -11,7 +11,7 @@ export const performTransaction = createAction(
 );
 
 /**
- * Salva la risposta della richiesta di Transazione.
+ * Attiva il salvataggio della risposta della richiesta di Transazione.
  */
 export const saveTransactionResult = createAction(
   '[Transaction] Save Transaction Result',

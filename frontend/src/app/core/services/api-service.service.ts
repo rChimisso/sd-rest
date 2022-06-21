@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {catchError, delay, finalize, map, Observable, throwError} from 'rxjs';
 
-import {decrementActiveCalls, incrementActiveCalls} from '../../features/app-overlay/redux/app-overlay.actions';
+import {decrementPendingCalls, incrementPendingCalls} from '../../features/app-overlay/redux/app-overlay.actions';
 import {Account} from '../models/account.interface';
 import {AccountHistory} from '../models/responses/account-history-response-body.interface';
 import {TransactionResponseBody} from '../models/responses/transaction-response-body.interface';
@@ -139,7 +139,7 @@ export class ApiService {
    * @private
    */
   private initialize() {
-    this.appState$.dispatch(incrementActiveCalls());
+    this.appState$.dispatch(incrementPendingCalls());
   }
 
   /**
@@ -148,6 +148,6 @@ export class ApiService {
    * @private
    */
   private finalize() {
-    this.appState$.dispatch(decrementActiveCalls());
+    this.appState$.dispatch(decrementPendingCalls());
   }
 }

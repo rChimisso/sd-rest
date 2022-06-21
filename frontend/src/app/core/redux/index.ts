@@ -4,18 +4,18 @@ import {Nullable} from '../models/nullable.type';
 import {State} from './core.reducers';
 
 /**
- * 
+ * Selettore parametrico dello {@link State Stato} dello store.
  *
  * @param {State} state
  * @returns {State}
  */
-export const getCoreState = (state: State) => state;
+export const getCoreState = (state: State): State => state;
 
 /**
- * 
+ * Selettore parametrico di un Feature State.
  *
  * @param {keyof State} featureKey
- * @returns {*}
+ * @returns {MemoizedSelector<State, Nullable<State | State | State | State>, Nullable<DefaultProjectorFn<State | State | State | State>>>}
  */
 export const getFeatureState = (featureKey: keyof State) => createSelector(
   getCoreState,
@@ -23,10 +23,10 @@ export const getFeatureState = (featureKey: keyof State) => createSelector(
 );
 
 /**
- * 
+ * Selettore parametrico di accountIds per un Feature State.
  *
  * @param {keyof State} featureKey
- * @returns {*}
+ * @returns {MemoizedSelector<State, string[], DefaultProjectorFn<string[]>>}
  */
 export const getAccountIds = (featureKey: keyof State) => createSelector(
   getFeatureState(featureKey),

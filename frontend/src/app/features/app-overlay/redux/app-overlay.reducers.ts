@@ -1,21 +1,47 @@
 import {HttpErrorResponse} from '@angular/common/http';
-import {createReducer, on} from '@ngrx/store';
+import {ActionReducer, createReducer, on} from '@ngrx/store';
 
 import {Nullable} from 'src/app/core/models/nullable.type';
 import {clearData} from 'src/app/core/redux/core.actions';
-import {handleError, clearError, incrementActiveCalls, decrementActiveCalls} from 'src/app/features/app-overlay/redux/app-overlay.actions';
+import {handleError, clearError, incrementPendingCalls, decrementPendingCalls} from 'src/app/features/app-overlay/redux/app-overlay.actions';
 
+/**
+ * Stato.
+ *
+ * @interface State
+ * @typedef {State}
+ */
 interface State {
+  /**
+   * Eventuale {@link HttpErrorResponse Errore HTTP} dell'ultima chiamata HTTP effettuata.
+   *
+   * @type {Nullable<HttpErrorResponse>}
+   */
   error: Nullable<HttpErrorResponse>;
-  activeCalls: number;
+  /**
+   * Numero di chiamate HTTP attualmente in pending.
+   *
+   * @type {number}
+   */
+  pendingCalls: number;
 }
 
+/**
+ * Stato iniziale.
+ *
+ * @type {State}
+ */
 const INITIAL_STATE: State = {
   error: null,
-  activeCalls: 0
+  pendingCalls: 0
 };
 
-const appOverlayReducer = createReducer(
+/**
+ * Reducer per l'intercettazione delle action e il salvataggio del loro payload sullo store.
+ *
+ * @type {ActionReducer<State>}
+ */
+const appOverlayReducer: ActionReducer<State> = createReducer(
   INITIAL_STATE,
   on(clearData, () => INITIAL_STATE),
   on(handleError, (state, {error}) => ({
@@ -26,13 +52,13 @@ const appOverlayReducer = createReducer(
     ...state,
     error: null
   })),
-  on(incrementActiveCalls, state => ({
+  on(incrementPendingCalls, state => ({
     ...state,
-    activeCalls: state.activeCalls + 1
+    pendingCalls: state.pendingCalls + 1
   })),
-  on(decrementActiveCalls, state => ({
+  on(decrementPendingCalls, state => ({
     ...state,
-    activeCalls: state.activeCalls - 1
+    pendingCalls: state.pendingCalls - 1
   }))
 );
 

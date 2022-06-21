@@ -10,8 +10,8 @@ import {SharedModule} from 'src/app/shared/shared.module';
 import {AccountsTableComponent} from './components/accounts-table/accounts-table.component';
 import {AccountsListContainerComponent} from './container/accounts-list-container.component';
 import {accountListFeatureKey} from './redux';
-import {AccountListEffects} from './redux/accounts-list.effects';
-import {accountListReducer} from './redux/accounts-list.reducers';
+import {AccountsListEffects} from './redux/accounts-list.effects';
+import {accountsListReducer} from './redux/accounts-list.reducers';
 
 /**
  * Account List Module.
@@ -26,8 +26,8 @@ import {accountListReducer} from './redux/accounts-list.reducers';
     MatTableModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    StoreModule.forFeature(accountListFeatureKey, accountListReducer),
-    EffectsModule.forFeature([AccountListEffects])
+    StoreModule.forFeature(accountListFeatureKey, accountsListReducer),
+    EffectsModule.forFeature([AccountsListEffects])
   ],
   declarations: [AccountsListContainerComponent, AccountsTableComponent]
 })

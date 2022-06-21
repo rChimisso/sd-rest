@@ -12,18 +12,43 @@ import {State} from 'src/app/core/redux/core.reducers';
 
 import {FormInterface} from '../models/form.interface';
 import {getAccount, getSortedHistory} from '../redux';
-import {retrieveAccountData} from '../redux/root.actions';
+import {retrieveAccountHistory} from '../redux/root.actions';
 
+/**
+ * Container per la richiesta di visualizzazione dello storico di un {@link Account}.
+ *
+ * @export
+ * @class RootContainerComponent
+ * @typedef {RootContainerComponent}
+ * @extends {AbstractFormContainer<FormInterface>}
+ */
 @Component({
   selector: 'root-container',
   templateUrl: './root-container.component.html',
   styleUrls: ['./root-container.component.scss']
 })
 export class RootContainerComponent extends AbstractFormContainer<FormInterface> {
+  /**
+   * Observable dell'{@link Account} selezionato.
+   *
+   * @public
+   * @type {Observable<Nullable<Account>>}
+   */
   public account$: Observable<Nullable<Account>> = this.appState$.select(getAccount);
 
+  /**
+   * Observable dello storico dell'{@link Account} selezionato.
+   *
+   * @public
+   * @type {Observable<Nullable<Movement[]>>}
+   */
   public history$: Observable<Nullable<Movement[]>> = this.appState$.select(getSortedHistory);
 
+  /**
+   * @constructor
+   * @public
+   * @param {Store<State>} appState$
+   */
   public constructor(appState$: Store<State>) {
     super(
       'root',
@@ -40,7 +65,12 @@ export class RootContainerComponent extends AbstractFormContainer<FormInterface>
     );
   }
 
+  /**
+   * Dispatcha la action {@link retrieveAccountHistory} per attivare la richiesta di recupero dello storico.
+   *
+   * @public
+   */
   public research() {
-    this.appState$.dispatch(retrieveAccountData({accountId: this.formGroup.controls.accountId.value}));
+    this.appState$.dispatch(retrieveAccountHistory({accountId: this.formGroup.controls.accountId.value}));
   }
 }
