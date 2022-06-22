@@ -23,14 +23,13 @@ L'editor principale e consigliato è Visual Studio Code.
 ## Frontend
 ### Tecnologie
 *Tutte le tecnologie utilizzate e le loro versioni sono presenti in dettaglio all'interno del [package.json](./frontend/package.json)*
-- [NodeJs](https://nodejs.org/it/) 16.15.1
-- [TypeScript](https://www.typescriptlang.org/) 4.7.2
-- [Angular 14](https://angular.io/docs)
-- [NgRx 14](https://next.ngrx.io/docs)
-- [SCSS](https://sass-lang.com/)
-- HTML5
+- [NodeJs](https://nodejs.org/it/) 16.15.1 - gestione del progetto Frontend.
+- [TypeScript](https://www.typescriptlang.org/) 4.7.2 - linguaggio principale utilizzato.
+- [Angular 14](https://angular.io/docs) - framework principale per la realizzazione della logica frontend.
+- [NgRx 14](https://next.ngrx.io/docs) - framework secondario per la gestione dei dati runtime (state) dell'applicazione.
+- [SCSS](https://sass-lang.com/) - estensione di CSS.
 ### Struttura
-Il lato Frontend del progetto segue la struttura di un progetto Angular.  
+Il lato Frontend del progetto segue la struttura di un progetto TypeScript con Angular.  
 In particolare sotto [src/app/](./frontend/src/app/) sono presenti i vari componenti Angular e gestione dello stato di NgRx, divisi per scopo:
 - [abstract/](./frontend/src/app/abstract/):  
   Contiene le definizioni astratte e generali di componenti comuni ai vari moduli.
@@ -67,38 +66,63 @@ In particolare sotto [src/app/](./frontend/src/app/) sono presenti i vari compon
   Endpoint transaction, fornisce la pagina per le richieste di transazioni.
 
 Gli endpoint home, accounts-list e transaction sono stati aggiunti oltre alle specifiche di base richieste per il Frontend.
-### Elementi codice principali
-- [ApiService](./frontend/src/app/core/services/api-service.service.ts):  
-  Bla bla bla
-- etc.  
-  etc.
 
 ---
 
 ## Backend
 ### Tecnologie
-*Eventuale disclaimer*
-- Elenco puntato
+***Aggiungere link e correggere varie ed eventuali***
+- Gradle - gestione del progetto Backend.
+- Java 17 - linguaggio utilizzato.
+- Spring - framework per la creazione di un applicativo REST.
+- JPA - framework per la gestione della persistenza.
+- Hibernate - framework per la gestione della persistenza.
 ### Struttura
-Introduzione struttura:
-- Elenco puntato.
-### Endpoint
-*Eventuale disclaimer*
-- Elenco puntato.
+Il lato Backend del progetto segue la struttura di un progetto Spring gestito da Gradle.  
+In particolare sotto [src/main/java/zorchi/](./backend/src/main/java/zorchi/) sono presenti le varie classi Java annotate per funzionare con Spring e JPA, divise per scopo:
+- [entities/](./backend/src/main/java/zorchi/entities/):  
+  Contiene tutte le entità del sistema, quali [Account](./backend/src/main/java/zorchi/entities/Account.java), [Transaction](./backend/src/main/java/zorchi/entities/Transaction.java) e [Transfer](./backend/src/main/java/zorchi/entities/Transfer.java).  
+  Contiene inoltre delle utili astrazioni delle varie entità e sottoclassi per la gestione delle richieste HTTP per la creazione o modifica delle entità.  
+  Ciascuna classe è annotata con delle specifiche annotazioni per determinare come tali entità debbano essere gestite a livello di persistenza. 
+- [repositories/](./backend/src/main/java/zorchi/repositories/):  
+  Contiene tutte le [CrudRepository](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) (Create Read Update Delete) che gestiscono le interazioni tra il codice Java e i dati persistiti.
+- [responses/](./backend/src/main/java/zorchi/responses/):  
+  Contiene le classi necessarie per la tipizzazione e la corretta strutturazione di alcune risposte HTTP, sia per l'eventuale body che per gli eventuali header aggiuntivi.
+- [rest/](./backend/src/main/java/zorchi/rest/):  
+  Contiene le classi principali dell'applicativo REST, ovvero la classe di bootstrap di Spring [RestApplication](./backend/src/main/java/zorchi/rest/RestApplication.java) e il controller [ApiController](./backend/src/main/java/zorchi/rest/ApiController.java) per la gestione degli endpoint.
+- [utility/](./backend/src/main/java/zorchi/utility/):  
+  Contiene alcune classi di utilità per semplificare la scrittura del codice e lo sviluppo.
 
-Aggiunte rispetto alla traccia.
-### Elementi codice principali
-- Elenco puntato
+Sotto [src/main/resources/](./backend/src/main/resources/) sono invece presenti le configurazioni per il database ([application.properties](backend\src\main\resources\application.properties)) e il database stesso ([h2_persistence.mv.db](backend\src\main\resources\h2_persistence.mv.db)).
+### Database
+***TODO***
+### Endpoint
+*Per un dettaglio maggiore di ciascun endpoint e del controller che li gestisce è possibile rifarsi alla Javadoc presente all'interno del codice.*
+- [/api/active](http://localhost:8080/api/active):
+  - **GET**: Restituisce la lista di tutti gli account non eliminati.
+- [/api/account](http://localhost:8080/api/account):
+  - **GET**: Restituisce la lista di tutti gli account, eliminati o meno.
+  - **POST**: Richiede un request body conforme alla classe [AccountData](./backend/src/main/java/zorchi/entities/Account.java#174) per la creazione di un nuovo account.
+  - **DELETE**: Richiede uno UUID conforme allo UUID di un account per l'eliminazione dello stesso.  
+  L'eliminazione avviene tramite impostazione di una flag nell'entità account selezionata, in modo da mantenere l'integrità referenziale e uno storico degli account chiusi.
+- [/api/account/{id}](http://localhost:8080/api/account/{id}):  
+  *Per questo endpoint è necessario sostituire il placeholder "{id}" con l'id di un account.*
+  - **GET**: Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
+  - **POST**: 
+  - **PUT**: 
+  - **PATCH**: 
+  - **HEAD**: 
+- [/api/transfer](http://localhost:8080/api/transfer): 
+  - **POST**: 
+- [/api/divert](http://localhost:8080/api/divert): 
+  - **POST**: 
+
+L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste per il Backend.
 
 # Legacy README
 
 ## Sistema e tecnologie
-*Sviluppato e Testato su un sistema Windows 10 x64bit*
 - **Backend:**
-  - Il codice da eseguire per l'avvio del server è posizionato nella cartella backend del progetto
-  - Scritto in Java 17
-  - Framework Spring
-  - Gestore Progetto Gradle
   - Embedded database H2
   - JPA & Hibernate
   - FasterXML/jackson-core
@@ -109,12 +133,11 @@ Aggiunte rispetto alla traccia.
   - User Name: zorchi
   - Password: password
 
-## Backend
-- **Formato requestBody:** JSON
+***Io la sezione seguente la metterei sotto Database.***
 - **Gestione account eliminati:**  
   Quando gli account non vengono mai eliminati, in modo da poter sempre tenere traccia dello storico delle transazioni. Quando un account viene eliminato non e' piu' possibile modificare l'account (Eseguire depositi, prelievi e trasferimenti da e verso tale account) ad accezione della visualizzazione degli stessi.
-- **Aggiunto endpoint GET("/api/active"):**  
-  Esso che mostra esclusivamente gli account non eliminati.
+
+***Ricordarsi di riportare le modifiche agli endpoint anche nell'elenco degli endpoint della nuova versione del readme.***
 - **Modifica GET("/api/account/{id}"):**  
   Aggiunti campi nella responce body in modo da fornire informazioni aggiuntive per il frontend
   (Maggiorni informazioni riguardanti l'account  indicato in id).
@@ -134,6 +157,7 @@ Aggiunte rispetto alla traccia.
 
 ---
 
+***Metterei la sezione seguente, senza parlare degli unit test (mai dire che c'è qualcosa che non va), all'interno della sezione Endpoint del Backend, specificando che sono solo degli esempi di request e response per un determinato endpoint chiamato con un determinato metodo HTTP.***
 ## Esempi formati requestBody e responceBody
   Non siamo riusciti a scrivere degli unit test soffisfacenti, quelle che seguono sono un insieme ri chiamate e risposte teste, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi. 
   Dovrebbe forire un minimo di contesto sulla nostra implementazione.
