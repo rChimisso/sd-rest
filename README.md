@@ -15,9 +15,6 @@ La parte di Backend si basa su Java e il framework Spring, mentre la parte di Fr
 Il progetto è diviso in 2 sezioni: [frontend](./frontend/) e [backend](./backend/), strutturate singolarmente e trattabili come 2 progetti separati ma integrati fra loro.  
 In entrambe le sezioni il codice è estensivamente documentato tramite Javadoc (Backend) e JSDoc (Frontend).
 
-Sviluppato e testato su un sistema Windows 10 x64 bit.  
-L'editor principale e consigliato è Visual Studio Code.
-
 ---
 
 ## Frontend
@@ -158,6 +155,7 @@ L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste
 ---
 
 ***Metterei la sezione seguente, senza parlare degli unit test (mai dire che c'è qualcosa che non va), all'interno della sezione Endpoint del Backend, specificando che sono solo degli esempi di request e response per un determinato endpoint chiamato con un determinato metodo HTTP.***
+***Forse avrebbe senso mettere la sezione seguente nell'ISTRUZIONI dato che la consegna dice esplicitamente "In questo file [ISTRUZIONI] deve essere indicata una chiara modalità per poter eseguire e testare correttamente l'elaborato consegnato."***
 ## Esempi formati requestBody e responceBody
   Non siamo riusciti a scrivere degli unit test soffisfacenti, quelle che seguono sono un insieme ri chiamate e risposte teste, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi. 
   Dovrebbe forire un minimo di contesto sulla nostra implementazione.
