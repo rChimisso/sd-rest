@@ -23,7 +23,7 @@ public class AccountHistoryResponseBody extends GenericResponseBody {
    * @param transfers - cronologia di tutti i movimenti.
    */
   public AccountHistoryResponseBody(Account account, List<GenericMovement> transfers) {
-    super("");
+    super("Storico dell'account recuperato con successo.");
     this.account = account;
     this.history = transfers;
   }

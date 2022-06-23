@@ -103,7 +103,7 @@ public class ApiController {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
     if (account.isValid()) {
       accountRepository.save(account);
-      return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), ""), HttpStatus.CREATED);
+      return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), "Account creato con successo."), HttpStatus.CREATED);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
