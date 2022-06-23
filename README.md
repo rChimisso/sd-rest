@@ -62,7 +62,7 @@ In particolare sotto [src/app/](./frontend/src/app/) sono presenti i vari compon
 - [/transaction](http://localhost:4200/transaction):  
   Endpoint transaction, fornisce la pagina per le richieste di transazioni.
 
-Gli endpoint home, accounts-list e transaction sono stati aggiunti oltre alle specifiche di base richieste per il Frontend.
+Gli endpoint `home`, `accounts-list` e `transaction` sono stati aggiunti oltre alle specifiche di base richieste per il Frontend.
 
 ---
 
@@ -92,61 +92,48 @@ In particolare sotto [src/main/java/zorchi/](./backend/src/main/java/zorchi/) so
 
 Sotto [src/main/resources/](./backend/src/main/resources/) sono invece presenti le configurazioni per il database ([application.properties](backend\src\main\resources\application.properties)) e il database stesso ([h2_persistence.mv.db](backend\src\main\resources\h2_persistence.mv.db)).
 ### Database
-Vengono riportate le tabele e i suoi attributi.
+Il file del database, [h2_persistence.mv.db](backend\src\main\resources\h2_persistence.mv.db), non è presente inizialmente nel progetto e verrà generato dopo il primo avvio del Backend.  
+Lo schema del database è il seguente:
 - [ACCOUNT](http://localhost:8080/h2-console/)
-  - **UUID**: L'uuid dell'account come specificato da consegna.
-
-  - **BALANCE**: Un double che rapresenza l'ammontare di denaro dell'acount, esso più andare in negativo (In rosso) solo tramite preglievi, quando il conto è in rosso si possono continuare a fare preglievi ma non si possono eseguire trasferimenti e trasazioni.
-  - **DELETED**: Booleano che indica se l'acount è stato eliminato.
-  - **NAME**: Nome del propietario dell'acount.
-  - **SURNAME**: Cognome del propietario dell'acount.
-
+  - **UUID**: Identificativo a 10 byte (20 caratteri esadecimali) dell'account come da specifiche.
+  - **BALANCE**: Double che rappresenza il saldo dell'account. Può andare in negativo (in rosso) solo tramite prelievi e in quello stato l'account potrà eseguire unicamente depositi, ovvero transazione con ammontare positivo.
+  - **DELETED**: Booleano che indica se l'account è stato eliminato.
+  - **NAME**: Nome del propietario dell'account.
+  - **SURNAME**: Cognome del propietario dell'account.
 - [TRANSACTION](http://localhost:8080/h2-console/)
-  - **UUID**: L'uuid della transazione come specificato da consegna.
-
-  - **AMOUNT**: Un double che rapresenza lo spostamento di denaro.
-  - **DATE**: La data dell'operaione.
-  - **ACCOUNT_UUID**: L'uuid dell'acount su qui il trasferimento ha effetto.
-
-- [TRASFER](http://localhost:8080/h2-console/)
-
-  - **UUID**: L'uuid del trasferimento come specificato da consegna.
-
-  - **Amount**: Un double che rapresenza lo spostamento di denaro, sempre positivo.
-  - **DATE**: La data dell'operaione.
-  - **RECIPIENT_TRANSACTION**: L'uuid 
-  della tranzazione che viene generata, rapresentanta la ricezione di denaro da parte del recipient.
-  - **SENDER_TRANSACTION**: L'uuid 
-  della tranzazione che viene generata, rapresentanta l'invio di denaro da parte del sender.
-
+  - **UUID**: Identificativo a 16 byte (32 caratteri esadecimali) della transazione come da specifiche.
+  - **AMOUNT**: Double che rappresenza la quantità di denaro da prelevare, se negativa, o depositare, se positiva.
+  - **DATE**: Data dell'operazione.
+  - **ACCOUNT_UUID**: Identificativo dell'account che sta effettuando la transazione.
+- [TRANSFER](http://localhost:8080/h2-console/)
+  - **UUID**: Identificativo a 16 byte (32 caratteri esadecimali) del trasferimento come da specifiche.
+  - **Amount**: Double che rappresenza lo quantità di denaro da trasferire, sempre positivo.
+  - **DATE**: Data dell'operazione.
+  - **SENDER_TRANSACTION**: Identificativo della transazione che viene generata per prelevare il denaro dall'account mittente.
+  - **RECIPIENT_TRANSACTION**: Identificativo della transazione che viene generata per depositare il denaro sull'account destinatario.
 
 ### Endpoint
 *Per un dettaglio maggiore di ciascun endpoint e del controller che li gestisce è possibile rifarsi alla Javadoc presente all'interno del codice.*
 - [/api/active](http://localhost:8080/api/active):
-
   - **GET**: Restituisce la lista di tutti gli account non eliminati.
 - [/api/account](http://localhost:8080/api/account):
-
   - **GET**: Restituisce la lista di tutti gli account, eliminati o meno.
   - **POST**: Richiede un request body conforme alla classe [AccountData](./backend/src/main/java/zorchi/entities/Account.java#174) per la creazione di un nuovo account.
-
   - **DELETE**: Richiede uno UUID conforme allo UUID di un account per l'eliminazione dello stesso.  
   L'eliminazione avviene tramite impostazione di una flag nell'entità account selezionata, in modo da mantenere l'integrità referenziale e uno storico degli account chiusi.
 - [/api/account/{id}](http://localhost:8080/api/account/{id}):  
-  *Per questo endpoint è necessario sostituire il placeholder "{id}" con l'id di un account.*
-  - [**GET**](#modifica-get): Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
-  - **POST**: Esegue un deposito o un prelievo a seconda di come l'ammontare viene specificato.
-
-  - **PUT**: Modifica il nome e il congome dell'account come specificato nel body.
-  - **PATCH**: Modifica il nome o il cognome come specificato nel body.
-  - **HEAD**: Restituisce il nome e il cognome nell header dell account specificato.
+  *Per questo endpoint è necessario sostituire il placeholder "{id}", anche detto PathVariable, con l'id di un account.*
+  - **GET**: Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
+  - **POST**: Richiede un request body conforme alla classe [TransactionData](./backend/src/main/java/zorchi/entities/Transaction.java#74) per eseguire una transazione, ovvero un deposito o un prelievo a seconda dell'ammontare.
+  - **PUT**: Richiede un request body conforme alla classe [AccountData](./backend/src/main/java/zorchi/entities/Account.java#174) per modificare sia il nome che il congome di un account.
+  - **PATCH**: Richiede un request body parzialmente conforme alla classe [AccountData](./backend/src/main/java/zorchi/entities/Account.java#174) per modificare il nome o il congome di un account.
+  - **HEAD**: Restituisce un header custom come da specifiche.
 - [/api/transfer](http://localhost:8080/api/transfer): 
-  - **POST**: Esegue un trasferimento da un account ad un altro per un certo ammontare, tutto specificato nel body.
-
+  - **POST**: Richiede un request body conforme alla classe [TransferData](./backend/src/main/java/zorchi/entities/Transfer.java#102) per eseguire un trasferimento di denaro da un account a un altro.
 - [/api/divert](http://localhost:8080/api/divert): 
-  - **POST**: Annulla una trasazione specificata nel body eseguendone una inversa. 
+  - **POST**: Richiede un request body conforme alla classe [TransferDivertData](./backend/src/main/java/zorchi/entities/Transfer.java#161) per annullare una trasazione tramite l'esecuzione di una uguale ma inversa. 
 
-L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste per il Backend.
+L'endpoint `/api/active` è stato aggiunto oltre alle specifiche di base richieste per il Backend.
 
 # Legacy README
 
@@ -168,7 +155,6 @@ L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste
 
 ***Ricordarsi di riportare le modifiche agli endpoint anche nell'elenco degli endpoint della nuova versione del readme.***   
 
-### <a id="modifica-get"></a> 
 - **Modifica GET("/api/account/{id}"):**          
   Aggiunti campi nella responce body in modo da fornire informazioni aggiuntive per il frontend
   (Maggiorni informazioni riguardanti l'account  indicato in id).
