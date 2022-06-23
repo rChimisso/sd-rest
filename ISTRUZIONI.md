@@ -1,11 +1,45 @@
-## Sviluppo
+## **Installazione**
 Sviluppato e testato su un sistema Windows 10 a 64 bit.  
-L'editor principale e consigliato è Visual Studio Code.  
+L'architettura a 64 bit è necessaria per poter sviluppare e lanciare il progetto.
 
-***Va segnalato, tra gli aspetti importanti, il sistema operativo e l'architettura della CPU che sono stati utilizzati per lo sviluppo, spiegando come installare eventuali dipendenze esterne del progetto.***
+### **IDE**
+L'IDE utilizzato, meglio integrato e consigliato è Visual Studio Code, sia per il Backend che per il Frontend.  
+Per installarlo è sufficiente recarsi a [questa pagina](https://code.visualstudio.com/download) e scaricare la versione per il proprio sistema operativo.  
+Durante la procedura di installazione è consigliato spuntare le caselle delle opzioni di installazione come segue (con quella per l'icona desktop a scelta libera):  
+***INSERIRE IMMAGINE***  
+È anche possibile utilizzare Eclipse per il Backend o IntelliJ per Backend e Frontend, sebbene Eclipse sia fortemente sconsigliato per via di incosistenze e complicazioni nella formattazione del codice e nell'interpretazione di caratteri Unicode.
+### **Dipendenze e avvio Backend**
+Per poter avviare il Backend è necessario installare la [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).  
+A seconda dell'IDE scelto seguire i passi appropriati.  
+Qui sono riportati i passi da seguire per Visual Studio Code:
+- Cliccare col tasto destro sulla cartella [backend](./backend/) per aprire il menù contestuale e selezionare la voce `Apri con Code`.  
+- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.  
+***INSERIRE IMMAGINE***  
+- Attendere che la build del progetto si concluda, visibile da una notifica in basso a destra.
+- Premere il pulsante Run in alto a destra o, una volta aperto il file [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java), cliccare sulla scritta `Run` sopra la [riga del metodo main](./backend/src/main/java/zorchi/rest/RestApplication.java#L20).
+- Il Backend sarà ora disponibile all'indirizzo `http://localhost:8080`.
+### **Dipendenze e avvio Frontend**
+Per poter avviare il Frontend è necessario installare [NodeJs] 16.15.1.  
+È consigliato, ma non necessario, utilizzare il software [nvm] per installare [NodeJs] in modo da poter gestire facilmente le versioni di [NodeJs] installate in caso sia presente la necessità di averne più di una.  
+Per installare [NodeJs] è sufficiente recarsi alla pagina linkata e seguire le istruzioni dell'installer.  
+Se si volesse installare [NodeJs] tramite [nvm] invece le istruzioni sono presente nel [readme](https://github.com/nvm-sh/nvm#readme) di [nvm].
+
+In seguito è necessario posizionarsi con un terminale, sia quello integrato nel sistema operativo o quello integrato in VSC, e lanciare il comando
+```
+npm i
+```
+per installare le dipendenze presenti nel [package.json](./frontend/package.json).
+
+Completata l'installazione delle dipendenze e trovandosi col terminale nella stessa cartella di cui sopra, per lanciare il Frontend bisogna lanciare il comando
+```
+npm run start
+```
+oppure utilizzare la sezione `NPM Script` di VSC che si trova in basso a sinistra e premere il pulsante Run affianco allo script `start`.
+
+Completata l'esecuzione dello script la pagina Frontend sarà disponibile all'indirizzo [`http://localhost:4200`](http://localhost:4200).
 
 ---
-## Installazione
+## **Sviluppo**
 
 - Visual Studio
 - NodeJs
@@ -17,7 +51,7 @@ L'editor principale e consigliato è Visual Studio Code.
 
 ---
 
-## Esecuzione
+## **Esecuzione**
 - Avvio BackEnd:
   - L'anciare l'applicazione Java, il Database verra inizializato al primo avvio.
 - Avvio FrontEnd:
@@ -26,7 +60,7 @@ L'editor principale e consigliato è Visual Studio Code.
 
 ---
 
-## Testing
+## **Testing**
 
 
 
@@ -455,5 +489,6 @@ Mostra tutti gli account nel sistema.
   Vengono restituire le informazioni.   
 
   - *allResponse:* 
----
 
+[NodeJs]: https://nodejs.org/
+[nvm]: https://github.com/nvm-sh/nvm
