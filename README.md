@@ -117,7 +117,6 @@ Per effettuare l'accesso le credenziali necessarie sono:
 - [JDBC URL](./backend/src/main/resources/application.properties#L1): `jdbc:h2:file:./src/main/resources/h2_persistence`
 - [Username](./backend/src/main/resources/application.properties#L3): `zorchi`
 - [Password](./backend/src/main/resources/application.properties#L4): `password`
-
 ### Endpoint
 *Per un dettaglio maggiore di ciascun endpoint e del controller che li gestisce è possibile rifarsi alla Javadoc presente all'interno del codice.*
 - [`/api/active`](http://localhost:8080/api/active):
@@ -143,7 +142,7 @@ L'endpoint `/api/active` è stato aggiunto oltre alle specifiche di base richies
 Inoltre sono state apportate le seguenti aggiunte alle specifiche di base richieste per gli endpoint:
 - Per **`GET`** [`/api/account/{id}`](http://localhost:8080/api/account/{id}):  
   Aggiunti campi nel response body in modo da fornire informazioni aggiuntive per il [Frontend].
-  Gli id passati in `history` del response body indicano se il movimento è una transazione, `sender` e `recipient` nulli, oppure un trasferimento, `sender` e `recipient` avvalorati.
+  Gli id degli account `sender` e `recipient` contenuti in `history` del response body per ciasun movimento permettono di distinguere il tipo di movimento: transazione se `sender` e `recipient` sono nulli, oppure trasferimento se `sender` e `recipient` sono avvalorati.
   Almeno uno tra `sender` e `recipient`, se non nulli, corrisponderà alla PathVariable `{id}` poiché gli unici trasferimenti presenti nello storico saranno quelli che coinvolgono l'account specificato.
 - Per **`POST`** [`/api/transfer`](http://localhost:8080/api/transfer):  
   Se viene inserito un ammontare negativo nel request body, tale ammontare diventa automaticamente positivo e l'operazione viene eseguita.
