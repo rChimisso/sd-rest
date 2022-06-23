@@ -104,7 +104,7 @@ Vengono riportate le tabele e i suoi attributi.
 - [TRANSACTION](http://localhost:8080/h2-console/)
   - **UUID**: L'uuid della transazione come specificato da consegna.
 
-  - **Amount**: Un double che rapresenza lo spostamento di denaro.
+  - **AMOUNT**: Un double che rapresenza lo spostamento di denaro.
   - **DATE**: La data dell'operaione.
   - **ACCOUNT_UUID**: L'uuid dell'acount su qui il trasferimento ha effetto.
 
@@ -142,7 +142,7 @@ Vengono riportate le tabele e i suoi attributi.
   - **HEAD**: Restituisce il nome e il cognome nell header dell account specificato.
 - [/api/transfer](http://localhost:8080/api/transfer): 
   - **POST**: Esegue un trasferimento da un account ad un altro per un certo ammontare, tutto specificato nel body.
-  
+
 - [/api/divert](http://localhost:8080/api/divert): 
   - **POST**: Annulla una trasazione specificata nel body eseguendone una inversa. 
 
@@ -187,7 +187,7 @@ L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste
   Introdotto il paramentro message in alcuni responceBody per la visualizzazione di messagi frontEnd
 - **Richieste con cambi aggiuntivi:**  
   Eventuali campi extra inseriti nell RequestBody vengono ignorati.
-- **Default amount:**  
+- [**Default amount:**](https://en.wikipedia.org/wiki/Robustness_principle)  
   In caso l'amount non venisse specificato dove richiesto, esso verrà settato a 0 come default.
 - **Campi extra in request body**  
   I cambi non necessari specificati all'interno di una RequestBody vengono ingorati.
