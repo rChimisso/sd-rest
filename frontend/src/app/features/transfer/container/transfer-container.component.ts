@@ -73,9 +73,12 @@ export class TransferContainerComponent extends AbstractFormContainer<FormInterf
       }),
       appState$
     );
-    this.transferResult$.subscribe(transferResult => {
+    this.transferResult$.pipe(this.takeUntil()).subscribe(transferResult => {
       if (transferResult) {
-        this.dialog.open(MovementResultDialogComponent<TransferResponseBody>, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
+        this.dialog.open(
+          MovementResultDialogComponent<TransferResponseBody>,
+          {data: transferResult}
+        ).afterClosed().pipe(this.takeUntil()).subscribe(() => this.appState$.dispatch(clearData()));
       }
     });
   }

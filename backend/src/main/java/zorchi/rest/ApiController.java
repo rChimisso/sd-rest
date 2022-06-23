@@ -103,7 +103,7 @@ public class ApiController {
     Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
     if (account.isValid()) {
       accountRepository.save(account);
-      return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), ""), HttpStatus.CREATED);
+      return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), "Account creato con successo."), HttpStatus.CREATED);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -291,10 +291,16 @@ public class ApiController {
         Account sender = transfer.getSenderTransaction().getAccount(), recipient = transfer.getRecipientTransaction().getAccount();
         if (recipient.canTransfer(transfer.getAmount())) {
           Transfer divertedTransfer = new Transfer(recipient, sender, transfer.getAmount(), transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
-          transactionRepository.save(divertedTransfer.getSenderTransaction());
-          transactionRepository.save(divertedTransfer.getRecipientTransaction());
-          transferRepository.save(divertedTransfer);
-          return new ResponseEntity<>(new GenericResponseBody(TransferResponseBody.Messages.SUCCESS.get()), HttpStatus.CREATED);
+          if (divertedTransfer.isValid()) {
+            recipient.setBalance(recipient.getBalance() - divertedTransfer.getAmount());
+            sender.setBalance(sender.getBalance() + divertedTransfer.getAmount());
+            accountRepository.save(sender);
+            accountRepository.save(recipient);
+            transactionRepository.save(divertedTransfer.getSenderTransaction());
+            transactionRepository.save(divertedTransfer.getRecipientTransaction());
+            transferRepository.save(divertedTransfer);
+            return new ResponseEntity<>(new GenericResponseBody(TransferResponseBody.Messages.SUCCESS.get()), HttpStatus.CREATED);
+          }
         }
         return new ResponseEntity<>(new GenericResponseBody(TransferResponseBody.Messages.FAILURE.get()), HttpStatus.BAD_REQUEST);
       }

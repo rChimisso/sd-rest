@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 
+import {AbstractSmartContainer} from 'src/app/abstract/containers/abstract-smart-container';
 import {Nullable} from 'src/app/core/models/nullable.type';
 import {State} from 'src/app/core/redux/core.reducers';
 import {ErrorDialogComponent} from 'src/app/features/app-overlay/components/error-dialog/error-dialog.component';
@@ -24,7 +25,7 @@ import {getError, getShowLoader} from '../redux';
   templateUrl: './app-overlay-container.component.html',
   styleUrls: ['./app-overlay-container.component.scss']
 })
-export class AppOverlayContainerComponent {
+export class AppOverlayContainerComponent extends AbstractSmartContainer {
   /**
    * Observable dell'eventuale errore HTTP.
    *
@@ -51,10 +52,11 @@ export class AppOverlayContainerComponent {
    * @param {ActivatedRoute} route
    * @param {MatDialog} dialog
    */
-  public constructor(private readonly appState$: Store<State>, private readonly router: Router, private readonly route: ActivatedRoute, private readonly dialog: MatDialog) {
-    this.error$.subscribe(error => {
+  public constructor(appState$: Store<State>, private readonly router: Router, private readonly route: ActivatedRoute, private readonly dialog: MatDialog) {
+    super(appState$);
+    this.error$.pipe(this.takeUntil()).subscribe(error => {
       if (error) {
-        this.dialog.open(ErrorDialogComponent, {data: error}).afterClosed().subscribe(() => this.appState$.dispatch(clearError()));
+        this.dialog.open(ErrorDialogComponent, {data: error}).afterClosed().pipe(this.takeUntil()).subscribe(() => this.appState$.dispatch(clearError()));
       }
     });
   }
