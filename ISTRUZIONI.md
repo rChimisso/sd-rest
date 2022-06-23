@@ -1,4 +1,12 @@
-## **Installazione**
+# ***Istruzioni di Installazione, Sviluppo e Testing***
+
+## **Membri gruppo**
+Riccardo Chimisso - 866009  
+Mauro Zorzin - 866001
+
+---
+
+## **Installazione e Sviluppo**
 Sviluppato e testato su un sistema Windows 10 a 64 bit.  
 L'architettura a 64 bit è necessaria per poter sviluppare e lanciare il progetto.
 
@@ -38,33 +46,15 @@ oppure utilizzare la sezione `NPM Script` di VSC che si trova in basso a sinistr
 
 Completata l'esecuzione dello script la pagina Frontend sarà disponibile all'indirizzo [`http://localhost:4200`](http://localhost:4200).
 
----
-## **Sviluppo**
-
-- Visual Studio
-- NodeJs
-- Java 17
-- Browser
-- Postman
-
-
-
----
-
-## **Esecuzione**
-- Avvio BackEnd:
-  - L'anciare l'applicazione Java, il Database verra inizializato al primo avvio.
-- Avvio FrontEnd:
-  - eseguire in comando npm start.
-  - se il sistema richiede i permessi di privacy inserire n e premere invio.
+Per lo sviluppo è consigliato:
+- Cliccare col tasto destro sulla cartella [frontend](./frontend/) per aprire il menù contestuale e selezionare la voce `Apri con Code`.  
+- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.
 
 ---
 
 ## **Testing**
 
-
-
-### Web App
+### **Frontend**
 Una volta che il servizio è stato avviato è possibile connettersi alla pagine :   
 
 ### HOME [/home](http://localhost:4200/home)
@@ -439,7 +429,7 @@ Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni
 ---
 - **DEL("api/account?id=67DF54711F4DAA03E4E6")**  
 Marchia un account come eliminato. Nessun account può essere effettivamente rimosso dalla base di dati.    
-Un servizo bancario non permetterebbe di eliminare trasazioni o account per evitare richi sia di integrita che di frode.   
+Un servizo bancario non permetterebbe di eliminare trasazioni o account per evitare rischi sia di integrita che di frode.   
 
   - *requestBody:* 
   - *responceBody:*
