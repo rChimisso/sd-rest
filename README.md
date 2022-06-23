@@ -105,14 +105,14 @@ Sotto [src/main/resources/](./backend/src/main/resources/) sono invece presenti 
 - [/api/account/{id}](http://localhost:8080/api/account/{id}):  
   *Per questo endpoint è necessario sostituire il placeholder "{id}" con l'id di un account.*
   - **GET**: Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
-  - **POST**: 
-  - **PUT**: 
-  - **PATCH**: 
-  - **HEAD**: 
+  - **POST**: Esegue un deposito o un prelievo a seconda di come l'ammontare viene specificato.
+  - **PUT**: Modifica il nome e il congome dell'account come specificato nel body.
+  - **PATCH**: Modifica il nome o il cognome come specificato nel body.
+  - **HEAD**: Restituisce il nome e il cognome nell header dell account specificato.
 - [/api/transfer](http://localhost:8080/api/transfer): 
-  - **POST**: 
+  - **POST**: Esegue un trasferimento da un account ad un altro per un certo ammontare, tutto specificato nel body.
 - [/api/divert](http://localhost:8080/api/divert): 
-  - **POST**: 
+  - **POST**: Annulla una trasazione specificata nel body eseguendone una inversa. 
 
 L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste per il Backend.
 
@@ -151,203 +151,360 @@ L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste
   Introdotto il paramentro message in alcuni responceBody per la visualizzazione di messagi frontEnd
 - **Richieste con cambi aggiuntivi:**  
   Eventuali campi extra inseriti nell RequestBody vengono ignorati.
+- **Default amount:**  
+  In caso l'amount non venisse specificato dove richiesto, esso verrà settato a 0 come default.
+- **Campi extra in request body**  
+  I cambi non necessari specificati all'interno di una RequestBody vengono ingorati.
+
 
 ---
 
 ***Metterei la sezione seguente, senza parlare degli unit test (mai dire che c'è qualcosa che non va), all'interno della sezione Endpoint del Backend, specificando che sono solo degli esempi di request e response per un determinato endpoint chiamato con un determinato metodo HTTP.***
 ***Forse avrebbe senso mettere la sezione seguente nell'ISTRUZIONI dato che la consegna dice esplicitamente "In questo file [ISTRUZIONI] deve essere indicata una chiara modalità per poter eseguire e testare correttamente l'elaborato consegnato."***
 ## Esempi formati requestBody e responceBody
-  Non siamo riusciti a scrivere degli unit test soffisfacenti, quelle che seguono sono un insieme ri chiamate e risposte teste, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi. 
-  Dovrebbe forire un minimo di contesto sulla nostra implementazione.
+  Quelle che seguono sono un insieme di chiamate e risposte teste, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi. 
+  
+     
+  Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati, quella che segue è una trascrizzione di un test eseguito manualemnte su Postman.
+
+  - *requestBody* = Il contenuto della richiesta in formato JSON.
+
+  - *responseBody:* = Il contenuto della risposta in formato JSON.
+
+  - *responce* = Il codice di risposta atteso per la richiesta.   
+
+  - *allResponce* = Tutti i codici di risposta attesi per quella chiamata in base al contesto da noi implementati.
+
+
 
   (Commenti indicati con //)
 
-
+---
 - **POST("/api/account"):**  
-  *requestBody:* 
-  ```json
+Crea un nuovo account.
+
+  - *requestBody:* 
+    ```json
     {
       "name": "name",
       "surname" : "surname"
     }
-  ```
-  *responseBody:*
-  ```json
+      ```
+  - *responseBody:*
+    ```json
     {
-      "uuid": "97468FE245BEF9D81042",
+      "message": "Account creato con successo.",
+      "id": "67DF54711F4DAA03E4E6"
     }
-  ```
+    ```
+  - *responce:*   
+    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+  Account creato correttamente.
 
-- GET("api/account")
+  - *allResponce:*  
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+  Le credeziali non sono valide.     
+  Manca name o surname o entrambe.
+  
+---
+- **GET("api/active")**   
+Mostra tutti gli account attivi nel sistema eccetto quelli eliminati.
 
-    requestBody : ""
-
-    responceBody :
-[
-    {
-        "name": "nameA",
-        "surname": "nameA",
-        "balance": 100.0,
-        "deleted": true,  // Indica se l'accunt e' stato cancellato: true = cancellato, false = attivo
-        "uuid": "97468FE245BEF9D81042"
-    },
-    {
-        "name": "nameB",
-        "surname": "nameB",
-        "balance": 0.0,
-        "deleted": false,
-        "uuid": "DE7BC97FE8876D99A663"
-    },
-    {
-        "name": "nameC",
-        "surname": "nameC",
-        "balance": 0.0,
-        "deleted": false,
-        "uuid": "A4E8BA65FC5C537DC477"
-    }
-]
-
-
-- DEL("api/account?id={id}")
-
-    requestBody : ""
-
-    responceBody : ""
-
-- GET("api/account/{id}")
-
-    requestBody : ""
-
-    responceBody : 
-{
-    "message": "", //Il campo e' presente per passare messaggi da visualizzare frontEnd, deriva da classa astratta, qui non viene mostrato nessun messaggio
-    "account": {
-        "name": "nameA",
-        "surname": "nameA",
-        "balance": 100.0,
-        "deleted": true,
-        "uuid": "97468FE245BEF9D81042"
-    },
-    "history": [    // Array di tutte le transazioni
+    - *requestBody:*  
+    
+    - *responceBody:*  
+      ```json
+      [
         {
-            "date": "2022-06-20T18:09:11.468+00:00",
-            "uuid": "D54350150F1041A6B83ECE5E650760D1",
-            "amount": 0.0,
-            "sender": "97468FE245BEF9D81042",
-            "recipient": "97468FE245BEF9D81042"
-        }
-        {
-            "date": "2022-06-20T14:49:53.468+00:00",
-            "uuid": "FE751CB77D7042E99615A27CA31E70AD", // Id di un trasferimento
-            "amount": 0.0,
-            "sender": "97468FE245BEF9D81042",
-            "recipient": "97468FE245BEF9D81042"
+          "name": "name",
+          "surname": "surname",
+          "balance": 0.0,
+
+          //Indica se l'account è stato eliminato
+          "deleted": false,
+
+          "uuid": "67DF54711F4DAA03E4E6"
         },
         {
-            "date": "2022-06-20T13:57:16.525+00:00",
-            "uuid": "FD89F1F31CC3467AA83C36470532706D", // Id di una trasazione
-            "amount": 100.0,
-            "sender": null,
-            "recipient": null
+          "name": "Mauro",
+          "surname": "Zorzin",
+          "balance": 0.0,
+          "deleted": false,
+          "uuid": "E375D78848BCA522F581"
+        },
+        {
+          "name": "Riccardo",
+          "surname": "Chimisso",
+          "balance": 0.0,
+          "deleted": false,
+          "uuid": "B58265B5C82C3FAB57ED"
         }
-    ]
-}
+      ]
+      ```
+  - *responce:*   
+    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
+  Vengono restiruite le informazioni.   
 
-- POST("/api/account/{id}")
+  - *allResponce:* 
+---
+- **POST("/api/account/67DF54711F4DAA03E4E6")**  
+Esegue un deposito o un prelievo per un creciso account.
 
-    requestBody : 
-{
-    "amount": 100
-}
 
-    responceBody : 
-{
-    "message": "Transazione eseguita con successo.", // Messaggio di conferma da mostrare Frontend
-    "id": "FD89F1F31CC3467AA83C36470532706D",       //  L'id della trasazione
-    "movementActor": {
-        "newBalance": 100.0,
-        "uuid": "97468FE245BEF9D81042"
-    }
-}
-
-- PUT("api/account/{id}")
-
-    requestBody : 
-{
-    "name": "newName",
-    "surname": "newSurname"
-}
-
-    responceBody : "" 
-
-- PATCH("api/account/{id}")
-
-    requestBody : 
-{
-    "name": "newName",  
-}
-
-    responceBody : "" 
-
-- HEAD("api/account?id={id}")
-
-    requestBody : ""
-
-    responceBody : ""  
-
-- POST("/api/transfer")
-
-    requestBody : 
-{
-    "amount" : 0,
-    "to" : "97468FE245BEF9D81042",
-    "from" : "97468FE245BEF9D81042"
-    
-}
-
-    responceBody :
-{
-    "message": "Trasferimento eseguito con successo.",
-    "id": "FE751CB77D7042E99615A27CA31E70AD",
-    "sender": {
-        "newBalance": 100.0,
-        "uuid": "97468FE245BEF9D81042"
-    },
-    "recipient": {
-        "newBalance": 100.0,
-        "uuid": "97468FE245BEF9D81042"
-    }
-}  
-
-- POST("/api/divert")
-
-    requestBody : 
-{
-    "id": "D54350150F1041A6B83ECE5E650760D1"
-    
-}
-
-    responceBody : ""
-
-- GET("/api/account/{id}") // Non mostra gli account cancellati
-
-    requestBody : ""
-
-    responceBody :
-[
+  - *requestBody:* 
+    ```json
     {
-        "name": "nameB",
-        "surname": "nameB",
-        "balance": 0.0,
-        "deleted": false,
-        "uuid": "DE7BC97FE8876D99A663"
-    },
-    {
-        "name": "nameC",
-        "surname": "nameC",
-        "balance": 0.0,
-        "deleted": false,
-        "uuid": "A4E8BA65FC5C537DC477"
+      "amount": 100
     }
-]
+    ```
+
+  - *responceBody:* 
+    ```json
+    {
+      "message": "Transazione eseguita con successo.",
+      "id": "B6895F2BC3B946B0BC1013FCA4D5D9B4",
+      "movementActor": 
+        {
+          "newBalance": 100.0,
+          "uuid": "67DF54711F4DAA03E4E6"
+        }
+    }
+    ```
+  - *responce:*   
+    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+La tranzazione viene creata e registrata nel sistema.
+
+  - *allResponce*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+    Le credeziali non sono valide.   
+    L'id non è in un formato accettabile. 
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :   
+    L'id specificato non esiste o è stato cancellato.
+
+---
+- **POST("/api/transfer")**  
+Esegue un trasferimento di denaro da un account ad un altro.
+
+  - *requestBody:*  
+    ```json
+    {
+      "amount": 10,
+      "from": "67DF54711F4DAA03E4E6",
+      "to": "E375D78848BCA522F581"
+    }
+    ```
+  - *responceBody:*  
+
+    ```json
+    {
+      "message": "Trasferimento eseguito con successo.",
+      "id": "B82FDB1C2AE1423AA622A516D11E540E",
+      "sender": 
+        {
+          "newBalance": 90.0,
+          "uuid": "67DF54711F4DAA03E4E6"
+        },
+      "recipient": 
+        {
+          "newBalance": 10.0,
+          "uuid": "E375D78848BCA522F581"
+        }
+    }
+    ```
+  - *responce:*   
+    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+Il trasferimento è stato eseguito e la risorsa è stata creata.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+    Le credeziali non sono valide.   
+    Gli id non sono in un formato accettabile.
+    Il bilancio dell'account non permette l'operazione.  
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) : L'id specificato non esiste o è stato cancellato.
+
+---
+- **PUT("api/account/67DF54711F4DAA03E4E6")**  
+Modifica il nome e il cognome di un account.
+
+  - *requestBody:* 
+    ```json
+    {
+      "name": "putNome",
+      "surname": "putSurname"
+        
+    }
+    ```
+  - *responceBody:*
+
+  - *responce:*   
+      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :   
+       Richiesta riuscita, body vuoto.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+    Le credeziali non sono valide.   
+    L'id non è in un formato accettabile.  
+    Manca o name o surname  o entrambi.   
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) : L'id specificato non esiste o è stato cancellato.   
+---
+- **PATCH("api/account/67DF54711F4DAA03E4E6")**  
+Modifica il nome o il congome di un account.   
+
+  - *requestBody:* 
+    ```json
+    {
+        "name": "patchName",  
+    }
+    ```
+  - *responceBody:* 
+  - *responce:*   
+      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :    
+      Richiesta riuscita, body vuoto.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+    Le credeziali non sono valide.   
+    L'id non è in un formato accettabile.  
+    Manca name o surname.   
+    Sono stati specificati sia name che surname.   
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    L'id specificato non esiste o è stato cancellato.   
+---
+- **HEAD("api/account?id=67DF54711F4DAA03E4E6")**
+
+  - *requestBody:* 
+  - *responceBody:*    
+  - *responce:*   
+  - *responce:*   
+    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
+  Vengono restiruite informazioni nell'header.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
+    Le credeziali non sono valide.   
+    l'id non è in un formato accettabile. 
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    L'id specificato non esiste o è stato cancellato.  
+---
+- **POST("/api/divert")**  
+Annulla un trasferimento, creando un trasferimento inverso.   
+
+  - *requestBody:* 
+    ```json
+    {
+      "id": "B82FDB1C2AE1423AA622A516D11E540E"    
+    }
+    ```
+  - *responceBody:* 
+    ```json
+    {
+      "message": "Trasferimento eseguito con successo."
+    }
+    ```
+  - *responce:*   
+    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+    Il trasferimento è stato eseguito e la risorsa è stata creata.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :      
+    Gli id del trasferimento specificato non è in un formato accettabile.
+    Il bilancio dell'account non permette l'operazione. 
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    L'id specificato non esiste.
+
+--- 
+- **GET("api/account/67DF54711F4DAA03E4E6")**  
+Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni.   
+
+  - *requestBody:* 
+  - *responceBody:* 
+```json
+{
+  "message": "Storico dell'account recuperato con successo.",
+  "account": 
+    {
+      "name": "patchName",
+      "surname": "putSurname",
+      "balance": 100.0,
+      "deleted": false,
+      "uuid": "67DF54711F4DAA03E4E6"
+    },
+    "history": 
+      [
+        {
+          "date": "2022-06-23T12:55:53.249+00:00",
+          "uuid": "51A03D18C98F4E2F81555A146EB9CDE5",
+          "amount": 10.0,
+          "sender": "E375D78848BCA522F581",
+          "recipient": "67DF54711F4DAA03E4E6"
+        },
+        {
+          "date": "2022-06-23T12:28:31.123+00:00",
+          "uuid": "B82FDB1C2AE1423AA622A516D11E540E",
+          "amount": 10.0,
+          "sender": "67DF54711F4DAA03E4E6",
+          "recipient": "E375D78848BCA522F581"
+        },
+        {
+          "date": "2022-06-23T12:20:46.253+00:00",
+          "uuid": "B6895F2BC3B946B0BC1013FCA4D5D9B4",
+          "amount": 100.0,
+          "sender": null,
+          "recipient": null
+        }
+      ]
+  }
+```
+  - *responce*
+  - *allResponce*
+---
+- **DEL("api/account?id=67DF54711F4DAA03E4E6")**  
+Marchia un account come eliminato. Nessun account può essere effettivamente rimosso dalla base di dati.    
+Un servizo bancario non permetterebbe di eliminare trasazioni o account per evitare richi sia di integrita che di frode.   
+
+  - *requestBody:* 
+  - *responceBody:*
+- *responce:*   
+      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) : Richiesta riuscita, body vuoto.
+
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :     
+    L'id non è in un formato accettabile.     
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    L'id specificato non esiste o è stato cancellato.   
+---
+- **GET("api/account")**  
+Mostra tutti gli account nel sistema.
+
+    - *requestBody:* 
+    
+    - *responceBody:*
+      ```json
+      [
+        {
+          "name": "patchName",
+          "surname": "putSurname",
+          "balance": 100.0,
+          "deleted": true,
+          "uuid": "67DF54711F4DAA03E4E6"
+        },
+        {
+          "name": "Mauro",
+          "surname": "Zorzin",
+          "balance": 0.0,
+          "deleted": false,
+          "uuid": "E375D78848BCA522F581"
+        },
+        {
+          "name": "Riccardo",
+          "surname": "Chimisso",
+          "balance": 0.0,
+          "deleted": false,
+          "uuid": "B58265B5C82C3FAB57ED"
+        }
+      ]
+      ```
+  - *responce*
+  - *allResponce*
+---
 
