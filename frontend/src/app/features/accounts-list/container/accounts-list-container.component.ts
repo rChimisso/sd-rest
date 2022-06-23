@@ -1,10 +1,10 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 
+import {AbstractSmartContainer} from 'src/app/abstract/containers/abstract-smart-container';
 import {Account} from 'src/app/core/models/account.interface';
-import {clearData} from 'src/app/core/redux/core.actions';
 import {State} from 'src/app/core/redux/core.reducers';
 
 import {getAccounts, getShowDeleted} from '../redux';
@@ -23,7 +23,7 @@ import {retrieveAccounts, updateShowDeleted} from '../redux/accounts-list.action
   templateUrl: './accounts-list-container.component.html',
   styleUrls: ['./accounts-list-container.component.scss']
 })
-export class AccountsListContainerComponent implements OnDestroy {
+export class AccountsListContainerComponent extends AbstractSmartContainer {
   /**
    * Observable della lista degli {@link Account}.
    *
@@ -45,18 +45,9 @@ export class AccountsListContainerComponent implements OnDestroy {
    * @public
    * @param {Store<State>} appState$
    */
-  public constructor(private readonly appState$: Store<State>) {
-    this.showDeleted$.subscribe(showDeleted => this.appState$.dispatch(retrieveAccounts({showDeleted})));
-  }
-
-  /**
-   * Metodo del ciclo di vita di Angular.  
-   * Gestisce la distruzione del componente.
-   *
-   * @public
-   */
-  public ngOnDestroy() {
-    this.appState$.dispatch(clearData());
+  public constructor(appState$: Store<State>) {
+    super(appState$);
+    this.showDeleted$.pipe(this.takeUntil()).subscribe(showDeleted => this.appState$.dispatch(retrieveAccounts({showDeleted})));
   }
 
   /**

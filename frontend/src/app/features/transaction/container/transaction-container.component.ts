@@ -66,9 +66,12 @@ export class TransactionContainerComponent extends AbstractFormContainer<FormInt
       }),
       appState$
     );
-    this.transactionResult$.subscribe(transferResult => {
+    this.transactionResult$.pipe(this.takeUntil()).subscribe(transferResult => {
       if (transferResult) {
-        this.dialog.open(MovementResultDialogComponent<TransactionResponseBody>, {data: transferResult}).afterClosed().subscribe(() => this.appState$.dispatch(clearData()));
+        this.dialog.open(
+          MovementResultDialogComponent<TransactionResponseBody>,
+          {data: transferResult}
+        ).afterClosed().pipe(this.takeUntil()).subscribe(() => this.appState$.dispatch(clearData()));
       }
     });
   }
