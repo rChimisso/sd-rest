@@ -92,25 +92,57 @@ In particolare sotto [src/main/java/zorchi/](./backend/src/main/java/zorchi/) so
 
 Sotto [src/main/resources/](./backend/src/main/resources/) sono invece presenti le configurazioni per il database ([application.properties](backend\src\main\resources\application.properties)) e il database stesso ([h2_persistence.mv.db](backend\src\main\resources\h2_persistence.mv.db)).
 ### Database
-***TODO***
+Vengono riportate le tabele e i suoi attributi.
+- [ACCOUNT](http://localhost:8080/h2-console/)
+  - **UUID**: L'uuid dell'account come specificato da consegna.
+
+  - **BALANCE**: Un double che rapresenza l'ammontare di denaro dell'acount, esso più andare in negativo (In rosso) solo tramite preglievi, quando il conto è in rosso si possono continuare a fare preglievi ma non si possono eseguire trasferimenti e trasazioni.
+  - **DELETED**: Booleano che indica se l'acount è stato eliminato.
+  - **NAME**: Nome del propietario dell'acount.
+  - **SURNAME**: Cognome del propietario dell'acount.
+
+- [TRANSACTION](http://localhost:8080/h2-console/)
+  - **UUID**: L'uuid della transazione come specificato da consegna.
+
+  - **Amount**: Un double che rapresenza lo spostamento di denaro.
+  - **DATE**: La data dell'operaione.
+  - **ACCOUNT_UUID**: L'uuid dell'acount su qui il trasferimento ha effetto.
+
+- [TRASFER](http://localhost:8080/h2-console/)
+
+  - **UUID**: L'uuid del trasferimento come specificato da consegna.
+
+  - **Amount**: Un double che rapresenza lo spostamento di denaro, sempre positivo.
+  - **DATE**: La data dell'operaione.
+  - **RECIPIENT_TRANSACTION**: L'uuid 
+  della tranzazione che viene generata, rapresentanta la ricezione di denaro da parte del recipient.
+  - **SENDER_TRANSACTION**: L'uuid 
+  della tranzazione che viene generata, rapresentanta l'invio di denaro da parte del sender.
+
+
 ### Endpoint
 *Per un dettaglio maggiore di ciascun endpoint e del controller che li gestisce è possibile rifarsi alla Javadoc presente all'interno del codice.*
 - [/api/active](http://localhost:8080/api/active):
+
   - **GET**: Restituisce la lista di tutti gli account non eliminati.
 - [/api/account](http://localhost:8080/api/account):
+
   - **GET**: Restituisce la lista di tutti gli account, eliminati o meno.
   - **POST**: Richiede un request body conforme alla classe [AccountData](./backend/src/main/java/zorchi/entities/Account.java#174) per la creazione di un nuovo account.
+
   - **DELETE**: Richiede uno UUID conforme allo UUID di un account per l'eliminazione dello stesso.  
   L'eliminazione avviene tramite impostazione di una flag nell'entità account selezionata, in modo da mantenere l'integrità referenziale e uno storico degli account chiusi.
 - [/api/account/{id}](http://localhost:8080/api/account/{id}):  
   *Per questo endpoint è necessario sostituire il placeholder "{id}" con l'id di un account.*
-  - **GET**: Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
+  - [**GET**](#modifica-get): Restituisce le informazioni di un account e il suo storico dei movimenti, assieme ad un header custom.
   - **POST**: Esegue un deposito o un prelievo a seconda di come l'ammontare viene specificato.
+
   - **PUT**: Modifica il nome e il congome dell'account come specificato nel body.
   - **PATCH**: Modifica il nome o il cognome come specificato nel body.
   - **HEAD**: Restituisce il nome e il cognome nell header dell account specificato.
 - [/api/transfer](http://localhost:8080/api/transfer): 
   - **POST**: Esegue un trasferimento da un account ad un altro per un certo ammontare, tutto specificato nel body.
+  
 - [/api/divert](http://localhost:8080/api/divert): 
   - **POST**: Annulla una trasazione specificata nel body eseguendone una inversa. 
 
@@ -134,14 +166,18 @@ L'endpoint /api/active è stato aggiunto oltre alle specifiche di base richieste
 - **Gestione account eliminati:**  
   Quando gli account non vengono mai eliminati, in modo da poter sempre tenere traccia dello storico delle transazioni. Quando un account viene eliminato non e' piu' possibile modificare l'account (Eseguire depositi, prelievi e trasferimenti da e verso tale account) ad accezione della visualizzazione degli stessi.
 
-***Ricordarsi di riportare le modifiche agli endpoint anche nell'elenco degli endpoint della nuova versione del readme.***
-- **Modifica GET("/api/account/{id}"):**  
+***Ricordarsi di riportare le modifiche agli endpoint anche nell'elenco degli endpoint della nuova versione del readme.***   
+
+### <a id="modifica-get"></a> 
+- **Modifica GET("/api/account/{id}"):**          
   Aggiunti campi nella responce body in modo da fornire informazioni aggiuntive per il frontend
   (Maggiorni informazioni riguardanti l'account  indicato in id).
   Gli id passati nel responceBody indicano, in caso sender e recipient siano nulli una trasazione ( Deposito / Prelievo) altrimenti un trasverimento.
   I campi sender e recipient nel responceBody indicano da chi e verso dove il trasferimento avviene
   (Indicati con id degli account).
   Uno dei campi Sender e Recipient sara sempre l'accunt indicato {id} in modo da mostrare la correttezza dell'operazione.
+
+  
 - **Gestione amount in trasferimenti di denaro POST("/api/trasfer"):**  
   Se si inserisce un ammontare negativo per un trasferimento di denaro, tale ammontare viene automaticamente convertito in un ammontare positivo.
   L'operazione viene eseguita.
@@ -243,7 +279,7 @@ Mostra tutti gli account attivi nel sistema eccetto quelli eliminati.
       ```
   - *responce:*   
     - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restiruite le informazioni.   
+  Vengono restituire le informazioni.   
 
   - *allResponce:* 
 ---
@@ -377,7 +413,7 @@ Modifica il nome o il congome di un account.
   - *responce:*   
   - *responce:*   
     - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restiruite informazioni nell'header.
+  Vengono restituire informazioni nell'header.
 
   - *allResponce:*   
     - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
@@ -407,7 +443,7 @@ Annulla un trasferimento, creando un trasferimento inverso.
 
   - *allResponce:*   
     - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :      
-    Gli id del trasferimento specificato non è in un formato accettabile.
+    l'id del trasferimento specificato non è in un formato accettabile.
     Il bilancio dell'account non permette l'operazione. 
     - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
     L'id specificato non esiste.
@@ -455,8 +491,15 @@ Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni
       ]
   }
 ```
-  - *responce*
-  - *allResponce*
+  - *responce:*   
+    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
+  Vengono restituire le informazioni.  
+  - *allResponce:*   
+    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :      
+    L'id specificato non è in un formato accettabile.
+    Il bilancio dell'account non permette l'operazione. 
+    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    L'id specificato non esiste.
 ---
 - **DEL("api/account?id=67DF54711F4DAA03E4E6")**  
 Marchia un account come eliminato. Nessun account può essere effettivamente rimosso dalla base di dati.    
@@ -464,8 +507,9 @@ Un servizo bancario non permetterebbe di eliminare trasazioni o account per evit
 
   - *requestBody:* 
   - *responceBody:*
-- *responce:*   
-      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) : Richiesta riuscita, body vuoto.
+  - *responce:*   
+      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :    
+      Richiesta riuscita, body vuoto.
 
   - *allResponce:*   
     - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :     
@@ -504,7 +548,10 @@ Mostra tutti gli account nel sistema.
         }
       ]
       ```
-  - *responce*
-  - *allResponce*
+  - *responce:*   
+    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
+  Vengono restituire le informazioni.   
+
+  - *allResponce:* 
 ---
 
