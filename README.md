@@ -154,8 +154,8 @@ Inoltre sono state apportate le seguenti aggiunte alle specifiche di base richie
 - Per tutti gli endpoint:  
   Sempre in linea col [principio di robustezza], eventuali campi non richiesti inseriti nel request body vengono semplicemente ignorati.
 
-[Backend]: #Backend
-[Frontend]: #Frontend
+[Backend]: #backend
+[Frontend]: #frontend
 [TypeScript]: https://www.typescriptlang.org/
 [Angular 14]: https://angular.io/docs
 [`h2_persistence.mv.db`]: backend\src\main\resources\h2_persistence.mv.db
