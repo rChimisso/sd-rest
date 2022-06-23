@@ -55,68 +55,63 @@ Per lo sviluppo è consigliato:
 ## **Testing**
 
 ### **Frontend**
-Una volta che il servizio è stato avviato è possibile connettersi alla pagine :   
-
-### HOME [/home](http://localhost:4200/home)
-
+Una volta che il servizio è stato avviato è possibile connettersi alle seguenti pagine:   
+**Home** [`/home`](http://localhost:4200/home)
 
 ![HOME](./img/home.png)
-Dalla Home è possibile accedere agli altri servizi.  
-Schiacciando sulla piccola casetta in alto a sinistra è possibile tornare a questa pagina in qualsiasi momento.
+Dalla Home è possibile navigare verso le altre pagine.  
+Schiacciando sull'icona della piccola casetta in alto a sinistra è possibile tornare a questa pagina in qualsiasi momento da qualsiasi altra pagina.
 
+Dal menù si può accedere, partendo da sinistra a:  
+**Elenco account** [`/accounts-list`](http://localhost:4200/accounts-list)
 
-Dal menù si può accedere partendo da sinistra a:
-### Elenco account [/accounts-list](http://localhost:4200/accounts-list)
 ![ELENCO_ACCOUNT](./img/elenco_account.png)
-In questa pagina è posibile visualizzare le informazioni di tutti gli acount nel sistema (UUID, Nome, Cognome, Saldo).
+In questa pagina è possibile visualizzare le informazioni di tutti gli account nel sistema (UUID, Nome, Cognome, Saldo).
 
-Attivando la piccola checkbox in basso a sinistra e possibile vidualizzare anche tutti gli account eliminati. la checkbox mantiene il suo stato anche quando si lascia la pagina.
+Spuntando la checkbox in basso a sinistra è possibile visualizzare anche tutti gli account eliminati. La checkbox persiste il suo ultimo stato selezionato anche dopo aver navigato verso altre pagine.
 
 ![ELENCO_ALL_ACCOUNT](./img/all_elenco_account.png)
 
-### Storico account [/](http://localhost:4200)
-In questa pagina è posibile inserire un UUID all'interno di un' apposita casella (AccountID), schiacciando sulla casella il sistema elenca già tutti gli account validi presenti nel sistema, è anche possibile digitare perte di un UUID, il sistema eseguira una rigerca elencado solo gli UUID che cominciano con la stringa inserita.  
-
-Se la stringa inserita è valida sara possibile clicare il tasto cerca sulla destra, verranno poi visualizzate tutte le informazioni dell'account inserito.
+**Storico account** [`/`](http://localhost:4200/)
 
 ![STORICO_ACCOUNT](./img/storico_account.png)
+In questa pagina è possibile inserire uno UUID all'interno di un'apposito input etichettato `Account ID` e, premendo sul pulsante `Ricerca`, verranno visualizzate tutte le informazioni dell'account inserito.
 
+Per l'input `Account ID` sono presenti dei controlli di validazione dell'input inserito che prevengono l'inserimento di caratteri non esadecimali e input più lunghi di 20 caratteri.  
+Inoltre il pulsante `Ricerca` si abiliterà soltanto se tutti i requisiti per l'input `Account ID` sono stati soddisfatti.
 
-### Trasferimento [/transfer](http://localhost:4200/transfer)
-In questa pagina è posibile eseguire un trasferimento di denaro da un account ad un altro.
-
-Si inseriscono i due UUID nelle apposite caselle ID Mittente e ID Destinatario (tali caselle funzionano similmente a quelle desctitte in Storico Account).   
-Si speciffica la quantità che si desidera trasferire (quantità sempre positiva).   
-Si clicca sul pulsante Esegui.
-
-In base ad alcuni fattore il sistema restituira Un messaggio di conferma se l'operazione è andata a buon fine o di errore se il saldo del mittente non è sufficente per eseguire il trasferimento.
+**Trasferimento** [`/transfer`](http://localhost:4200/transfer)
 
 ![TRASFERIMENTO](./img/trasferimento.png)
+In questa pagina è possibile eseguire un trasferimento di denaro da un account a un altro.
 
-Messaggio di conferma
+Si inseriscono i due UUID negli appositi input `ID Mittente` e `ID Destinatario` e si specifica la quantità che si desidera trasferire.   
+Infine cliccando sul pulsante `Esegui` verrà inoltrata la richiesta di trasferimento al Backend, per poi visualizzare un dialog che informa dell'esito dell'operazione.
+
+Gli input `ID Mittente` e `ID Destinatario` hanno controlli di validazione uguali a quelli di `Account ID` della pagina **Storico account**, mentre l'input dell'ammontare impedisce l'inserimento di qualunque carattere che non rappresenti un numero positivo con massimo 2 cifre decimali.
+
+Messaggio di successo:
+
 ![TRASFERIMENTO_R1](./img/trasferiemnto1_result.png)
 
-Messaggio di errore
+Messaggio di errore:
+
 ![TRASFERIMENTO_R2](./img/trasferimento2_result.png)
 
-### Tranzazione [/transaction:](http://localhost:4200//transaction)
-In questa pagina è posibile eseguire una transazione ovvero un deposito o un prelievo.
-
-Si inserisce l'UUID dell'account nell'apposito campo, similmente a come avviente nelle altre pagine.   
-Si specifica l'ammontare della tranzazione,
-positivo per un deposito negativo per un prelievo.   
-Si clicca sul pulsante Esegui.   
-
-In base al saldo dell'account un prelievo potrebbe fallire con relativo messaggio di errore se il saldo è insufficente per eseguire l'operazione.
+**Transazione** [`/transaction`](http://localhost:4200//transaction)
 
 ![TRANZAZIONE](./img/tranzazione.png)
+In questa pagina è possibile eseguire una transazione per un determinato account, ovvero un deposito o un prelievo.
 
+Si inserisce lo UUID dell'account nell'apposito campo e si specifica l'ammontare della transazione, positivo per un deposito o negativo per un prelievo.   
+Infine cliccando sul pulsante `Esegui` verrà inoltrata la richiesta di trasferimento al Backend, per poi visualizzare un dialog che informa dell'esito dell'operazione, esattamente come per la pagina **Trasferimento**.
 
-----
+Gli input `Account ID` e  dell'ammontare hanno controlli di validazione uguali a quelli della pagina **Trasferimento**, con la differenza che qui l'ammontare può anche essere negativo.
+
+---
 
 ### API
-  Quelle che seguono sono un insieme di chiamate e risposte test, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi. 
-  
+  Quelle che seguono sono un insieme di chiamate e risposte test, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi.
      
   Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati,  tutte le chiamate sono state eseguite manualmente attraverso Postman.
 
@@ -227,7 +222,7 @@ Esegue un deposito o un prelievo per un creciso account.
     ```
   - *response:*   
     - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
-La tranzazione viene creata e registrata nel sistema.
+La transazione viene creata e registrata nel sistema.
 
   - *allResponse*   
     - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
@@ -406,7 +401,7 @@ Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni
             {
               "date": "2022-06-23T12:20:46.253+00:00",
 
-                //UUID di un tranzazione.
+                //UUID di un transazione.
               "uuid": "B6895F2BC3B946B0BC1013FCA4D5D9B4",
 
               "amount": 100.0,
