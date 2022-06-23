@@ -13,17 +13,21 @@ L'architettura a 64 bit è necessaria per poter sviluppare e lanciare il progett
 ### **IDE**
 L'IDE utilizzato, meglio integrato e consigliato è Visual Studio Code, sia per il Backend che per il Frontend.  
 Per installarlo è sufficiente recarsi a [questa pagina](https://code.visualstudio.com/download) e scaricare la versione per il proprio sistema operativo.  
-Durante la procedura di installazione è consigliato spuntare le caselle delle opzioni di installazione come segue (con quella per l'icona desktop a scelta libera):  
-***INSERIRE IMMAGINE***  
+Durante la procedura di installazione è consigliato spuntare le caselle delle opzioni di installazione come segue (con quella per l'icona desktop a scelta libera):
+
+<img width="449" alt="VSC-install" src="https://user-images.githubusercontent.com/65339023/175396724-62e41c50-6910-4af8-b0c7-0ebdebdb6965.PNG">
+
 È anche possibile utilizzare Eclipse per il Backend o IntelliJ per Backend e Frontend, sebbene Eclipse sia fortemente sconsigliato per via di incosistenze e complicazioni nella formattazione del codice e nell'interpretazione di caratteri Unicode.
 ### **Dipendenze e avvio Backend**
 Per poter avviare il Backend è necessario installare la [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).  
 A seconda dell'IDE scelto seguire i passi appropriati.  
 Qui sono riportati i passi da seguire per Visual Studio Code:
 - Cliccare col tasto destro sulla cartella [backend](./backend/) per aprire il menù contestuale e selezionare la voce `Apri con Code`.  
-- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.  
-In caso non vengano installate le estensioni raccomandate è possibile installarle in un secondo momento aprendo il file [extensions.json](./backend/.vscode/extensions.json) e cercando gli ID di ciascuna estensione nell'apposita sezione sulla barra laterale.  
-***INSERIRE IMMAGINE***  
+- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.
+
+![VSC-install-ext](https://user-images.githubusercontent.com/65339023/175396822-e992f401-bd43-4b04-b35c-bee71daffec9.PNG)
+
+In caso non vengano installate le estensioni raccomandate è possibile installarle in un secondo momento aprendo il file [extensions.json](./backend/.vscode/extensions.json) e cercando gli ID di ciascuna estensione nell'apposita sezione sulla barra laterale.
 - Attendere che la build del progetto si concluda, visibile da una notifica in basso a destra.
 - Premere il pulsante Run in alto a destra o, una volta aperto il file [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java), cliccare sulla scritta `Run` sopra la [riga del metodo main](./backend/src/main/java/zorchi/rest/RestApplication.java#L20).
 - Il Backend sarà ora disponibile all'indirizzo `http://localhost:8080`.
@@ -60,23 +64,26 @@ In caso non vengano installate le estensioni raccomandate è possibile installar
 Una volta che il servizio è stato avviato è possibile connettersi alle seguenti pagine:   
 **Home** [`/home`](http://localhost:4200/home)
 
-![HOME](./img/home.png)
+<img width="1250" alt="home" src="https://user-images.githubusercontent.com/65339023/175396917-9f69104c-4e65-4b60-a36c-e1141846342c.png">
+
 Dalla Home è possibile navigare verso le altre pagine.  
 Schiacciando sull'icona della piccola casetta in alto a sinistra è possibile tornare a questa pagina in qualsiasi momento da qualsiasi altra pagina.
 
 Dal menù si può accedere, partendo da sinistra a:  
 **Elenco account** [`/accounts-list`](http://localhost:4200/accounts-list)
 
-![ELENCO_ACCOUNT](./img/elenco_account.png)
+<img width="1250" alt="elenco_account" src="https://user-images.githubusercontent.com/65339023/175396954-1e1eee98-4067-4f29-93be-0d2d86a1eb4f.png">
+
 In questa pagina è possibile visualizzare le informazioni di tutti gli account nel sistema (UUID, Nome, Cognome, Saldo).
 
 Spuntando la checkbox in basso a sinistra è possibile visualizzare anche tutti gli account eliminati. La checkbox persiste il suo ultimo stato selezionato anche dopo aver navigato verso altre pagine.
 
-![ELENCO_ALL_ACCOUNT](./img/all_elenco_account.png)
+<img width="1250" alt="all_elenco_account" src="https://user-images.githubusercontent.com/65339023/175397018-6bbe59d4-05ef-4bb7-be4b-5865443a82ae.png">
 
 **Storico account** [`/`](http://localhost:4200/)
 
-![STORICO_ACCOUNT](./img/storico_account.png)
+<img width="1250" alt="storico_account" src="https://user-images.githubusercontent.com/65339023/175397041-ea8aaf8c-a8c4-43bc-bc9e-777f35dafbad.png">
+
 In questa pagina è possibile inserire uno UUID all'interno di un'apposito input etichettato `Account ID` e, premendo sul pulsante `Ricerca`, verranno visualizzate tutte le informazioni dell'account inserito.
 
 Per l'input `Account ID` sono presenti dei controlli di validazione dell'input inserito che prevengono l'inserimento di caratteri non esadecimali e input più lunghi di 20 caratteri.  
@@ -84,7 +91,8 @@ Inoltre il pulsante `Ricerca` si abiliterà soltanto se tutti i requisiti per l'
 
 **Trasferimento** [`/transfer`](http://localhost:4200/transfer)
 
-![TRASFERIMENTO](./img/trasferimento.png)
+<img width="1250" alt="trasferimento" src="https://user-images.githubusercontent.com/65339023/175397077-723262bb-19e0-4ed8-81c3-9a895efa0660.png">
+
 In questa pagina è possibile eseguire un trasferimento di denaro da un account a un altro.
 
 Si inseriscono i due UUID negli appositi input `ID Mittente` e `ID Destinatario` e si specifica la quantità che si desidera trasferire.   
@@ -94,15 +102,17 @@ Gli input `ID Mittente` e `ID Destinatario` hanno controlli di validazione ugual
 
 Messaggio di successo:
 
-![TRASFERIMENTO_R1](./img/trasferiemnto1_result.png)
+<img width="1250" alt="trasferiemnto1_result" src="https://user-images.githubusercontent.com/65339023/175397118-811d084c-f456-4475-af35-fb5ad2ade588.png">
+
 
 Messaggio di errore:
 
-![TRASFERIMENTO_R2](./img/trasferimento2_result.png)
+<img width="1250" alt="trasferimento2_result" src="https://user-images.githubusercontent.com/65339023/175397133-cd371f8b-4c1e-49bb-8b9e-1a92d2e314c4.png">
 
 **Transazione** [`/transaction`](http://localhost:4200//transaction)
 
-![TRANZAZIONE](./img/tranzazione.png)
+<img width="1250" alt="transazione" src="https://user-images.githubusercontent.com/65339023/175397189-6b1bb0b4-d470-48ec-825e-7fb834d504dc.png">
+
 In questa pagina è possibile eseguire una transazione per un determinato account, ovvero un deposito o un prelievo.
 
 Si inserisce lo UUID dell'account nell'apposito campo e si specifica l'ammontare della transazione, positivo per un deposito o negativo per un prelievo.   
@@ -114,7 +124,7 @@ Gli input `Account ID` e  dell'ammontare hanno controlli di validazione uguali a
 
 ### API
 Quelle che seguono sono un insieme di chiamate e risposte test che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche da noi apportate.  
-Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati,  tutte le chiamate sono state eseguite manualmente attraverso [Postman](https://www.postman.com/downloads/).
+Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati, tutte le chiamate sono state eseguite manualmente attraverso [Postman](https://www.postman.com/downloads/).
 
 ---
 
