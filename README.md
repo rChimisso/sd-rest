@@ -10,7 +10,7 @@ Mauro Zorzin - 866001
 Progetto Endpoint REST di Sistemi Distribuiti.
 
 Ipotetico applicativo Fullstack per un sistema bancario, suddiviso in [Backend] e [Frontend].  
-La parte di [Backend] si basa su Java e il framework Spring, mentre la parte di [Frontend] si basa su [TypeScript] e il framework [Angular 14].
+La parte di [Backend] si basa su Java e il framework [Spring], mentre la parte di [Frontend] si basa su [TypeScript] e il framework [Angular].
 
 Il progetto è diviso in 2 sezioni: [`frontend`](./frontend/) e [`backend`](./backend/), strutturate singolarmente e trattabili come 2 progetti separati ma integrati fra loro.  
 In entrambe le sezioni il codice è estensivamente documentato tramite Javadoc ([Backend]) e JSDoc ([Frontend]).
@@ -26,8 +26,8 @@ In entrambe le sezioni il codice è estensivamente documentato tramite Javadoc (
 - [NgRx 14](https://ngrx.io/docs) - framework secondario per la gestione dei dati runtime (state) dell'applicazione.
 - [SCSS](https://sass-lang.com/) - estensione di CSS.
 ### **Struttura**
-Il lato [Frontend] del progetto segue la struttura di un progetto TypeScript con Angular.  
-In particolare sotto [`src/app/`](./frontend/src/app/) sono presenti i vari componenti Angular e gestione dello stato di NgRx, divisi per scopo:
+Il lato [Frontend] del progetto segue la struttura di un progetto [TypeScript] con [Angular].  
+In particolare sotto [`src/app/`](./frontend/src/app/) sono presenti i vari componenti [Angular] e gestione dello stato di NgRx, divisi per scopo:
 - [`abstract/`](./frontend/src/app/abstract/):  
   Contiene le definizioni astratte e generali di componenti comuni ai vari moduli.
 - [`core/`](./frontend/src/app/core/):  
@@ -62,21 +62,21 @@ In particolare sotto [`src/app/`](./frontend/src/app/) sono presenti i vari comp
 - [`/transaction`](http://localhost:4200/transaction):  
   Endpoint transaction, fornisce la pagina per le richieste di transazioni.
 
-Gli endpoint `home`, `accounts-list` e `transaction` sono stati aggiunti oltre alle specifiche di base richieste per il [Frontend].
+Gli endpoint [`home`](#L56), [`accounts-list`](#L58) e [`transaction`](#L62) sono stati aggiunti oltre alle specifiche di base richieste per il [Frontend].
 
 ---
 
 ## **Backend**
 ### **Tecnologie**
-- [Gradle](https://gradle.org/) - gestione del progetto [Backend].
+- [Gradle] - gestione del progetto [Backend].
 - Java 17 - linguaggio utilizzato.
-- [Spring](https://spring.io/) - framework per la creazione di un applicativo REST.
+- [Spring] - framework per la creazione di un applicativo REST.
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) - framework per la gestione della persistenza.
 - [H2](https://www.h2database.com/html/main.html) - DBMS.
 - [FasterXML/jackson-core](https://github.com/FasterXML/jackson-core) - API per la gestione dei JSON.
 ### **Struttura**
-Il lato [Backend] del progetto segue la struttura di un progetto Spring gestito da Gradle.  
-In particolare sotto [`src/main/java/zorchi/`](./backend/src/main/java/zorchi/) sono presenti le varie classi Java annotate per funzionare con Spring e JPA, divise per scopo:
+Il lato [Backend] del progetto segue la struttura di un progetto [Spring] gestito da [Gradle].  
+In particolare sotto [`src/main/java/zorchi/`](./backend/src/main/java/zorchi/) sono presenti le varie classi Java annotate per funzionare con [Spring] e JPA, divise per scopo:
 - [`entities/`](./backend/src/main/java/zorchi/entities/):  
   Contiene tutte le entità del sistema, quali [`Account`](./backend/src/main/java/zorchi/entities/Account.java), [`Transaction`](./backend/src/main/java/zorchi/entities/Transaction.java) e [`Transfer`](./backend/src/main/java/zorchi/entities/Transfer.java).  
   Contiene inoltre delle utili astrazioni delle varie entità e sottoclassi per la gestione delle richieste HTTP per la creazione o modifica delle entità.  
@@ -86,7 +86,7 @@ In particolare sotto [`src/main/java/zorchi/`](./backend/src/main/java/zorchi/) 
 - [`responses/`](./backend/src/main/java/zorchi/responses/):  
   Contiene le classi necessarie per la tipizzazione e la corretta strutturazione di alcune risposte HTTP, sia per l'eventuale body che per gli eventuali header aggiuntivi.
 - [`rest/`](./backend/src/main/java/zorchi/rest/):  
-  Contiene le classi principali dell'applicativo REST, ovvero la classe di bootstrap di Spring [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java) e il controller [`ApiController`](./backend/src/main/java/zorchi/rest/ApiController.java) per la gestione degli endpoint.
+  Contiene le classi principali dell'applicativo REST, ovvero la classe di bootstrap di Spring [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java) e il controller [`ApiController`](./backend/src/main/java/zorchi/rest/ApiController.java) per la gestione degli [endpoint](#L121).
 - [`utility/`](./backend/src/main/java/zorchi/utility/):  
   Contiene alcune classi di utilità per semplificare la scrittura del codice e lo sviluppo.
 
@@ -156,8 +156,11 @@ Inoltre sono state apportate le seguenti aggiunte alle specifiche di base richie
 
 [Backend]: #backend
 [Frontend]: #frontend
+[Spring]: https://spring.io/
+[Gradle]: https://gradle.org/
 [TypeScript]: https://www.typescriptlang.org/
 [Angular 14]: https://angular.io/docs
+[Angular]: https://angular.io/docs
 [`h2_persistence.mv.db`]: backend\src\main\resources\h2_persistence.mv.db
 [`AccountData`]: ./backend/src/main/java/zorchi/entities/Account.java#L174
 [principio di robustezza]: https://en.wikipedia.org/wiki/Robustness_principle
