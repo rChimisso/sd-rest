@@ -22,6 +22,7 @@ A seconda dell'IDE scelto seguire i passi appropriati.
 Qui sono riportati i passi da seguire per Visual Studio Code:
 - Cliccare col tasto destro sulla cartella [backend](./backend/) per aprire il menù contestuale e selezionare la voce `Apri con Code`.  
 - Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.  
+In caso non vengano installate le estensioni raccomandate è possibile installarle in un secondo momento aprendo il file [extensions.json](./backend/.vscode/extensions.json) e cercando gli ID di ciascuna estensione nell'apposita sezione sulla barra laterale.  
 ***INSERIRE IMMAGINE***  
 - Attendere che la build del progetto si concluda, visibile da una notifica in basso a destra.
 - Premere il pulsante Run in alto a destra o, una volta aperto il file [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java), cliccare sulla scritta `Run` sopra la [riga del metodo main](./backend/src/main/java/zorchi/rest/RestApplication.java#L20).
@@ -48,7 +49,8 @@ Completata l'esecuzione dello script la pagina Frontend sarà disponibile all'in
 
 Per lo sviluppo è consigliato:
 - Cliccare col tasto destro sulla cartella [frontend](./frontend/) per aprire il menù contestuale e selezionare la voce `Apri con Code`.  
-- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.
+- Una volta apertosi il progetto comparirà una notifica come sotto per installare le estensioni raccomandate. Cliccare su `Install`.  
+In caso non vengano installate le estensioni raccomandate è possibile installarle in un secondo momento aprendo il file [extensions.json](./backend/.vscode/extensions.json) e cercando gli ID di ciascuna estensione nell'apposita sezione sulla barra laterale.
 
 ---
 
@@ -111,35 +113,28 @@ Gli input `Account ID` e  dell'ammontare hanno controlli di validazione uguali a
 ---
 
 ### API
-  Quelle che seguono sono un insieme di chiamate e risposte test, che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche fatte da noi.
-     
-  Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati,  tutte le chiamate sono state eseguite manualmente attraverso Postman.
+Quelle che seguono sono un insieme di chiamate e risposte test che abbiamo svolto, con alcuni commenti sui campi aggiuntivi e modifiche da noi apportate.  
+Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati,  tutte le chiamate sono state eseguite manualmente attraverso [Postman](https://www.postman.com/downloads/).
 
-  Legenda:*
+---
 
-  - *requestBody* = Il contenuto della richiesta in formato JSON.
-
-  - *responseBody:* = Il contenuto della risposta in formato JSON.
-
-  - *response* = Il codice di risposta atteso per la richiesta.   
-
-  - *allResponse* = Tutti i codici di risposta attesi per quella chiamata in base al contesto da noi implementati.
-
-
-
-  (Commenti indicati con //)
+**Legenda:**
+- *requestBody*: Il contenuto della richiesta in formato JSON.
+- *responseBody*: Il contenuto della risposta in formato JSON.
+- *response*: Il codice di risposta atteso per la richiesta.   
+- *allResponses*: Tutti i codici di risposta attesi per quella chiamata in base al contesto da noi implementato.
+- Commenti indicati con `//`.
 
 ---
 - **POST("/api/account"):**  
 Crea un nuovo account.
-
   - *requestBody:* 
     ```json
     {
       "name": "name",
       "surname" : "surname"
     }
-      ```
+    ```
   - *responseBody:*
     ```json
     {
@@ -148,66 +143,59 @@ Crea un nuovo account.
     }
     ```
   - *response:*   
-    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
-  Account creato correttamente.
+    - [201 (Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2):  
+    Account creato correttamente.
+  - *allResponses:*  
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    Le credeziali non sono valide. Manca name o surname o entrambe.
 
-  - *allResponse:*  
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-  Le credeziali non sono valide.     
-  Manca name o surname o entrambe.
-  
 ---
+
 - **GET("api/active")**   
-Mostra tutti gli account attivi nel sistema eccetto quelli eliminati.
-
-    - *requestBody:*  
-    
-    - *responseBody:*  
-      ```json
-      [
-        {
-          "name": "name",
-          "surname": "surname",
-          "balance": 0.0,
-
-          //Indica se l'account è stato eliminato
-          "deleted": false,
-
-          "uuid": "67DF54711F4DAA03E4E6"
-        },
-        {
-          "name": "Mauro",
-          "surname": "Zorzin",
-          "balance": 0.0,
-          "deleted": false,
-          "uuid": "E375D78848BCA522F581"
-        },
-        {
-          "name": "Riccardo",
-          "surname": "Chimisso",
-          "balance": 0.0,
-          "deleted": false,
-          "uuid": "B58265B5C82C3FAB57ED"
-        }
-      ]
-      ```
+Mostra tutti gli account nel sistema eccetto quelli eliminati.
+  - *requestBody:* -
+  - *responseBody:*
+    ```json
+    [
+      {
+        "name": "name",
+        "surname": "surname",
+        "balance": 0.0,
+        //Indica se l'account è stato eliminato
+        "deleted": false,
+        "uuid": "67DF54711F4DAA03E4E6"
+      },
+      {
+        "name": "Mauro",
+        "surname": "Zorzin",
+        "balance": 0.0,
+        "deleted": false,
+        "uuid": "E375D78848BCA522F581"
+      },
+      {
+        "name": "Riccardo",
+        "surname": "Chimisso",
+        "balance": 0.0,
+        "deleted": false,
+        "uuid": "B58265B5C82C3FAB57ED"
+      }
+    ]
+    ```
   - *response:*   
-    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restituire le informazioni.   
+    - [200 (OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1):  
+    Vengono restituire le informazioni.   
+  - *allResponses:* -
 
-  - *allResponse:* 
 ---
+
 - **POST("/api/account/67DF54711F4DAA03E4E6")**  
-Esegue un deposito o un prelievo per un creciso account.
-
-
+Esegue un deposito o un prelievo per un account.
   - *requestBody:* 
     ```json
     {
       "amount": 100
     }
     ```
-
   - *responseBody:* 
     ```json
     {
@@ -221,20 +209,19 @@ Esegue un deposito o un prelievo per un creciso account.
     }
     ```
   - *response:*   
-    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
-La transazione viene creata e registrata nel sistema.
-
-  - *allResponse*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-    Le credeziali non sono valide.   
-    L'id non è in un formato accettabile. 
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :   
+    - [201 (Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2):  
+    La transazione viene creata e registrata nel sistema.
+  - *allResponses:*   
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    Le credeziali non sono valide.  
+    L'id non è in un formato accettabile.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
     L'id specificato non esiste o è stato cancellato.
 
 ---
-- **POST("/api/transfer")**  
-Esegue un trasferimento di denaro da un account ad un altro.
 
+- **POST("/api/transfer")**  
+Esegue un trasferimento di denaro da un account a un altro.
   - *requestBody:*  
     ```json
     {
@@ -244,7 +231,6 @@ Esegue un trasferimento di denaro da un account ad un altro.
     }
     ```
   - *responseBody:*  
-
     ```json
     {
       "message": "Trasferimento eseguito con successo.",
@@ -262,21 +248,22 @@ Esegue un trasferimento di denaro da un account ad un altro.
     }
     ```
   - *response:*   
-    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+    - [201 (Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2):    
 Il trasferimento è stato eseguito e la risorsa è stata creata.
 
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-    Le credeziali non sono valide.   
-    Gli id non sono in un formato accettabile.
+  - *allResponses:*   
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    Le credeziali non sono valide.  
+    Gli id non sono in un formato accettabile.  
     Il bilancio dell'account non permette l'operazione.  
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) : L'id specificato non esiste o è stato cancellato.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
+    L'id specificato non esiste o è stato cancellato.
 
 ---
+
 - **PUT("api/account/67DF54711F4DAA03E4E6")**  
 Modifica il nome e il cognome di un account.
-
-  - *requestBody:* 
+  - *requestBody:*
     ```json
     {
       "name": "putNome",
@@ -284,89 +271,87 @@ Modifica il nome e il cognome di un account.
         
     }
     ```
-  - *responceBody:*
-
-  - *response:*   
-      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :   
-       Richiesta riuscita, body vuoto.
-
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-    Le credeziali non sono valide.   
+  - *responseBody:* -
+  - *response:*
+    - [204 (No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5):  
+    Richiesta riuscita, body vuoto.
+  - *allResponses:*
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):   
+    Le credeziali non sono valide.  
     L'id non è in un formato accettabile.  
-    Manca o name o surname  o entrambi.   
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) : L'id specificato non esiste o è stato cancellato.   
+    Manca o name o surname o entrambi.  
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
+    L'id specificato non esiste o è stato cancellato.
+
 ---
+
 - **PATCH("api/account/67DF54711F4DAA03E4E6")**  
 Modifica il nome o il congome di un account.   
-
-  - *requestBody:* 
+  - *requestBody:*
     ```json
     {
         "name": "patchName",  
     }
     ```
-  - *responseBody:* 
-  - *response:*   
-      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :    
-      Richiesta riuscita, body vuoto.
-
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-    Le credeziali non sono valide.   
+  - *responseBody:* -
+  - *response:*
+    - [204 (No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5):    
+    Richiesta riuscita, body vuoto.
+  - *allResponses:*   
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):   
+    Le credeziali non sono valide.  
     L'id non è in un formato accettabile.  
-    Manca name o surname.   
-    Sono stati specificati sia name che surname.   
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
-    L'id specificato non esiste o è stato cancellato.   
+    Mancano name e surname.  
+    Sono stati specificati sia name che surname.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
+    L'id specificato non esiste o è stato cancellato.
+
 ---
+
 - **HEAD("api/account?id=67DF54711F4DAA03E4E6")**
+  - *requestBody:* -
+  - *responseBody:* -
+  - *response:*
+    - [200 (OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1):  
+    Vengono restituire informazioni nell'header.
+  - *allResponses:*
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):   
+    Le credeziali non sono valide.  
+    L'id non è in un formato accettabile.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
+    L'id specificato non esiste o è stato cancellato.
 
-  - *requestBody:* 
-  - *responseBody:*      
-  - *response:*   
-    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restituire informazioni nell'header.
-
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :   
-    Le credeziali non sono valide.   
-    l'id non è in un formato accettabile. 
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
-    L'id specificato non esiste o è stato cancellato.  
 ---
-- **POST("/api/divert")**  
-Annulla un trasferimento, creando un trasferimento inverso.   
 
-  - *requestBody:* 
+- **POST("/api/divert")**  
+Annulla un trasferimento, creando un trasferimento inverso.
+  - *requestBody:*
     ```json
     {
       "id": "B82FDB1C2AE1423AA622A516D11E540E"    
     }
     ```
-  - *responseBody:* 
+  - *responseBody:*
     ```json
     {
       "message": "Trasferimento eseguito con successo."
     }
     ```
-  - *response:*   
-    - [201(Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2) :    
+  - *response:*
+    - [201 (Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2):  
     Il trasferimento è stato eseguito e la risorsa è stata creata.
-
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :      
-    l'id del trasferimento specificato non è in un formato accettabile.
-    Il bilancio dell'account non permette l'operazione. 
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+  - *allResponses:*
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    L'id del trasferimento non è in un formato accettabile.  
+    Il bilancio dell'account non permette l'operazione.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
     L'id specificato non esiste.
 
---- 
+---
+
 - **GET("api/account/67DF54711F4DAA03E4E6")**  
 Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni.   
-
-  - *requestBody:* 
-
+  - *requestBody:* -
   - *responseBody:* 
     ```json
     {
@@ -412,38 +397,37 @@ Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni
       }
     ```
   - *response:*   
-    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restituire le informazioni.   
-  Se sender e recipient sono null si tratta di un prelievo/deposito, altrimenti è un trasferimento.
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :      
-    L'id specificato non è in un formato accettabile.
-    Il bilancio dell'account non permette l'operazione. 
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
+    - [200 (OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1):  
+    Vengono restituire le informazioni.  
+    Se `sender` e `recipient` sono null si tratta di un prelievo/deposito, altrimenti è un trasferimento.
+  - *allResponses:*
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    L'id specificato non è in un formato accettabile.  
+    Il bilancio dell'account non permette l'operazione.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
     L'id specificato non esiste.
----
-- **DEL("api/account?id=67DF54711F4DAA03E4E6")**  
-Marchia un account come eliminato. Nessun account può essere effettivamente rimosso dalla base di dati.    
-Un servizo bancario non permetterebbe di eliminare trasazioni o account per evitare rischi sia di integrita che di frode.   
 
-  - *requestBody:* 
-  - *responceBody:*
-  - *response:*   
-      - [204(No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5) :    
+---
+
+- **DELETE("api/account?id=67DF54711F4DAA03E4E6")**  
+Segna un account come eliminato. 
+  - *requestBody:* -
+  - *responseBody:* -
+  - *response:*
+      - [204 (No Content)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.5):  
       Richiesta riuscita, body vuoto.
+  - *allResponses:*
+    - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
+    L'id non è in un formato accettabile.
+    - [404 (Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4):  
+    L'id specificato non esiste o è stato cancellato.
 
-  - *allResponse:*   
-    - [400(Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1) :     
-    L'id non è in un formato accettabile.     
-    - [404(Not Found)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4) :    
-    L'id specificato non esiste o è stato cancellato.   
 ---
-- **GET("api/account")**  
-Mostra tutti gli account nel sistema.
 
-    - *requestBody:* 
-    
-    - *responceBody:*
+- **GET("api/account")**
+Mostra tutti gli account nel sistema.
+    - *requestBody:* -
+    - *responseBody:*
       ```json
       [
         {
@@ -469,11 +453,10 @@ Mostra tutti gli account nel sistema.
         }
       ]
       ```
-  - *response:*   
-    - [200(OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1) :   
-  Vengono restituire le informazioni.   
-
-  - *allResponse:* 
+  - *response:*
+    - [200 (OK)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.1):  
+    Vengono restituire le informazioni.   
+  - *allResponses:* -
 
 [NodeJs]: https://nodejs.org/
 [nvm]: https://github.com/nvm-sh/nvm
