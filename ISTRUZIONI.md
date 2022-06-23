@@ -123,7 +123,6 @@ Le chiamate sono in ordine cronologico e contengono gli effettivi id chiamati,  
 - *responseBody*: Il contenuto della risposta in formato JSON.
 - *response*: Il codice di risposta atteso per la richiesta.   
 - *allResponses*: Tutti i codici di risposta attesi per quella chiamata in base al contesto da noi implementato.
-- Commenti indicati con `//`.
 
 ---
 - **POST("/api/account"):**  
@@ -161,7 +160,6 @@ Mostra tutti gli account nel sistema eccetto quelli eliminati.
         "name": "name",
         "surname": "surname",
         "balance": 0.0,
-        //Indica se l'account è stato eliminato
         "deleted": false,
         "uuid": "67DF54711F4DAA03E4E6"
       },
@@ -250,7 +248,6 @@ Esegue un trasferimento di denaro da un account a un altro.
   - *response:*   
     - [201 (Created)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.3.2):    
 Il trasferimento è stato eseguito e la risorsa è stata creata.
-
   - *allResponses:*   
     - [400 (Bad Request)](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1):  
     Le credeziali non sono valide.  
@@ -286,7 +283,7 @@ Modifica il nome e il cognome di un account.
 ---
 
 - **PATCH("api/account/67DF54711F4DAA03E4E6")**  
-Modifica il nome o il congome di un account.   
+Modifica il nome o il cognome di un account.   
   - *requestBody:*
     ```json
     {
@@ -375,20 +372,14 @@ Mostra i dati completi di un account, compreso lo storico di tutte le trasazioni
             },
             {
               "date": "2022-06-23T12:28:31.123+00:00",
-
-                //UUID di un trasferimento.
               "uuid": "B82FDB1C2AE1423AA622A516D11E540E",
-
               "amount": 10.0,
               "sender": "67DF54711F4DAA03E4E6",
               "recipient": "E375D78848BCA522F581"
             },
             {
               "date": "2022-06-23T12:20:46.253+00:00",
-
-                //UUID di un transazione.
               "uuid": "B6895F2BC3B946B0BC1013FCA4D5D9B4",
-
               "amount": 100.0,
               "sender": null,
               "recipient": null
