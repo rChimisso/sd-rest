@@ -62,7 +62,7 @@ In particolare sotto [`src/app/`](./frontend/src/app/) sono presenti i vari comp
 - [`/transaction`](http://localhost:4200/transaction):  
   Endpoint transaction, fornisce la pagina per le richieste di transazioni.
 
-Gli endpoint [`home`](#L56), [`accounts-list`](#L58) e [`transaction`](#L62) sono stati aggiunti oltre alle specifiche di base richieste per il [Frontend].
+Gli endpoint `home`, `accounts-list` e `transaction` sono stati aggiunti oltre alle specifiche di base richieste per il [Frontend].
 
 ---
 
@@ -86,7 +86,7 @@ In particolare sotto [`src/main/java/zorchi/`](./backend/src/main/java/zorchi/) 
 - [`responses/`](./backend/src/main/java/zorchi/responses/):  
   Contiene le classi necessarie per la tipizzazione e la corretta strutturazione di alcune risposte HTTP, sia per l'eventuale body che per gli eventuali header aggiuntivi.
 - [`rest/`](./backend/src/main/java/zorchi/rest/):  
-  Contiene le classi principali dell'applicativo REST, ovvero la classe di bootstrap di Spring [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java) e il controller [`ApiController`](./backend/src/main/java/zorchi/rest/ApiController.java) per la gestione degli [endpoint](#L121).
+  Contiene le classi principali dell'applicativo REST, ovvero la classe di bootstrap di Spring [`RestApplication`](./backend/src/main/java/zorchi/rest/RestApplication.java) e il controller [`ApiController`](./backend/src/main/java/zorchi/rest/ApiController.java) per la gestione degli [endpoint](#endpoint-1).
 - [`utility/`](./backend/src/main/java/zorchi/utility/):  
   Contiene alcune classi di utilità per semplificare la scrittura del codice e lo sviluppo.
 
