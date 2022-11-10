@@ -43,7 +43,9 @@ public class Account extends AbstractEntity {
    * Costruttore senza argomenti per il funzionamento di Hibernate.
    */
   public Account() {
+    //"name" is marked "@NonNullFields at package level" but is not initialized in this constructor.
     super(StandardUUID.INVALID_UUID);
+    this.name = "";
   }
 
   /**
