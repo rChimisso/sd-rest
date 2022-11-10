@@ -5,7 +5,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
- * Wrapper di utility per la generazione di {@link UUID} a 16 byte (128 bit, 32 hex).
+ * Wrapper di utility per la generazione di {@link UUID} a 16 byte (128 bit, 32
+ * hex).
  */
 public class StandardUUID {
   /**
@@ -34,7 +35,8 @@ public class StandardUUID {
   }
 
   /**
-   * Restituisce una stringa rappresentante un {@link UUID}, assicurandosi che non sia duplicato in base al {@link Predicate predicato} passato.
+   * Restituisce una stringa rappresentante un {@link UUID}, assicurandosi che non
+   * sia duplicato in base al {@link Predicate predicato} passato.
    * 
    * @param duplicated - {@link Predicate} per il controllo della duplicazione.
    * @return {@link UUID} sottoforma di stringa.
@@ -51,6 +53,11 @@ public class StandardUUID {
    * Wrapper di utility per la generazione di UUID a 10 byte (80 bit, 20 hex).
    */
   public class ShortUUID {
+    // Add a private constructor to hide the implicit public one.
+    private ShortUUID() {
+      throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Lunghezza in byte di uno ShortUUID.
      */
@@ -67,7 +74,8 @@ public class StandardUUID {
     }
 
     /**
-     * Restituisce una stringa rappresentante uno ShortUUID, assicurandosi che non sia duplicato in base al {@link Predicate predicato} passato.
+     * Restituisce una stringa rappresentante uno ShortUUID, assicurandosi che non
+     * sia duplicato in base al {@link Predicate predicato} passato.
      * 
      * @param duplicated - {@link Predicate} per il controllo della duplicazione.
      * @return ShortUUID sottoforma di stringa.
@@ -81,7 +89,7 @@ public class StandardUUID {
       } while (duplicated.test(shortUUID));
       return shortUUID;
     }
-  
+
     /**
      * Converte una serie di byte in una stringa di caratteri esadecimali.
      * 
