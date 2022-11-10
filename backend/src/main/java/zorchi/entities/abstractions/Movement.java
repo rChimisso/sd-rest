@@ -10,18 +10,18 @@ import org.springframework.lang.Nullable;
  * Astrazione di un generico movimento bancario.
  */
 @MappedSuperclass
- public abstract class Movement extends AbstractEntity {
+public abstract class Movement extends AbstractEntity {
   /**
    * Ammontare coinvolto.
    */
   private final float AMOUNT;
-	/**
-	 * {@link Date Data} in cui è stato effettuato il movimento.
-	 */
-	private final Date DATE;
+  /**
+   * {@link Date Data} in cui è stato effettuato il movimento.
+   */
+  private final Date DATE;
 
   /**
-   * @param UUID - UUID usato per identificare univocamente il movimento.
+   * @param UUID   - UUID usato per identificare univocamente il movimento.
    * @param amount - ammontare coinvolto.
    */
   protected Movement(String UUID, float amount) {
@@ -29,24 +29,24 @@ import org.springframework.lang.Nullable;
     this.DATE = new Date();
     this.AMOUNT = amount;
   }
-  
+
   /**
-	 * Restituisce l'ammontare coinvolto.
+   * Restituisce l'ammontare coinvolto.
    * 
-	 * @return {@link #AMOUNT}.
-	 */
-	public float getAmount() {
+   * @return {@link #AMOUNT}.
+   */
+  public float getAmount() {
     return AMOUNT;
   }
 
-	/**
-	 * Restituisce la {@link Date Data} in cui si è stato effettuato il movimento.
+  /**
+   * Restituisce la {@link Date Data} in cui si è stato effettuato il movimento.
    * 
-	 * @return {@link #DATE}.
-	 */
-	public Date getDate() {
-		return DATE;
-	}
+   * @return {@link #DATE}.
+   */
+  public Date getDate() {
+    return DATE;
+  }
 
   @Override
   public int hashCode() {
@@ -58,6 +58,25 @@ import org.springframework.lang.Nullable;
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Movement other = (Movement) obj;
+    if (Float.floatToIntBits(AMOUNT) != Float.floatToIntBits(other.AMOUNT))
+      return false;
+    if (DATE == null) {
+      if (other.DATE != null)
+        return false;
+    } else if (!DATE.equals(other.DATE))
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString() {
     return super.toString() + ", AMOUNT=" + AMOUNT + ", DATE=" + DATE;
   }
@@ -65,8 +84,10 @@ import org.springframework.lang.Nullable;
   /**
    * Dati di un generico movimento bancario
    * <p>
-   * Se {@link GenericMovement#getSender() sender} e {@link GenericMovement#getRecipient() recipient} sono nulli
-   * allora il movimento è una {@link zorchi.entities.Transaction Transazione}, altrimenti si tratta di un {@link zorchi.entities.Transfer Trasferimento}.
+   * Se {@link GenericMovement#getSender() sender} e
+   * {@link GenericMovement#getRecipient() recipient} sono nulli
+   * allora il movimento è una {@link zorchi.entities.Transaction Transazione},
+   * altrimenti si tratta di un {@link zorchi.entities.Transfer Trasferimento}.
    */
   public static interface GenericMovement {
     /**
@@ -75,27 +96,33 @@ import org.springframework.lang.Nullable;
      * @return ID del movimento.
      */
     String getUUID();
+
     /**
      * Ammontare coinvolto.
      * 
      * @return Ammontare coinvolto.
      */
     float getAmount();
+
     /**
      * Data in cui è stato eseguito il movimento.
      * 
      * @return Data in cui è stato eseguito il movimento.
      */
     Date getDate();
+
     /**
-     * Mittente del movimento, null se il movimento è una {@link zorchi.entities.Transaction Transazione}.
+     * Mittente del movimento, null se il movimento è una
+     * {@link zorchi.entities.Transaction Transazione}.
      * 
      * @return Mittente del movimento.
      */
     @Nullable
     String getSender();
+
     /**
-     * Destinatario del movimento, null se il movimento è una {@link zorchi.entities.Transaction Transazione}.
+     * Destinatario del movimento, null se il movimento è una
+     * {@link zorchi.entities.Transaction Transazione}.
      * 
      * @return Destinatario del movimento.
      */
