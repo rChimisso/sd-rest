@@ -47,6 +47,7 @@ public class Account extends AbstractEntity {
     // this constructor.
     super(StandardUUID.INVALID_UUID);
     this.name = "";
+    this.surname = "";
   }
 
   /**
