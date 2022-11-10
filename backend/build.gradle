@@ -2,11 +2,13 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+  id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'zorchi'
 version = '1.0.0'
 sourceCompatibility = '17'
+
 
 repositories {
 	mavenCentral()
@@ -22,4 +24,18 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://localhost:9000/'
+        property "sonar.login", "squ_bd2ecd621e99a80ae06e0030105bebc52038dc60"
+        property "sonar.password", ""
+        property "sonar.projectKey", "project:REST"
+        property 'sonar.projectName', 'REST SD'
+        property 'sonar.java.source', 11
+        property 'sonar.junit.reportPaths', 'build/results'
+        property 'encoding', 'UTF-8'
+        property 'charSet', 'UTF-8'
+        property "sonar.coverage.jacoco.xmlReportPaths", "path.xml"
+    }
 }
