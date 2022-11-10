@@ -21,19 +21,19 @@ import zorchi.utility.StandardUUID;
  */
 @Entity
 public class Transfer extends Movement {
-	/**
-	 * Transazione del mittente.
-	 */
-	@ManyToOne()
-  @JoinColumn(name = "SENDER_TRANSACTION")
-	private final Transaction SENDER_TRANSACTION;
   /**
-	 * Transazione del destinatario.
-	 */
-	@ManyToOne(cascade = CascadeType.ALL)
+   * Transazione del mittente.
+   */
+  @ManyToOne()
+  @JoinColumn(name = "SENDER_TRANSACTION")
+  private final Transaction SENDER_TRANSACTION;
+  /**
+   * Transazione del destinatario.
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "RECIPIENT_TRANSACTION")
-	private final Transaction RECIPIENT_TRANSACTION;
-	
+  private final Transaction RECIPIENT_TRANSACTION;
+
   /**
    * Referenza statica per un Trasferimento non valido.
    */
@@ -49,38 +49,43 @@ public class Transfer extends Movement {
     this.RECIPIENT_TRANSACTION = Transaction.INVALID_TRANSACTION;
     this.SENDER_TRANSACTION = Transaction.INVALID_TRANSACTION;
   }
-	
-  /**
-   * @param sender - {@link Account Account bancario} del mittente.
-   * @param recipient - {@link Account Account bancario} del destinatario.
-   * @param amount - ammontare del trasferimento.
-   * @param duplicated - {@link Predicate predicato} di duplicazione degli UUID per le {@link Transaction Transazioni}.
-   * @param UUID - Standard UUID usato per identificare univocamente il Trasferimento.
-   */
-	public Transfer(Account sender, Account recipient, float amount, Predicate<String> duplicated, String UUID) {
-    super(sender.canTransfer(Math.abs(amount)) ? UUID : StandardUUID.INVALID_UUID, sender.canTransfer(Math.abs(amount)) ? Math.abs(amount) : 0);
-		float actualAmount = sender.canTransfer(Math.abs(amount)) ? Math.abs(amount) : 0;
-    this.SENDER_TRANSACTION = new Transaction(new TransactionData(-actualAmount), sender, StandardUUID.randomUUID(duplicated));
-    this.RECIPIENT_TRANSACTION = new Transaction(new TransactionData(actualAmount), recipient, StandardUUID.randomUUID(duplicated));
-	}
-	
-  /**
-	 * Restituisce la {@link Transaction Transazione} del mittente.
-   * 
-	 * @return {@link #SENDER_TRANSACTION}.
-	 */
-	public Transaction getSenderTransaction() {
-		return SENDER_TRANSACTION;
-	}
 
   /**
-	 * Restituisce la {@link Transaction Transazione} del destinatario.
+   * @param sender     - {@link Account Account bancario} del mittente.
+   * @param recipient  - {@link Account Account bancario} del destinatario.
+   * @param amount     - ammontare del trasferimento.
+   * @param duplicated - {@link Predicate predicato} di duplicazione degli UUID
+   *                   per le {@link Transaction Transazioni}.
+   * @param UUID       - Standard UUID usato per identificare univocamente il
+   *                   Trasferimento.
+   */
+  public Transfer(Account sender, Account recipient, float amount, Predicate<String> duplicated, String UUID) {
+    super(sender.canTransfer(Math.abs(amount)) ? UUID : StandardUUID.INVALID_UUID,
+        sender.canTransfer(Math.abs(amount)) ? Math.abs(amount) : 0);
+    float actualAmount = sender.canTransfer(Math.abs(amount)) ? Math.abs(amount) : 0;
+    this.SENDER_TRANSACTION = new Transaction(new TransactionData(-actualAmount), sender,
+        StandardUUID.randomUUID(duplicated));
+    this.RECIPIENT_TRANSACTION = new Transaction(new TransactionData(actualAmount), recipient,
+        StandardUUID.randomUUID(duplicated));
+  }
+
+  /**
+   * Restituisce la {@link Transaction Transazione} del mittente.
    * 
-	 * @return {@link #RECIPIENT_TRANSACTION}.
-	 */
-	public Transaction getRecipientTransaction() {
-		return RECIPIENT_TRANSACTION;
-	}
+   * @return {@link #SENDER_TRANSACTION}.
+   */
+  public Transaction getSenderTransaction() {
+    return SENDER_TRANSACTION;
+  }
+
+  /**
+   * Restituisce la {@link Transaction Transazione} del destinatario.
+   * 
+   * @return {@link #RECIPIENT_TRANSACTION}.
+   */
+  public Transaction getRecipientTransaction() {
+    return RECIPIENT_TRANSACTION;
+  }
 
   @Override
   public int hashCode() {
@@ -92,14 +97,37 @@ public class Transfer extends Movement {
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Transfer other = (Transfer) obj;
+    if (RECIPIENT_TRANSACTION == null) {
+      if (other.RECIPIENT_TRANSACTION != null)
+        return false;
+    } else if (!RECIPIENT_TRANSACTION.equals(other.RECIPIENT_TRANSACTION))
+      return false;
+    if (SENDER_TRANSACTION == null) {
+      if (other.SENDER_TRANSACTION != null)
+        return false;
+    } else if (!SENDER_TRANSACTION.equals(other.SENDER_TRANSACTION))
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString() {
-    return "Transfer [" + super.toString() + ", RECIPIENT_TRANSACTION=" + RECIPIENT_TRANSACTION + ", SENDER_TRANSACTION=" + SENDER_TRANSACTION + "]";
+    return "Transfer [" + super.toString() + ", RECIPIENT_TRANSACTION=" + RECIPIENT_TRANSACTION
+        + ", SENDER_TRANSACTION=" + SENDER_TRANSACTION + "]";
   }
 
   /**
    * Dati per la creazione di un {@link Transfer Trasferimento}.
    */
-	public static class TransferData {
+  public static class TransferData {
     /**
      * Ammontare coinvolto.
      */
@@ -118,10 +146,11 @@ public class Transfer extends Movement {
 
     /**
      * @param amount - ammontare coinvolto.
-     * @param from - UUID dell'{@link Account Account bancario} del mittente.
-     * @param to - UUID dell'{@link Account Account bancario} del destinatario.
+     * @param from   - UUID dell'{@link Account Account bancario} del mittente.
+     * @param to     - UUID dell'{@link Account Account bancario} del destinatario.
      */
-    public TransferData(@JsonProperty("amount") float amount, @JsonProperty("from") String from, @JsonProperty("to") String to) {
+    public TransferData(@JsonProperty("amount") float amount, @JsonProperty("from") String from,
+        @JsonProperty("to") String to) {
       this.amount = amount;
       this.from = from;
       this.to = to;
@@ -135,7 +164,7 @@ public class Transfer extends Movement {
     public float getAmount() {
       return amount;
     }
-    
+
     /**
      * Restituisce l'UUID dell'{@link Account Account bancario} del mittente.
      * 
@@ -154,11 +183,11 @@ public class Transfer extends Movement {
       return to;
     }
   }
-	
+
   /**
    * Dati per il divert di un {@link Transfer Trasferimento}.
    */
-	public static class TransferDivertData {
+  public static class TransferDivertData {
     /**
      * UUID del {@link Transfer Trasferimento} di cui fare il divert.
      */
@@ -169,7 +198,7 @@ public class Transfer extends Movement {
      * @param id - UUID del {@link Transfer Trasferimento} di cui fare il divert.
      */
     public TransferDivertData(@JsonProperty("id") String id) {
-      this.id = id; 
+      this.id = id;
     }
 
     /**
@@ -180,5 +209,5 @@ public class Transfer extends Movement {
     public String getId() {
       return id;
     }
-	}
+  }
 }
