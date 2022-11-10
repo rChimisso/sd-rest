@@ -53,6 +53,8 @@ public class StandardUUID {
    * Wrapper di utility per la generazione di UUID a 10 byte (80 bit, 20 hex).
    */
   public class ShortUUID {
+    private static final Random RANDOM = new Random();
+
     // Add a private constructor to hide the implicit public one.
     private ShortUUID() {
       throw new IllegalStateException("Utility class");
@@ -82,10 +84,9 @@ public class StandardUUID {
      */
     public static String randomShortUUID(Predicate<String> duplicated) {
       String shortUUID;
-      Random rg = new Random();
       do {
         byte[] bytes = new byte[BYTES];
-        rg.nextBytes(bytes);
+        RANDOM.nextBytes(bytes);
         shortUUID = byteToHex(bytes);
       } while (duplicated.test(shortUUID));
       return shortUUID;
