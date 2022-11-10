@@ -13,7 +13,8 @@ import zorchi.entities.abstractions.Movement;
 import zorchi.utility.StandardUUID;
 
 /**
- * Transazione bancaria su singolo {@link Account Account bancario}, ovvero un prelievo o un versamento.
+ * Transazione bancaria su singolo {@link Account Account bancario}, ovvero un
+ * prelievo o un versamento.
  */
 @Entity
 public class Transaction extends Movement {
@@ -41,8 +42,10 @@ public class Transaction extends Movement {
 
   /**
    * @param transactionData - dati della Transazione.
-   * @param account - {@link Account Account bancario} che ha effettuato la Transazione.
-   * @param UUID - Standard UUID usato per identificare univocamente la Transazione.
+   * @param account         - {@link Account Account bancario} che ha effettuato
+   *                        la Transazione.
+   * @param UUID            - Standard UUID usato per identificare univocamente la
+   *                        Transazione.
    */
   public Transaction(TransactionData transactionData, Account account, String UUID) {
     super(account.isValid() ? UUID : StandardUUID.INVALID_UUID, account.isValid() ? transactionData.amount : 0);
@@ -50,7 +53,8 @@ public class Transaction extends Movement {
   }
 
   /**
-   * Restituisce l'{@link Account Account bancario} che ha effettuato la Transazione.
+   * Restituisce l'{@link Account Account bancario} che ha effettuato la
+   * Transazione.
    * 
    * @return {@link #ACCOUNT}.
    */
@@ -61,6 +65,21 @@ public class Transaction extends Movement {
   @Override
   public int hashCode() {
     return 31 * super.hashCode() + ACCOUNT.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Transaction other = (Transaction) obj;
+    return ACCOUNT.equals(other.ACCOUNT);
   }
 
   @Override
