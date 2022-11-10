@@ -31,7 +31,7 @@ public class Account extends AbstractEntity {
    * Se l'Account è stato eliminato.
    */
   private boolean deleted = false;
-  
+
   /**
    * Referenza statica per un Account non valido.
    */
@@ -43,21 +43,23 @@ public class Account extends AbstractEntity {
    * Costruttore senza argomenti per il funzionamento di Hibernate.
    */
   public Account() {
-    //"name" is marked "@NonNullFields at package level" but is not initialized in this constructor.
+    // "name" is marked "@NonNullFields at package level" but is not initialized in
+    // this constructor.
     super(StandardUUID.INVALID_UUID);
     this.name = "";
   }
 
   /**
    * @param accountData - dati dell'Account.
-   * @param UUID - Short UUID usato per identificare univocamente l'Account.
+   * @param UUID        - Short UUID usato per identificare univocamente
+   *                    l'Account.
    */
   public Account(AccountData accountData, String UUID) {
     super(UUID);
     this.name = accountData.name;
     this.surname = accountData.surname;
     this.balance = 0;
-	}
+  }
 
   /**
    * Restituisce il {@link #name nome} del proprietario dell'account.
@@ -87,7 +89,8 @@ public class Account extends AbstractEntity {
   }
 
   /**
-   * Imposta il nuovo valore del {@link #surname cognome} del proprietario dell'account.
+   * Imposta il nuovo valore del {@link #surname cognome} del proprietario
+   * dell'account.
    * 
    * @param surname - nuovo {@link #surname cognome}.
    */
@@ -103,7 +106,7 @@ public class Account extends AbstractEntity {
   public double getBalance() {
     return balance;
   }
-  
+
   /**
    * Imposta il nuovo valore del {@link #balance saldo} dell'account.
    * 
@@ -128,7 +131,7 @@ public class Account extends AbstractEntity {
   public void delete() {
     this.deleted = true;
   }
-  
+
   /**
    * Controlla se questo Account puoi trasferire l'{@code amount} specificato.
    * 
@@ -166,8 +169,29 @@ public class Account extends AbstractEntity {
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Account other = (Account) obj;
+    if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
+      return false;
+    if (deleted != other.deleted)
+      return false;
+    if (!name.equals(other.name))
+      return false;
+    if (!surname.equals(other.surname))
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString() {
-    return "Account [" + super.toString() + ", balance=" + balance + ", deleted=" + deleted + ", name=" + name + ", surname=" + surname + "]";
+    return "Account [" + super.toString() + ", balance=" + balance + ", deleted=" + deleted + ", name=" + name
+        + ", surname=" + surname + "]";
   }
 
   /**
@@ -186,8 +210,10 @@ public class Account extends AbstractEntity {
     private final String surname;
 
     /**
-     * @param name - {@link #name nome}, passabile come proprietà {@code "name"} di un JSON.
-     * @param surname - {@link #surname cognome}, passabile come proprietà {@code "surname"} di un JSON.
+     * @param name    - {@link #name nome}, passabile come proprietà {@code "name"}
+     *                di un JSON.
+     * @param surname - {@link #surname cognome}, passabile come proprietà
+     *                {@code "surname"} di un JSON.
      */
     public AccountData(@JsonProperty("name") String name, @JsonProperty("surname") String surname) {
       this.name = name;
