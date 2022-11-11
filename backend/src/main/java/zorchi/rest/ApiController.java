@@ -33,7 +33,6 @@ import zorchi.responses.bodies.IndexableResponseBody;
 import zorchi.responses.bodies.TransactionResponseBody;
 import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
-import zorchi.utility.Currency;
 import zorchi.utility.StandardUUID;
 import zorchi.utility.StandardUUID.ShortUUID;
 
@@ -44,10 +43,6 @@ import zorchi.utility.StandardUUID.ShortUUID;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ApiController {
-
-  // Oggetti per perazioni su transazioni, verificare se non sia meglio introsurlo
-  // come statico
-  private final Currency currency = new Currency();
   /**
    * JPA {@link AccountRepository}.
    */
@@ -190,14 +185,14 @@ public class ApiController {
       Account account = findAccount(id);
       if (account.isValid()) {
 
-        double newBalance = currency.sum(account.getBalance(), transactionData.getAmount());
-        if (newBalance >= 0) {
-          account.setBalance(newBalance);
+        if (account.balanceTransfer(transactionData.getAmount())) {
+
           Transaction transaction = new Transaction(transactionData, account,
               StandardUUID.randomUUID(transactionRepository::existsById));
           accountRepository.save(account);
           transactionRepository.save(transaction);
-          return new ResponseEntity<>(new TransactionResponseBody(newBalance, transaction.getUUID(), account.getUUID()),
+          return new ResponseEntity<>(
+              new TransactionResponseBody(account.getBalance(), transaction.getUUID(), account.getUUID()),
               HttpStatus.CREATED);
         }
         return new ResponseEntity<>(
@@ -301,16 +296,15 @@ public class ApiController {
         Transfer transfer = new Transfer(sender, recipient, Math.abs(transferData.getAmount()),
             transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
         if (transfer.isValid()) {
-          double newSenderBalance = currency.sub(sender.getBalance(), transfer.getAmount()),
-              newRecipientBalance = currency.sum(recipient.getBalance(), transfer.getAmount());
-          sender.setBalance(newSenderBalance);
-          recipient.setBalance(newRecipientBalance);
+          sender.balanceTransfer(-transfer.getAmount());
+          recipient.balanceTransfer(transfer.getAmount());
           accountRepository.save(sender);
           accountRepository.save(recipient);
           transactionRepository.save(transfer.getSenderTransaction());
           transactionRepository.save(transfer.getRecipientTransaction());
           transferRepository.save(transfer);
-          return new ResponseEntity<>(new TransferResponseBody(newSenderBalance, newRecipientBalance, sender.getUUID(),
+          return new ResponseEntity<>(new TransferResponseBody(
+              sender.getBalance(), recipient.getBalance(), sender.getUUID(),
               recipient.getUUID(), transfer.getUUID()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new TransferResponseBody(-1, -1, StandardUUID.INVALID_UUID,

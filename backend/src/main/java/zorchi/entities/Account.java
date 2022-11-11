@@ -118,6 +118,23 @@ public class Account extends AbstractEntity {
   }
 
   /**
+   * Trasferimento di denaro da un account all'altro.
+   * <p>
+   * Se il saldo dell'account è insufficiente, il trasferimento non viene
+   * effettuato.
+   * 
+   * @param amount - importo da trasferire.
+   * @return true se il trasferimento è stato effettuato, false altrimenti.
+   */
+  public boolean balanceTransfer(double amount) {
+    double newBalance = (amount * 100 + this.balance * 100) / 100;
+    if (newBalance < 0) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Se l'Account è stato eliminato.
    * 
    * @return {@link #deleted}.
