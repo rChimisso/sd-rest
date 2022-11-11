@@ -1,5 +1,8 @@
 package zorchi.entities;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import zorchi.entities.Account.AccountData;
 import zorchi.utility.StandardUUID;
@@ -12,16 +15,16 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.balanceTransfer(-100);
     account2.balanceTransfer(100);
-    assert account1.getBalance() == 0;
-    assert account2.getBalance() == 100;
+    assertTrue(account1.getBalance() == 0);
+    assertTrue(account2.getBalance() == 100);
   }
 
   @Test
   void testCanTransfer() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assert account1.canTransfer(100) == false;
-    assert account2.canTransfer(-100) == true;
+    assertFalse(account1.canTransfer(100));
+    assertTrue(account2.canTransfer(-100));
   }
 
   @Test
@@ -29,9 +32,8 @@ public class AccountTest {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.delete();
-    account2.delete();
-    assert account1.isValid() == false;
-    assert account2.isValid() == false;
+    assertFalse(account1.isValid());
+    assertTrue(account2.isValid());
 
   }
 
@@ -39,8 +41,8 @@ public class AccountTest {
   void testEquals() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assert account1.equals(account2) == false;
-    assert account2.equals(account1) == false;
+    assertFalse(account1.equals(account2));
+    assertFalse(account2.equals(account1));
 
   }
 
@@ -48,8 +50,8 @@ public class AccountTest {
   void testGetBalance() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assert account1.getBalance() == 0;
-    assert account2.getBalance() == 0;
+    assertTrue(account1.getBalance() == 0);
+    assertTrue(account2.getBalance() == 0);
 
   }
 
@@ -57,8 +59,8 @@ public class AccountTest {
   void testGetName() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assert account1.getName().equals("Mario");
-    assert account2.getName().equals("Luigi");
+    assertTrue(account1.getName().equals("Mario"));
+    assertTrue(account2.getName().equals("Luigi"));
 
   }
 
@@ -75,7 +77,7 @@ public class AccountTest {
   void testHashCode() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
-    assert account1.hashCode() == account2.hashCode();
+    assertEquals(account1.hashCode(), account2.hashCode());
 
   }
 
@@ -84,8 +86,8 @@ public class AccountTest {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.delete();
-    assert account1.isDeleted() == true;
-    assert account2.isDeleted() == false;
+    assertTrue(account1.isDeleted());
+    assertFalse(account2.isDeleted());
 
   }
 
@@ -93,8 +95,8 @@ public class AccountTest {
   void testIsValid() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), StandardUUID.INVALID_UUID);
-    assert account1.isValid() == true;
-    assert account2.isValid() == false;
+    assertTrue(account1.isValid());
+    assertFalse(account2.isValid());
 
   }
 
@@ -104,8 +106,8 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setBalance(100);
     account2.setBalance(-100);
-    assert account1.getBalance() == 100;
-    assert account2.getBalance() == -100;
+    assertTrue(account1.getBalance() == 100);
+    assertTrue(account2.getBalance() == -100);
 
   }
 
@@ -115,8 +117,8 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setName("Giovanni");
     account2.setName("Giuseppe");
-    assert account1.getName().equals("Giovanni");
-    assert account2.getName().equals("Giuseppe");
+    assertTrue(account1.getName().equals("Giovanni"));
+    assertTrue(account2.getName().equals("Giuseppe"));
 
   }
 
