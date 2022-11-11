@@ -34,7 +34,7 @@ import zorchi.responses.bodies.TransactionResponseBody;
 import zorchi.responses.bodies.TransferResponseBody;
 import zorchi.responses.headers.CustomHeaders;
 import zorchi.utility.StandardUUID;
-import zorchi.utility.StandardUUID.ShortUUID;
+import zorchi.utility.ShortUUID;
 
 /**
  * Controller per la gestione delle richieste con radice {@code "/api"}.
@@ -109,7 +109,8 @@ public class ApiController {
    */
   @PostMapping("/account")
   public ResponseEntity<IndexableResponseBody> postAccount(@Valid @RequestBody AccountData accountData) {
-    Account account = new Account(accountData, ShortUUID.randomShortUUID(accountRepository::existsById));
+    ShortUUID shortUUID = new ShortUUID(accountRepository::existsById);
+    Account account = new Account(accountData, shortUUID.getShortUUID());
     if (account.isValid()) {
       accountRepository.save(account);
       return new ResponseEntity<>(new IndexableResponseBody(account.getUUID(), "Account creato con successo."),
@@ -130,7 +131,8 @@ public class ApiController {
    */
   @DeleteMapping("/account")
   public ResponseEntity<String> deleteAccount(@Valid @RequestParam String id) {
-    if (ShortUUID.isValidShortUUID(id)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID()) {
       Account account = findAccount(id);
       if (account.isValid()) {
         account.delete();
@@ -152,7 +154,8 @@ public class ApiController {
    */
   @GetMapping("/account/{id}")
   public ResponseEntity<AccountHistoryResponseBody> getAccountId(@Valid @PathVariable String id) {
-    if (ShortUUID.isValidShortUUID(id)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID()) {
       Account account = findAccount(id);
       if (account.isValid()) {
         return new ResponseEntity<>(
@@ -181,7 +184,8 @@ public class ApiController {
   @PostMapping("/account/{id}")
   public ResponseEntity<TransactionResponseBody> postAccountId(@PathVariable String id,
       @Valid @RequestBody TransactionData transactionData) {
-    if (ShortUUID.isValidShortUUID(id)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID()) {
       Account account = findAccount(id);
       if (account.isValid()) {
 
@@ -214,7 +218,8 @@ public class ApiController {
    */
   @PutMapping("/account/{id}")
   public ResponseEntity<String> putAccountId(@PathVariable String id, @Valid @RequestBody AccountData accountData) {
-    if (ShortUUID.isValidShortUUID(id)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID()) {
       Account account = findAccount(id);
       if (account.isValid()) {
         account.setName(accountData.getName());
@@ -239,7 +244,8 @@ public class ApiController {
   @PatchMapping("/account/{id}")
   public ResponseEntity<String> patchAccountId(@PathVariable String id, @RequestBody AccountData accountData) {
     String name = accountData.getName(), surname = accountData.getSurname();
-    if (ShortUUID.isValidShortUUID(id) && (name != null ^ surname != null)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID() && (name != null ^ surname != null)) {
       Account account = findAccount(id);
       if (account.isValid()) {
         if (name != null) {
@@ -268,7 +274,8 @@ public class ApiController {
    */
   @RequestMapping(value = "/account/{id}", method = RequestMethod.HEAD)
   public ResponseEntity<String> headAccountId(@PathVariable String id) {
-    if (ShortUUID.isValidShortUUID(id)) {
+    ShortUUID shortUUID = new ShortUUID(id);
+    if (shortUUID.isValidShortUUID()) {
       Account account = findAccount(id);
       if (account.isValid()) {
         return new ResponseEntity<>(CustomHeaders.getXSistemaBancarioHeader(account.getName(), account.getSurname()),
@@ -290,8 +297,11 @@ public class ApiController {
   @PostMapping("/transfer")
   public ResponseEntity<TransferResponseBody> postTransfer(@Valid @RequestBody TransferData transferData) {
     String senderId = transferData.getFrom(), recipientId = transferData.getTo();
-    if (ShortUUID.isValidShortUUID(senderId) && ShortUUID.isValidShortUUID(recipientId)) {
-      Account sender = findAccount(senderId), recipient = findAccount(recipientId);
+    ShortUUID senderShortUUID = new ShortUUID(senderId);
+    ShortUUID recipientShortUUID = new ShortUUID(recipientId);
+    if (senderShortUUID.isValidShortUUID() && recipientShortUUID.isValidShortUUID()) {
+      Account sender = findAccount(senderId);
+      Account recipient = findAccount(recipientId);
       if (sender.isValid() && recipient.isValid()) {
         Transfer transfer = new Transfer(sender, recipient, Math.abs(transferData.getAmount()),
             transactionRepository::existsById, StandardUUID.randomUUID(transferRepository::existsById));
