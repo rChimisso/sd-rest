@@ -128,9 +128,11 @@ public class Account extends AbstractEntity {
    */
   public boolean balanceTransfer(double amount) {
     double newBalance = (amount * 100 + this.balance * 100) / 100;
+
     if (newBalance < 0) {
       return false;
     }
+    this.balance = newBalance;
     return true;
   }
 
