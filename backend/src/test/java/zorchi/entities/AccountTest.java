@@ -68,8 +68,8 @@ public class AccountTest {
   void testGetSurname() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assert account1.getSurname().equals("Rossi");
-    assert account2.getSurname().equals("Verdi");
+    assertTrue(account1.getSurname().equals("Rossi"));
+    assertTrue(account2.getSurname().equals("Verdi"));
 
   }
 
@@ -128,8 +128,8 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setSurname("Bianchi");
     account2.setSurname("Neri");
-    assert account1.getSurname().equals("Bianchi");
-    assert account2.getSurname().equals("Neri");
+    assertTrue(account1.getSurname().equals("Bianchi"));
+    assertTrue(account2.getSurname().equals("Neri"));
 
   }
 
@@ -138,12 +138,12 @@ public class AccountTest {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
 
-    assert account1.toString()
+    assertTrue(account1.toString()
         .equals(
-            "Account [UUID=12345678901234567890123456789012, balance=0.0, deleted=false, name=Mario, surname=Rossi]");
-    assert account2.toString()
+            "Account [UUID=12345678901234567890123456789012, balance=0.0, deleted=false, name=Mario, surname=Rossi]"));
+    assertTrue(account2.toString()
         .equals(
-            "Account [UUID=01234567890123456789012345678901, balance=0.0, deleted=false, name=Luigi, surname=Verdi]");
+            "Account [UUID=01234567890123456789012345678901, balance=0.0, deleted=false, name=Luigi, surname=Verdi]"));
 
   }
 }
