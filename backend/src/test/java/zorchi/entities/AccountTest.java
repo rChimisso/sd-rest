@@ -3,7 +3,6 @@ package zorchi.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import zorchi.entities.Account.AccountData;
@@ -19,8 +18,8 @@ public class AccountTest {
     account2.balanceTransfer(100);
     Double balance1 = account1.getBalance();
     Double balance2 = account2.getBalance();
-    assertEquals(balance1, 0.0);
-    assertEquals(balance2, 100.0);
+    assertEquals(0.0, balance1);
+    assertEquals(100.0, balance2);
   }
 
   @Test
@@ -53,11 +52,8 @@ public class AccountTest {
   @Test
   void testGetBalance() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
-    Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     Double balance1 = account1.getBalance();
-    Double balance2 = account2.getBalance();
-    assertEquals(balance1, 0.0);
-    assertEquals(balance2, 0.0);
+    assertEquals(0.0, balance1);
 
   }
 
@@ -65,8 +61,8 @@ public class AccountTest {
   void testGetName() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assertEquals(account1.getName(), "Mario");
-    assertEquals(account2.getName(), "Luigi");
+    assertEquals("Mario", account1.getName());
+    assertEquals("Luigi", account2.getName());
 
   }
 
@@ -74,8 +70,8 @@ public class AccountTest {
   void testGetSurname() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assertEquals(account1.getSurname(), "Rossi");
-    assertEquals(account2.getSurname(), "Verdi");
+    assertEquals("Rossi", account1.getSurname());
+    assertEquals("Verdi", account2.getSurname());
 
   }
 
@@ -114,8 +110,8 @@ public class AccountTest {
     account2.setBalance(-100);
     Double balance1 = account1.getBalance();
     Double balance2 = account2.getBalance();
-    assertEquals(balance1, 100.0);
-    assertEquals(balance2, -100.0);
+    assertEquals(100.0, balance1);
+    assertEquals(-100.0, balance2);
 
   }
 
@@ -126,8 +122,8 @@ public class AccountTest {
     account1.setName("Giovanni");
     account2.setName("Giuseppe");
 
-    assertEquals(account1.getName(), "Giovanni");
-    assertEquals(account2.getName(), "Giuseppe");
+    assertEquals("Giovanni", account1.getName());
+    assertEquals("Giuseppe", account2.getName());
 
   }
 
@@ -137,8 +133,8 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setSurname("Bianchi");
     account2.setSurname("Neri");
-    assertEquals(account1.getSurname(), "Bianchi");
-    assertEquals(account2.getSurname(), "Neri");
+    assertEquals("Bianchi", account1.getSurname());
+    assertEquals("Neri", account2.getSurname());
 
   }
 
@@ -147,10 +143,12 @@ public class AccountTest {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
 
-    assertEquals(account1.toString(),
-        "Account [UUID=12345678901234567890123456789012, balance=0.0, deleted=false, name=Mario, surname=Rossi]");
-    assertEquals(account2.toString(),
-        "Account [UUID=01234567890123456789012345678901, balance=0.0, deleted=false, name=Luigi, surname=Verdi]");
+    assertEquals(
+        "Account [UUID=12345678901234567890123456789012, balance=0.0, deleted=false, name=Mario, surname=Rossi]",
+        account1.toString());
+    assertEquals(
+        "Account [UUID=01234567890123456789012345678901, balance=0.0, deleted=false, name=Luigi, surname=Verdi]",
+        account2.toString());
 
   }
 }
