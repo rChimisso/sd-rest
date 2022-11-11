@@ -1,14 +1,12 @@
 package zorchi.utility;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Utilità per gestire numeri che rappresentano currency.
  */
+@Service
 public class Currency {
-  // Add a private constructor to hide the implicit public one.
-  private Currency() {
-    throw new IllegalStateException("Utility class");
-  }
-
   /**
    * Somma correttamente due valori monetari.
    * <p>
@@ -19,7 +17,7 @@ public class Currency {
    * @param value2 - secondo valore da sommare.
    * @return somma dei due valori.
    */
-  public static double sum(double value1, double value2) {
+  public double sum(double value1, double value2) {
     return (value1 * 100 + value2 * 100) / 100;
   }
 
@@ -33,7 +31,7 @@ public class Currency {
    * @param value2 - secondo valore da sottrarre.
    * @return differenza dei due valori.
    */
-  public static double sub(double value1, double value2) {
+  public double sub(double value1, double value2) {
     return (value1 * 100 - value2 * 100) / 100;
   }
 }
