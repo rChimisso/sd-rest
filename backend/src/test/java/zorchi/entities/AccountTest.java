@@ -2,6 +2,7 @@ package zorchi.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,10 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.balanceTransfer(-100);
     account2.balanceTransfer(100);
-    assertSame(account1.getBalance(), 0);
-    assertSame(account2.getBalance(), 100);
+    Double balance1 = account1.getBalance();
+    Double balance2 = account2.getBalance();
+    assertEquals(balance1, 0.0);
+    assertEquals(balance2, 100.0);
   }
 
   @Test
@@ -42,8 +45,8 @@ public class AccountTest {
   void testEquals() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assertEquals(account1, account2);
-    assertEquals(account2, account1);
+    assertNotEquals(account1, account2);
+    assertNotEquals(account2, account1);
 
   }
 
@@ -51,8 +54,10 @@ public class AccountTest {
   void testGetBalance() {
     Account account1 = new Account(new AccountData("Mario", "Rossi"), "12345678901234567890123456789012");
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
-    assertSame(account1.getBalance(), 0);
-    assertSame(account2.getBalance(), 0);
+    Double balance1 = account1.getBalance();
+    Double balance2 = account2.getBalance();
+    assertEquals(balance1, 0.0);
+    assertEquals(balance2, 0.0);
 
   }
 
@@ -107,8 +112,10 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setBalance(100);
     account2.setBalance(-100);
-    assertSame(account1.getBalance(), 100);
-    assertSame(account2.getBalance(), -100);
+    Double balance1 = account1.getBalance();
+    Double balance2 = account2.getBalance();
+    assertEquals(balance1, 100.0);
+    assertEquals(balance2, -100.0);
 
   }
 
@@ -118,6 +125,7 @@ public class AccountTest {
     Account account2 = new Account(new AccountData("Luigi", "Verdi"), "01234567890123456789012345678901");
     account1.setName("Giovanni");
     account2.setName("Giuseppe");
+
     assertEquals(account1.getName(), "Giovanni");
     assertEquals(account2.getName(), "Giuseppe");
 
